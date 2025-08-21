@@ -1,0 +1,97 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e3f2fd; /* Light, sky blue background */
+    color: #334e68; /* Dark blue-gray for text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 650px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+h1 {
+    text-align: center;
+    color: #1a73e8; /* Vibrant Google-like blue for the title */
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+p {
+    text-align: center;
+    color: #5f6368; /* A slightly darker gray for secondary text */
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #334e68;
+}
+
+input, select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #c8d6e5; /* A light, soft border color */
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #334e68;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #1a73e8; /* Blue border on focus for a clean look */
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(45deg, #1a73e8, #4285f4); /* A subtle blue gradient */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(45deg, #4285f4, #1a73e8); /* Invert the gradient on hover */
+}
+
+#results {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #f0f4f8; /* A light blue-gray background for the results section */
+    border-radius: 8px;
+    border: 1px solid #c8d6e5;
+    color: #334e68;
+    line-height: 1.6;
+}

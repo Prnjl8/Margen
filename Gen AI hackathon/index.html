@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Advisor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Personalized Career Advisor</h1>
+        <p>Please tell us about yourself to get started.</p>
+
+        <form id="careerForm">
+            <div class="form-group">
+                <label for="interests">What are your interests? (e.g., Science, Arts, Coding)</label>
+                <input type="text" id="interests" name="interests" placeholder="Enter your interests here" required>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">What skills do you have? (e.g., Python, Communication, Teamwork)</label>
+                <input type="text" id="skills" name="skills" placeholder="Enter your skills here" required>
+            </div>
+
+            <div class="form-group">
+                <label for="aptitudes">What are your natural aptitudes? (e.g., Problem-solving, Creativity, Leadership)</label>
+                <input type="text" id="aptitudes" name="aptitudes" placeholder="Enter your aptitudes here" required>
+            </div>
+
+            <div class="form-group">
+                <label for="education">What is your current education level?</label>
+                <select id="education" name="education" required>
+                    <option value="">Select...</option>
+                    <option value="High School">High School</option>
+                    <option value="College">College Student</option>
+                    <option value="Graduate">Graduate</option>
+                </select>
+            </div>
+            
+            <button type="submit">Get My Career Path</button>
+        </form>
+
+        <div id="results">
+            </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
