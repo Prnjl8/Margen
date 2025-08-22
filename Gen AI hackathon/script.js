@@ -22,22 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsBox.classList.add('show-results');
 
         // Here, you would typically make a real API call
-        // For example:
-        // fetch('/api/career-path', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(userData)
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Display the real results from the backend
-        //     resultsBox.innerHTML = `<h3>Your Career Path:</h3><p>${data.careerPath}</p>`;
-        // })
-        // .catch(error => {
-        //     resultsBox.innerHTML = '<p class="text-center text-danger">An error occurred. Please try again.</p>';
-        // });
-
-        // For this example, we'll simulate a result after a delay
+        
         setTimeout(() => {
             const mockResult = `Based on your interests in ${userData.interests}, skills in ${userData.skills}, and aptitudes in ${userData.aptitudes}, we recommend exploring a career in **Data Science** or **Software Engineering**.`;
             resultsBox.innerHTML = `
