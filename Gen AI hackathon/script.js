@@ -1,29 +1,50 @@
-document.getElementById('careerForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Stop the form from submitting in the traditional way
+document.addEventListener('DOMContentLoaded', () => {
+    // Get all necessary elements once to improve performance
+    const form = document.getElementById('careerForm');
+    const resultsBox = document.getElementById('results');
 
-    // Collect data from the form
-    const interests = document.getElementById('interests').value;
-    const skills = document.getElementById('skills').value;
-    const aptitudes = document.getElementById('aptitudes').value;
-    const education = document.getElementById('education').value;
+    // Add a submit event listener to the form
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent default form submission
 
-    // Create a data object to send to the backend
-    const userData = {
-        interests: interests,
-        skills: skills,
-        aptitudes: aptitudes,
-        education: education
-    };
+        // Collect all form data
+        const formData = new FormData(form);
+        const userData = {};
+        for (const [key, value] of formData.entries()) {
+            userData[key] = value;
+        }
 
-    // At this point, the data is ready! 
-    // You will later use this `userData` object to make an API call to your backend.
-    // For now, let's just log it to the console to see if it works.
-    console.log("Collected User Data:", userData);
+        // Log data for professional debugging and backend prep
+        console.log("Collected User Data:", userData);
 
-    // You can also display a simple message on the page.
-    document.getElementById('results').innerHTML = `<p>Processing your request...</p>`;
+        // Display a "Processing" message with an animation
+        resultsBox.innerHTML = '<p class="text-center">Processing your request...</p>';
+        resultsBox.classList.add('show-results');
 
-    // **Next Step:** You will replace the console.log with a function that sends this data 
-    // to your backend server, which will then interact with the Google Generative AI API.
-    // This is part of the next phase.
+        // Here, you would typically make a real API call
+        // For example:
+        // fetch('/api/career-path', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(userData)
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     // Display the real results from the backend
+        //     resultsBox.innerHTML = `<h3>Your Career Path:</h3><p>${data.careerPath}</p>`;
+        // })
+        // .catch(error => {
+        //     resultsBox.innerHTML = '<p class="text-center text-danger">An error occurred. Please try again.</p>';
+        // });
+
+        // For this example, we'll simulate a result after a delay
+        setTimeout(() => {
+            const mockResult = `Based on your interests in ${userData.interests}, skills in ${userData.skills}, and aptitudes in ${userData.aptitudes}, we recommend exploring a career in **Data Science** or **Software Engineering**.`;
+            resultsBox.innerHTML = `
+                <h4 class="text-center mb-3">Your Personalized Career Path</h4>
+                <p>${mockResult}</p>
+            `;
+            resultsBox.classList.add('show-results');
+        }, 2000); // Simulate a 2-second API call delay
+    });
 });
