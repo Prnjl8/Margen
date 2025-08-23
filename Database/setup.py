@@ -1,131 +1,128 @@
-#!/usr/bin/env python3
-"""
-Setup script for Career Advisor Database System
-This script helps set up the database and check dependencies
-"""
-
-import os
-import sys
-import subprocess
+# test_database.py
 import sqlite3
+import os
+from db_utils import DatabaseManager
 
-def check_python_version():
-    """Check if Python version is compatible"""
-    if sys.version_info < (3, 7):
-        print("❌ Python 3.7 or higher is required")
-        return False
-    print(f"✅ Python {sys.version_info.major}.{sys.version_info.minor} detected")
-    return True
-
-def check_database():
-    """Check if database exists and has data"""
-    db_path = 'advisor.db'
+def test_database_connection():
+    """Test basic database connection and table existence"""
+    print("=== Testing Database Connection ===")
+    
+    db_path = os.path.join(os.path.dirname(__file__), '..', 'margen_ai.db')
+    
     if not os.path.exists(db_path):
-        print("❌ Database file not found. Creating database...")
+        print(f"❌ Database file not found at: {db_path}")
         return False
     
+    print(f"✅ Database file found at: {db_path}")
+    
+    # Test connection
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
         # Check if tables exist
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = [row[0] for row in cursor.fetchall()]
         
-        if not tables:
-            print("❌ Database exists but has no tables")
-            conn.close()
-            return False
+        expected_tables = ['users', 'user_profiles', 'careers', 'milestones', 'skills', 'milestone_skills']
         
-        # Check if data exists
-        cursor.execute("SELECT COUNT(*) FROM users")
-        user_count = cursor.fetchone()[0]
+        print(f"📋 Found tables: {tables}")
         
-        cursor.execute("SELECT COUNT(*) FROM careers")
-        career_count = cursor.fetchone()[0]
+        for table in expected_tables:
+            if table in tables:
+                print(f"✅ Table '{table}' exists")
+            else:
+                print(f"❌ Table '{table}' missing")
         
         conn.close()
-        
-        if user_count == 0 or career_count == 0:
-            print("❌ Database exists but has no data")
-            return False
-        
-        print(f"✅ Database ready with {user_count} users and {career_count} careers")
         return True
         
     except Exception as e:
-        print(f"❌ Database error: {e}")
+        print(f"❌ Database connection failed: {e}")
         return False
 
-def create_database():
-    """Create the database and populate with sample data"""
-    try:
-        print("📝 Creating database...")
-        subprocess.run([sys.executable, 'creat.db.py'], check=True)
-        
-        print("📝 Populating database with sample data...")
-        subprocess.run([sys.executable, 'populate_db.py'], check=True)
-        
-        print("✅ Database created and populated successfully")
-        return True
-        
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error creating database: {e}")
-        return False
+def test_sample_data():
+    """Test that sample data was properly inserted"""
+    print("\n=== Testing Sample Data ===")
+    
+    db = DatabaseManager()
+    
+    # Test careers
+    careers = db.get_all_careers()
+    print(f"📊 Found {len(careers)} careers:")
+    for career in careers:
+        print(f"   - {career['title']}: {career['description'][:50]}...")
+    
+    # Test roadmap for Frontend Developer
+    print(f"\n🗺️  Testing roadmap for Frontend Developer:")
+    roadmap = db.get_career_roadmap(1)  # Frontend Developer has career_id = 1
+    for milestone in roadmap:
+        print(f"   {milestone['order']}. {milestone['title']}")
+        print(f"      Skills: {', '.join(milestone['skills'])}")
+    
+    # Test skill search
+    print(f"\n🔍 Testing skill-based career search:")
+    matching_careers = db.search_careers_by_skills(['Python', 'SQL'])
+    print(f"Careers matching 'Python' and 'SQL':")
+    for career in matching_careers:
+        print(f"   - {career['title']} ({career['skill_matches']} skill matches)")
 
-def check_backend_dependencies():
-    """Check if backend dependencies are installed"""
+def test_user_operations():
+    """Test user creation and profile operations"""
+    print("\n=== Testing User Operations ===")
+    
+    db = DatabaseManager()
+    
+    # Test creating a user
+    test_email = "test@example.com"
+    test_password_hash = "hashed_password_123"
+    
     try:
-        import flask
-        import flask_cors
-        print("✅ Backend dependencies are installed")
-        return True
-    except ImportError as e:
-        print(f"❌ Missing backend dependency: {e}")
-        return False
-
-def install_backend_dependencies():
-    """Install backend dependencies"""
-    try:
-        print("📦 Installing backend dependencies...")
-        subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', 'backend/requirements.txt'], check=True)
-        print("✅ Backend dependencies installed")
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error installing backend dependencies: {e}")
-        return False
+        user_id = db.create_user(test_email, test_password_hash, "123-456-7890", "Bachelor's")
+        print(f"✅ Created user with ID: {user_id}")
+        
+        # Test retrieving user
+        user = db.get_user_by_email(test_email)
+        if user:
+            print(f"✅ Retrieved user: {user['email']} (ID: {user['user_id']})")
+        
+        # Test creating user profile
+        profile_id = db.create_user_profile(user_id, "Coding, Design", "Python, JavaScript", "Problem-solving, Creativity")
+        print(f"✅ Created profile with ID: {profile_id}")
+        
+        # Test retrieving profile
+        profile = db.get_user_profile(user_id)
+        if profile:
+            print(f"✅ Retrieved profile: Interests={profile['interests']}")
+        
+        # Clean up test data
+        conn = db.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM user_profiles WHERE user_id = ?", (user_id,))
+        cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+        conn.commit()
+        conn.close()
+        print("🧹 Cleaned up test data")
+        
+    except Exception as e:
+        print(f"❌ User operations failed: {e}")
 
 def main():
-    """Main setup function"""
-    print("🚀 Career Advisor Database System Setup")
-    print("=" * 50)
+    """Run all tests"""
+    print("🧪 Testing AI Career Advisor Database\n")
     
-    # Check Python version
-    if not check_python_version():
-        sys.exit(1)
+    # Test 1: Database connection and structure
+    if not test_database_connection():
+        print("❌ Database connection test failed. Exiting.")
+        return
     
-    # Check database
-    if not check_database():
-        if not create_database():
-            sys.exit(1)
+    # Test 2: Sample data
+    test_sample_data()
     
-    # Check backend dependencies
-    if not check_backend_dependencies():
-        if not install_backend_dependencies():
-            print("💡 You can install backend dependencies manually with:")
-            print("   pip install -r backend/requirements.txt")
-            sys.exit(1)
+    # Test 3: User operations
+    test_user_operations()
     
-    print("\n🎉 Setup completed successfully!")
-    print("\n📋 Next steps:")
-    print("1. Start the backend server:")
-    print("   cd backend")
-    print("   python app.py")
-    print("\n2. In a new terminal, start the frontend:")
-    print("   cd frontend")
-    print("   npm install")
-    print("   npm start")
-    print("\n3. Open your browser to http://localhost:3000")
+    print("\n🎉 All tests completed!")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
