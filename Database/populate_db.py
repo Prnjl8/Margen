@@ -1,75 +1,153 @@
-# populate_db.py
-import sqlite3
 
-conn = sqlite3.connect('advisor.db')
+import sqlite3
+import os
+
+
+db_path = os.path.join(os.path.dirname(__file__), '..', 'margen_ai.db')
+
+conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
-print("Connected to the database.")
+print("Populating database with sample knowledge...")
 
-# --- POPULATE USER DATA (Sample Users) ---
 
-# Clear existing user data to avoid duplicates when re-running
-cursor.execute("DELETE FROM users;")
-cursor.execute("DELETE FROM user_interests;")
-cursor.execute("DELETE FROM user_skills;")
+careers_to_add = [
+    (1, "Frontend Developer", "Build beautiful, responsive, and user-friendly websites and web applications."),
+    (2, "Backend Developer", "Develop server-side logic, databases, and APIs that power web applications."),
+    (3, "Data Scientist", "Analyze complex data sets to help organizations make better decisions."),
+    (4, "UX/UI Designer", "Create intuitive and engaging user experiences through design and research."),
+    (5, "DevOps Engineer", "Bridge the gap between development and operations through automation and infrastructure management.")
+]
 
-# Create User 1: Priya
-cursor.execute("INSERT INTO users (user_id, username) VALUES (1, 'Priya');")
-cursor.execute("INSERT INTO user_interests (user_id, interest_name) VALUES (1, 'Data Analysis');")
-cursor.execute("INSERT INTO user_interests (user_id, interest_name) VALUES (1, 'Business');")
-cursor.execute("INSERT INTO user_skills (user_id, skill_name) VALUES (1, 'SQL');")
-cursor.execute("INSERT INTO user_skills (user_id, skill_name) VALUES (1, 'Excel');")
+cursor.executemany(
+    "INSERT INTO careers (career_id, title, description) VALUES (?, ?, ?)",
+    careers_to_add
+)
 
-# Create User 2: Alex
-cursor.execute("INSERT INTO users (user_id, username) VALUES (2, 'Alex');")
-cursor.execute("INSERT INTO user_interests (user_id, interest_name) VALUES (2, 'Web Design');")
-cursor.execute("INSERT INTO user_interests (user_id, interest_name) VALUES (2, 'Art');")
-cursor.execute("INSERT INTO user_skills (user_id, skill_name) VALUES (2, 'HTML');")
 
-print("Sample user data populated.")
-
-# --- POPULATE KNOWLEDGE BASE (for Data Analyst career) ---
-
-# Clear existing knowledge data
-cursor.execute("DELETE FROM careers;")
-cursor.execute("DELETE FROM skills;")
-cursor.execute("DELETE FROM roadmap_steps;")
-cursor.execute("DELETE FROM resources;")
-
-# Populate Careers
-cursor.execute("INSERT INTO careers (career_id, career_name, description) VALUES (101, 'Data Analyst', 'Data analysts collect, clean, and interpret data sets to answer a question or solve a problem.');")
-
-# Populate Skills for Data Analyst
 skills_to_add = [
-    (1, 'SQL', 'The language for managing data in relational databases.'),
-    (2, 'Python', 'A versatile programming language with powerful data analysis libraries.'),
-    (3, 'Tableau', 'A popular data visualization tool.'),
-    (4, 'Statistics', 'The science of collecting, analyzing, and interpreting data.')
+    
+    ('HTML5 & CSS3',), ('JavaScript (ES6+)',), ('React',), ('Vue.js',), ('TypeScript',),
+    ('Git',), ('API Integration',), ('Responsive Design',), ('CSS Frameworks',), ('Webpack',),
+    
+
+    ('Python',), ('Node.js',), ('Java',), ('C#',), ('SQL',), ('NoSQL',), ('REST APIs',),
+    ('GraphQL',), ('Docker',), ('Microservices',), ('Database Design',), ('Authentication',),
+    
+    
+    ('Python',), ('R',), ('SQL',), ('Machine Learning',), ('Statistics',), ('Data Visualization',),
+    ('Pandas',), ('NumPy',), ('Scikit-learn',), ('TensorFlow',), ('Jupyter Notebooks',),
+    
+    
+    ('Figma',), ('Adobe XD',), ('Sketch',), ('User Research',), ('Wireframing',), ('Prototyping',),
+    ('Usability Testing',), ('Design Systems',), ('Typography',), ('Color Theory',),
+    
+
+    ('Linux',), ('Docker',), ('Kubernetes',), ('AWS',), ('Azure',), ('CI/CD',), ('Terraform',),
+    ('Ansible',), ('Monitoring',), ('Logging',), ('Security',), ('Networking',)
 ]
-cursor.executemany("INSERT INTO skills (skill_id, skill_name, description) VALUES (?, ?, ?);", skills_to_add)
 
-# Populate Roadmap Steps for Data Analyst (Career ID 101)
-roadmap_steps_to_add = [
-    (101, 4, 'Beginner', 1), # Data Analyst, Statistics, Beginner, Order 1
-    (101, 1, 'Beginner', 2), # Data Analyst, SQL, Beginner, Order 2
-    (101, 2, 'Intermediate', 1), # Data Analyst, Python, Intermediate, Order 1
-    (101, 3, 'Intermediate', 2)  # Data Analyst, Tableau, Intermediate, Order 2
+cursor.executemany("INSERT OR IGNORE INTO skills (name) VALUES (?)", skills_to_add)
+
+
+milestones_data = [
+    
+    (1, 1, "Foundational Knowledge", 1),
+    (2, 1, "Framework Mastery", 2),
+    (3, 1, "Advanced Concepts", 3),
+    (4, 1, "Performance & Optimization", 4),
+    
+    
+    (5, 2, "Programming Fundamentals", 1),
+    (6, 2, "Database & APIs", 2),
+    (7, 2, "Architecture & Design", 3),
+    (8, 2, "DevOps & Deployment", 4),
+    
+    
+    (9, 3, "Mathematics & Statistics", 1),
+    (10, 3, "Programming & Data Manipulation", 2),
+    (11, 3, "Machine Learning", 3),
+    (12, 3, "Advanced Analytics", 4),
+    
+    
+    (13, 4, "Design Fundamentals", 1),
+    (14, 4, "User Research", 2),
+    (15, 4, "Prototyping & Testing", 3),
+    (16, 4, "Design Systems", 4),
+    
+    
+    (17, 5, "Linux & Networking", 1),
+    (18, 5, "Cloud Platforms", 2),
+    (19, 5, "Containerization", 3),
+    (20, 5, "Automation & CI/CD", 4)
 ]
-cursor.executemany("INSERT INTO roadmap_steps (career_id, skill_id, stage, stage_order) VALUES (?, ?, ?, ?);", roadmap_steps_to_add)
 
-# Populate Resources for some skills
-resources_to_add = [
-    (1, 'Course', 'Khan Academy - SQL: Querying and managing data', 'https://www.khanacademy.org/computing/computer-programming/sql'),
-    (1, 'Video', 'SQL for Beginners by freeCodeCamp', 'https://www.youtube.com/watch?v=HXV3zeQKqGY'),
-    (2, 'Course', 'Python for Everybody (Coursera)', 'https://www.coursera.org/specializations/python'),
-    (3, 'Website', 'Tableau Public - Free Training Videos', 'https://public.tableau.com/en-us/s/resources')
+cursor.executemany(
+    "INSERT INTO milestones (milestone_id, career_id, title, milestone_order) VALUES (?, ?, ?, ?)",
+    milestones_data
+)
+
+
+milestone_skills_data = [
+    
+    (1, 1), (1, 2), (1, 6), 
+    
+    
+    (2, 3), (2, 4), (2, 5), (2, 7), 
+    
+    (3, 8), (3, 9), (3, 10),  
+    
+   
+    (5, 12), (5, 13), (5, 14), (5, 6),  
+    
+    
+    (6, 16), (6, 17), (6, 18), (6, 19),  
+    
+   
+    (7, 20), (7, 21), (7, 22),  
+    
+   
+    (9, 25), (9, 26), 
+    
+   
+    (10, 12), (10, 16), (10, 27), (10, 28), 
+    
+    
+    (11, 29), (11, 30), (11, 31),  
+    
+    
+    (13, 33), (13, 34), (13, 35), (13, 39), (13, 40), 
+    
+    
+    (14, 36), (14, 37),
+    
+   
+    (15, 37), (15, 38),  
+    
+   
+    (17, 42), (17, 52), 
+    
+   
+    (18, 44), (18, 45),  
+    
+    
+    (19, 43), (19, 46),  
+    
+    (20, 47), (20, 48), (20, 49), (20, 50), (20, 51)  
 ]
-cursor.executemany("INSERT INTO resources (skill_id, resource_type, title, url) VALUES (?, ?, ?, ?);", resources_to_add)
 
-print("Knowledge base for Data Analyst populated.")
 
-# Commit changes and close
+for milestone_id, skill_name_index in milestone_skills_data:
+    
+    skill_name = skills_to_add[skill_name_index - 1][0]
+    cursor.execute(
+        "INSERT INTO milestone_skills (milestone_id, skill_id) VALUES (?, (SELECT skill_id FROM skills WHERE name=?))",
+        (milestone_id, skill_name)
+    )
+
+print("Sample data added successfully.")
+
 conn.commit()
 conn.close()
 
-print("Data population complete. Database is ready.")
+print(f"Database populated at: {db_path}")
