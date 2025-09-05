@@ -8,497 +8,247 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- STYLES --- */
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
+        /* --- STYLES WITH DARK/LIGHT MODE --- */
+        :root {
+            /* Light Theme Variables */
+            --bg-landing: #f0f4f8;
+            --bg-main-app: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-accent: #4f46e5;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(209, 213, 219, 0.8);
+            --input-bg: rgba(229, 231, 235, 0.8);
+            --btn-primary-bg: linear-gradient(90deg, #4f46e5, #818cf8);
+            --btn-primary-text: white;
+            --tab-bg: rgba(0, 0, 0, 0.05);
+            --tab-active-bg: white;
+            --timeline-line: #d1d5db;
         }
-        
-        .gradient-background {
+
+        body.dark {
+            /* Dark Theme Variables */
+            --bg-landing: linear-gradient(-45deg, #020617, #111827, #1e293b);
+            --bg-main-app: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
+            --text-primary: white;
+            --text-secondary: #94a3b8;
+            --text-accent: #22d3ee;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.2);
+            --btn-primary-bg: linear-gradient(90deg, #14b8a6, #22d3ee);
+            --btn-primary-text: white;
+            --tab-bg: rgba(0, 0, 0, 0.2);
+            --tab-active-bg: rgba(255, 255, 255, 0.1);
+            --timeline-line: rgba(255, 255, 255, 0.2);
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            min-height: 100vh;
+            background: var(--bg-landing);
+            transition: background 0.5s ease;
+        }
+
+        /* Gradient Animation for Dark Mode */
+        body.dark {
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }
 
-        .bg-landing {
-            /* New Dark Landing Page Gradient */
-            background: linear-gradient(-45deg, #020617, #111827, #1e293b);
-            position: relative;
-        }
-
-        .bg-main-app {
-            /* New Dark App Gradient */
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        #app-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        /* Page transition animation */
-        .page {
-            display: none;
-            width: 100%;
-            min-height: 100vh;
-            animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .page.active {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-        }
+        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        /* --- HEADER --- */
-        #app-header {
-            background: transparent;
-        }
-
-        /* --- LANDING PAGE (MODIFIED) --- */
-        #landing-page.page.active {
-            padding: 1rem;
-        }
-        .landing-background-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.1; /* Reduced opacity for dark theme */
-        }
-        .landing-content {
-            text-align: center;
-            color: #e2e8f0; /* Light gray text */
-        }
-        .landing-title {
-            font-size: 4.5rem; /* Larger title */
-            font-weight: 800;
-            letter-spacing: -0.025em;
-            color: white;
-        }
-        .landing-subtitle {
-            font-size: 1.25rem; /* Slightly larger subtitle */
-            color: #94a3b8; /* Lighter gray for subtitle */
-            max-width: 450px;
-            margin: 1rem auto 0;
-        }
-        .get-started-btn-container {
-            display: inline-block;
-            padding: 2px;
-            border-radius: 9999px; /* pill shape */
-            background: linear-gradient(90deg, #14b8a6, #22d3ee); /* New Cyan accent */
-            margin-top: 2.5rem;
-            transition: transform 0.3s ease;
-        }
-        .get-started-btn-container:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(20, 184, 166, 0.5);
-        }
-        .get-started-btn {
-            display: block;
-            background: #1e293b; /* Dark slate */
-            color: white;
-            padding: 0.75rem 2.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 1.125rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .get-started-btn:hover {
-            background: transparent;
-            color: white;
-        }
-        .compact-features {
-            margin-top: 3rem;
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            color: #94a3b8;
-        }
-        .compact-feature-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        /* --- AUTH PAGE (CENTERED & AESTHETIC) --- */
-        .auth-container {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr; /* Give more space to promo */
-            width: 100%;
-            max-width: 950px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-        .auth-promo-panel {
-            padding: 3rem;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .auth-promo-panel h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .auth-promo-panel p {
-            margin-top: 1rem;
-            opacity: 0.8;
-        }
-        .auth-form-panel {
-            padding: 2.5rem;
-            background: rgba(0,0,0,0.15);
-        }
-        .form-title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .form-subtitle {
-            text-align: center;
-            color: white !important; /* VISIBILITY FIX */
-            opacity: 0.8; 
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2); 
-            margin-top: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        .tab-container {
-            display: flex;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            padding: 5px;
-            margin-bottom: 2rem;
-        }
-        .tab {
-            flex: 1;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: none;
-            background: transparent;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            font-size: 0.875rem; /* Smaller font for 3 tabs */
-        }
-        .tab.active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        .input-field {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .input-field::placeholder { color: rgba(255, 255, 255, 0.4); }
-        .input-field:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.5);
-            border-color: #14b8a6;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #14b8a6, #22d3ee);
-            color: white; 
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2); 
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 20px rgba(20, 184, 166, 0.3);
-        }
-
-        /* --- INPUT PAGE --- */
-        .input-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 600px;
-            color: white;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-        .form-label {
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        .input-field-light {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .input-field-light::placeholder { color: rgba(255, 255, 255, 0.4); }
-        .input-field-light:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.5);
-            border-color: #14b8a6;
-        }
-        .wizard-btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .wizard-btn.primary {
-            background: linear-gradient(90deg, #14b8a6, #22d3ee);
-            color: white; 
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2); 
-        }
-        .wizard-btn.primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
-        }
+        #app-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .page { display: none; width: 100%; min-height: 100vh; animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .page.active { display: flex; flex-direction: column; justify-content: center; align-items: center; flex-grow: 1; }
         
-        /* --- CAREERS PAGE --- */
-        .career-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 1.5rem;
-            color: white;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .career-card.selected {
-            border-color: #22d3ee;
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
-        }
-        .career-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        .back-btn-bottom {
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 50px; /* Pill shape */
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .back-btn-bottom:hover {
-            background: rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+        /* --- UNIVERSAL THEME TOGGLE --- */
+        .theme-toggle-btn { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 50; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 9999px; padding: 0.5rem; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: all 0.3s ease; }
+        .theme-toggle-btn:hover { transform: scale(1.1); }
+        .theme-toggle-btn svg { width: 1.25rem; height: 1.25rem; color: var(--text-secondary); }
         
-        /* --- ROADMAP & COMPARISON PAGES --- */
-        .scrollable-page {
-            justify-content: flex-start !important;
-            overflow-y: auto !important;
-        }
-        .roadmap-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-        }
-        .milestone-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .milestone-item:last-child {
-            margin-bottom: 0;
-        }
-        .skill-item {
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .skill-item.completed {
-            text-decoration: line-through;
-            opacity: 0.5;
-        }
-        .notes-textarea {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 0.5rem;
-            width: 100%;
-            padding: 0.5rem;
-            color: white;
-            margin-top: 0.75rem;
-        }
-        .comparison-grid {
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: minmax(300px, 1fr);
-            gap: 2rem;
-            width: 100%;
-        }
-        .comparison-column {
-            background: rgba(0,0,0,0.2);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            color: white; /* VISIBILITY FIX */
-        }
-        .comparison-timeline {
-            position: relative;
-            padding-left: 1.5rem;
-            border-left: 2px solid rgba(255,255,255,0.2);
-        }
-        .comparison-milestone {
-            position: relative;
-            padding-bottom: 2rem;
-        }
-        .comparison-milestone-dot {
-            position: absolute;
-            left: -2.1rem;
-            top: 0.25rem;
-            width: 1rem;
-            height: 1rem;
-            background-color: #22d3ee;
-            border-radius: 50%;
-        }
+        /* Header styling adjustments */
+        #app-header { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 88rem; padding: 1rem; padding-right: 2rem; }
+        #app-header.hidden { display: none; }
+        #app-header-left { display: flex; align-items: center; }
+        #app-header-right { display: flex; align-items: center; gap: 1rem; }
+        #app-header-right .theme-toggle-btn { position: static; }
 
-        /* --- UTILITIES --- */
-        .loader {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #ffffff;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* --- LANDING PAGE --- */
+        #landing-page.page.active { padding: 1rem; }
+        .landing-content { text-align: center; color: var(--text-secondary); }
+        .landing-title { font-size: 4.5rem; font-weight: 800; letter-spacing: -0.025em; color: var(--text-primary); }
+        .landing-subtitle { font-size: 1.25rem; max-width: 450px; margin: 1rem auto 0; }
+        .get-started-btn { display: block; background: var(--btn-primary-bg); color: var(--btn-primary-text); padding: 0.75rem 2.5rem; border-radius: 9999px; font-weight: 600; font-size: 1.125rem; cursor: pointer; transition: all 0.3s ease; }
+        .get-started-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(20, 184, 166, 0.5); }
+        .compact-features { margin-top: 3rem; display: flex; justify-content: center; gap: 2rem; }
+        .compact-feature-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-secondary); }
+        .compact-feature-item svg { color: var(--text-accent); }
+
+        /* --- AUTH PAGE --- */
+        .auth-container { display: grid; grid-template-columns: 1.2fr 1fr; width: 100%; max-width: 950px; background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .auth-promo-panel { padding: 3rem; color: var(--text-primary); display: flex; flex-direction: column; justify-content: center; }
+        .auth-promo-panel h2 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; }
+        .auth-promo-panel p { margin-top: 1rem; color: var(--text-secondary); }
+        .auth-form-panel { padding: 2.5rem; background: rgba(0,0,0,0.1); }
+        .form-title { font-size: 2rem; font-weight: 700; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.2); color: var(--text-primary); }
+        .form-subtitle { text-align: center; color: var(--text-secondary) !important; opacity: 0.8; margin-top: 0.5rem; margin-bottom: 2rem; }
+        .tab-container { display: flex; background: var(--tab-bg); border-radius: 10px; padding: 5px; margin-bottom: 2rem; }
+        .tab { flex: 1; padding: 0.75rem; border-radius: 8px; border: none; background: transparent; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: background 0.3s ease; font-size: 0.875rem; }
+        .tab.active { background: var(--tab-active-bg); }
+        .input-field { width: 100%; padding: 1rem; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-primary); font-weight: 500; transition: all 0.3s ease; }
+        .input-field::placeholder { color: var(--text-secondary); }
+        .input-field:focus { outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5); border-color: var(--text-accent); }
+        body.dark .input-field:focus { box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.5); border-color: var(--text-accent); }
+        .submit-btn { width: 100%; padding: 1rem; margin-top: 1.5rem; border: none; border-radius: 10px; background: var(--btn-primary-bg); color: var(--btn-primary-text); font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 20px rgba(20, 184, 166, 0.3); }
+        
+        /* --- INPUT & ASSESSMENT PAGE --- */
+        .input-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 600px; color: var(--text-primary); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .form-label { display: flex; align-items: center; font-weight: 600; margin-bottom: 0.5rem; }
+        .input-field-light { width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-primary); transition: all 0.3s ease; }
+        .input-field-light::placeholder { color: var(--text-secondary); }
+        .input-field-light:focus { outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5); border-color: var(--text-accent); }
+        body.dark .input-field-light:focus { box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.5); border-color: var(--text-accent); }
+        .goal-checkbox { display: flex; align-items: center; background: var(--input-bg); padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; transition: background 0.3s; border: 1px solid transparent; }
+        .goal-checkbox:has(input:checked) { background: rgba(79, 70, 229, 0.2); border-color: var(--text-accent); }
+        body.dark .goal-checkbox:has(input:checked) { background: rgba(20, 184, 166, 0.3); }
+        .goal-checkbox input { display: none; }
+        .goal-checkbox span { flex-grow: 1; }
+        .wizard-btn { padding: 0.75rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .wizard-btn.primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+        .wizard-btn.primary:hover { transform: translateY(-2px); }
+        .wizard-btn.secondary { background: var(--input-bg); color: var(--text-primary); }
+        .assessment-question { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); }
+        .assessment-option { display: block; background: var(--input-bg); padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; transition: background 0.3s; border: 1px solid transparent; }
+        .assessment-option:has(input:checked) { background: rgba(79, 70, 229, 0.2); border-color: var(--text-accent); }
+        body.dark .assessment-option:has(input:checked) { background: rgba(20, 184, 166, 0.3); }
+        .assessment-option input { margin-right: 0.75rem; }
+
+        /* --- CAREERS --- */
+        .career-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.5rem; color: var(--text-primary); transition: all 0.3s ease; cursor: pointer; }
+        .career-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border-color: var(--text-accent); }
+        .career-card.selected { border-color: var(--text-accent); box-shadow: 0 0 15px rgba(20, 184, 166, 0.5); }
+        body.light .career-card.selected { box-shadow: 0 0 15px rgba(79, 70, 229, 0.5); }
+        .back-btn-bottom { background: rgba(0, 0, 0, 0.2); color: white; padding: 0.75rem 2rem; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.2); }
+        body.light .back-btn-bottom { background: white; color: var(--text-primary); border-color: var(--card-border); }
+
+        /* --- ROADMAP & COMPARISON --- */
+        #roadmap-page.page.active, #comparison-page.page.active, #case-studies-page.page.active, #skill-gap-page.page.active { justify-content: flex-start; overflow-y: auto; padding-top: 5rem; padding-bottom: 5rem; }
+        
+        /* Individual Roadmap (CREATIVE & CENTERED) */
+        .roadmap-container { position: relative; width: 100%; max-width: 800px; color: var(--text-primary); margin: 0 auto; }
+        .roadmap-timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background-color: var(--timeline-line); transform: translateX(-50%); }
+        .roadmap-milestone { position: relative; width: 50%; padding: 1rem; margin-bottom: 2rem; opacity: 0; transform: translateY(50px); animation: slideInUp 0.6s ease-out forwards; }
+        @keyframes slideInUp { to { opacity: 1; transform: translateY(0); } }
+        .roadmap-milestone:nth-child(odd) { left: 0; padding-right: 3rem; }
+        .roadmap-milestone:nth-child(even) { left: 50%; padding-left: 3rem; }
+        .milestone-content { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); }
+        .milestone-icon { position: absolute; top: 0; width: 40px; height: 40px; background: var(--text-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid; border-color: var(--bg-main-app); }
+        body.light .milestone-icon { border-color: #e0e7ff; }
+        .milestone-icon svg { width: 20px; height: 20px; color: white; }
+        .roadmap-milestone:nth-child(odd) .milestone-icon { right: -20px; transform: translateX(50%); }
+        .roadmap-milestone:nth-child(even) .milestone-icon { left: -20px; transform: translateX(-50%); }
+        .skill-item { cursor: pointer; }
+        .skill-item.completed { text-decoration: line-through; opacity: 0.5; }
+        .notes-textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.5rem; color: var(--text-primary); }
+
+        /* Comparison Page */
+        .comparison-column { color: var(--text-primary); }
+        .comparison-column .roadmap-container { padding: 0; max-width: none; }
+        .comparison-column .roadmap-timeline-line { left: 1.25rem; }
+        .comparison-column .roadmap-milestone { width: 100%; left: 0 !important; padding-left: 3.5rem !important; padding-right: 1rem !important; }
+        .comparison-column .milestone-icon { left: 1.25rem !important; transform: translateX(-50%) !important; }
+
+        /* CASE STUDIES PAGE (NEW) */
+        .case-study-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 1rem;}
+        .case-study-header { display: flex; align-items: center; gap: 1rem; }
+        .case-study-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--text-accent); }
+        .case-study-name { font-weight: 700; font-size: 1.25rem; color: var(--text-primary); }
+        .case-study-title { color: var(--text-secondary); }
+        .case-study-section-title { font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .case-study-text { font-size: 0.875rem; color: var(--text-secondary); }
+        .case-study-skills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .case-study-skill-tag { background: var(--input-bg); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; }
+        .case-study-protip { border-left: 4px solid var(--text-accent); padding-left: 1rem; margin-top: 0.5rem; font-style: italic; }
+        
+        /* SKILL GAP ANALYSIS PAGE (NEW) */
+        .progress-bar-container { background-color: var(--input-bg); border-radius: 999px; height: 1.5rem; overflow: hidden; width: 100%; border: 1px solid var(--card-border); }
+        .progress-bar-fill { background: var(--btn-primary-bg); height: 100%; transition: width 0.5s ease-out; }
+        .skill-list-item { background: var(--input-bg); padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; }
+
+        .loader { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ffffff; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        body.light .loader { border-color: #e5e7eb; border-top-color: #4f46e5; }
         .hidden { display: none; }
     </style>
 </head>
-<body class="gradient-background bg-landing">
+<body class="gradient-background">
     <div id="app-container">
+        <!-- THEME TOGGLE BUTTON -->
+        <div id="theme-toggle-container" class="fixed top-6 right-6 z-50">
+             <button id="theme-toggle-btn" class="theme-toggle-btn !static">
+                <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <svg id="theme-icon-moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+        </div>
+
         <!-- Header (Visible when logged in) -->
-        <header id="app-header" class="w-full max-w-7xl mx-auto hidden items-center justify-between p-4 text-white">
-            <h1 class="text-2xl font-bold tracking-wider">MARGEN AI</h1>
-            <div>
-                <span id="user-email" class="mr-4 opacity-80"></span>
-                <button id="signout-btn" class="font-semibold hover:opacity-80 transition">Sign Out</button>
+        <header id="app-header" class="hidden">
+            <div id="app-header-left">
+                <h1 class="text-2xl font-bold tracking-wider" style="color: var(--text-primary);">MARGEN AI</h1>
+            </div>
+            <div id="app-header-right">
+                <div class="flex items-center" style="color: var(--text-primary);">
+                    <span id="user-email" class="mr-4 opacity-80"></span>
+                    <button id="signout-btn" class="font-semibold hover:opacity-80 transition">Sign Out</button>
+                </div>
             </div>
         </header>
 
-        <!-- PAGE 0: LANDING PAGE (MODIFIED) -->
+        <!-- PAGE 0: LANDING PAGE -->
         <main id="landing-page" class="page active">
-            <svg class="landing-background-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="a" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M16 4v24m-12-12h24" stroke="#475569" stroke-linecap="square"/></pattern></defs><rect width="100%" height="100%" fill="url(#a)"/></svg>
             <div class="landing-content">
                 <p>Welcome to</p>
                 <h1 class="landing-title">MARGEN AI</h1>
                 <p class="landing-subtitle">Your personalized guide to professional growth. Navigate your career path with confidence.</p>
-                <div class="get-started-btn-container">
-                    <button id="get-started-btn" class="get-started-btn">Get Started</button>
-                </div>
+                <button id="get-started-btn" class="get-started-btn mx-auto mt-10">Get Started</button>
                 <div class="compact-features">
                     <div class="compact-feature-item">
-                        <svg class="h-5 w-5 text-cyan-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                         <span>Personalized Paths</span>
                     </div>
                     <div class="compact-feature-item">
-                        <svg class="h-5 w-5 text-cyan-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.25 2.75 2.75S13.5 26.44 12 26.44 9.25 25.19 9.25 23.69s1.25-2.75 2.75-2.75z"/><path d="M12 20.94V4.19"/><path d="M12 4.19c-1.5 0-2.75-1.25-2.75-2.75S10.5-1.31 12-1.31s2.75 1.25 2.75 2.75S13.5 4.19 12 4.19z"/><path d="M12 4.19v16.75"/></svg>
+                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.25 2.75 2.75S13.5 26.44 12 26.44 9.25 25.19 9.25 23.69s1.25-2.75 2.75-2.75z"/><path d="M12 20.94V4.19"/><path d="M12 4.19c-1.5 0-2.75-1.25-2.75-2.75S10.5-1.31 12-1.31s2.75 1.25 2.75 2.75S13.5 4.19 12 4.19z"/></svg>
                         <span>Dynamic Roadmaps</span>
                     </div>
                     <div class="compact-feature-item">
-                        <svg class="h-5 w-5 text-cyan-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        <span>Future-Proof</span>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>AI Powered</span>
                     </div>
                 </div>
             </div>
         </main>
 
-        <!-- PAGE 1: AUTHENTICATION (NEW LAYOUT) -->
+        <!-- PAGE 1: AUTHENTICATION -->
         <main id="auth-page" class="page">
-            <div class="auth-container">
+             <div class="auth-container">
                 <div class="auth-promo-panel">
-                    <h2 class="text-4xl font-bold">Unlock Your Future.</h2>
-                    <p class="mt-4 text-lg opacity-80">Gain clarity and direction for your professional journey. Your personalized career roadmap is just a few clicks away.</p>
-                    <div class="mt-8">
-                        <svg width="100%" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:rgba(20, 184, 166, 0.5);stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:rgba(34, 211, 238, 0.5);stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <g stroke="url(#grad1)" stroke-width="2">
-                                <circle cx="50" cy="100" r="10" fill="rgba(255,255,255,0.1)"/>
-                                <circle cx="150" cy="50" r="15" fill="rgba(255,255,255,0.1)"/>
-                                <circle cx="250" cy="150" r="12" fill="rgba(255,255,255,0.1)"/>
-                                <circle cx="350" cy="100" r="18" fill="rgba(255,255,255,0.1)"/>
-                                <line x1="50" y1="100" x2="150" y2="50" />
-                                <line x1="150" y1="50" x2="250" y2="150" />
-                                <line x1="250" y1="150" x2="350" y2="100" />
-                                <line x1="50" y1="100" x2="250" y2="150" />
-                            </g>
-                        </svg>
-                    </div>
+                    <h2 id="auth-promo-title">Unlock Your Future.</h2>
+                    <p id="auth-promo-text">Gain clarity and direction for your professional journey. Your personalized career roadmap is just a few clicks away.</p>
                 </div>
                 <div class="auth-form-panel">
-                    <h2 class="form-title text-white">MARGEN AI</h2>
-                    <p class="form-subtitle">Your future awaits. Sign in to continue.</p>
+                    <h2 class="form-title" style="color: var(--text-primary);">MARGEN AI</h2>
+                    <p class="form-subtitle" style="color: var(--text-secondary) !important;">Your future awaits. Sign in to continue.</p>
                     <div class="tab-container">
                         <button id="signin-tab" class="tab active">Email</button>
                         <button id="signup-tab" class="tab">Sign Up</button>
                         <button id="otp-tab" class="tab">Use OTP</button>
                     </div>
-                    <!-- Email Sign In Form -->
                     <form id="signin-form">
                         <div class="space-y-5">
                             <input id="signin-email" type="email" placeholder="Email Address" class="input-field" required>
@@ -506,7 +256,6 @@
                         </div>
                         <button type="submit" class="submit-btn">Sign In &rarr;</button>
                     </form>
-                    <!-- Sign Up Form -->
                     <form id="signup-form" class="hidden">
                         <div class="space-y-5">
                             <input id="signup-email" type="email" placeholder="Email Address" class="input-field" required>
@@ -514,94 +263,133 @@
                         </div>
                         <button type="submit" class="submit-btn">Create Account &rarr;</button>
                     </form>
-                    <!-- OTP Form -->
                     <form id="otp-form" class="hidden">
-                        <!-- Step 1: Enter Phone -->
                         <div id="otp-phone-step">
-                            <p class="text-center text-sm opacity-70 mb-4 text-white">Enter your phone number to receive a one-time password.</p>
-                            <div class="space-y-5">
-                                <input id="phone-number" type="tel" placeholder="Phone Number" class="input-field" required>
-                            </div>
-                            <button type="button" id="send-otp-btn" class="submit-btn">Send OTP</button>
+                            <label class="block mb-2" for="phone-number" style="color: var(--text-primary);">Enter your phone number to receive a one-time password.</label>
+                            <input id="phone-number" type="tel" placeholder="+91..." class="input-field" required>
+                            <button id="send-otp-btn" type="button" class="submit-btn">Send OTP</button>
                         </div>
-                        <!-- Step 2: Verify OTP -->
                         <div id="otp-verify-step" class="hidden">
-                            <p class="text-center text-sm opacity-70 mb-4 text-white">We've sent a code to <span id="otp-phone-display" class="font-bold"></span>.</p>
-                            <div class="space-y-5">
-                                <input id="otp-code" type="text" maxlength="6" placeholder="6-Digit Code" class="input-field text-center tracking-[1em]" required>
-                            </div>
+                            <label class="block mb-2" for="otp-code" style="color: var(--text-primary);">Enter the 6-digit code sent to <span id="otp-phone-display" class="font-bold"></span>.</label>
+                            <input id="otp-code" type="text" placeholder="123456" class="input-field" required>
                             <button type="submit" class="submit-btn">Verify & Sign In</button>
                         </div>
                     </form>
-                    <p id="auth-error" class="text-pink-300 text-sm text-center mt-4 h-5"></p>
+                    <p id="auth-error" class="text-pink-300 text-sm text-center mt-4"></p>
                 </div>
             </div>
         </main>
 
-        <!-- PAGE 2: USER INPUT (MODIFIED) -->
+        <!-- PAGE 2: USER INPUT -->
         <main id="input-page" class="page">
             <div class="input-card">
                 <h2 class="form-title">Tell Us About You</h2>
-                <p class="form-subtitle opacity-70">Let's build your personalized profile.</p>
+                <p class="form-subtitle">This helps us find the perfect career path for you.</p>
                 <form id="input-form" class="mt-8 space-y-6">
                     <div>
-                        <label for="name" class="form-label">What is your name?</label>
-                        <input id="name" type="text" placeholder="e.g., Alex Doe" class="input-field-light">
+                        <label for="name" class="form-label">What's your name?</label>
+                        <input id="name" type="text" placeholder="Enter your name" class="input-field-light">
                     </div>
                     <div>
-                        <label for="interests" class="form-label">What are your interests?</label>
-                        <input id="interests" type="text" placeholder="e.g., Science, Arts, Coding" class="input-field-light">
+                        <label for="interests" class="form-label">Your Interests</label>
+                        <input id="interests" type="text" placeholder="e.g., Technology, Art, Healthcare" class="input-field-light">
+                        <button type="button" id="start-assessment-btn" class="text-sm mt-2" style="color: var(--text-accent);">Don't know? Tap to take an interest assessment.</button>
                     </div>
                     <div>
-                        <label for="skills" class="form-label">What are your current skills?</label>
-                        <input id="skills" type="text" placeholder="e.g., Python, Communication" class="input-field-light">
+                        <label for="skills" class="form-label">Your Current Skills</label>
+                        <input id="skills" type="text" placeholder="e.g., Python, Communication, Teamwork" class="input-field-light">
                     </div>
-                    <div>
-                        <label for="pace" class="form-label">What is your preferred learning pace?</label>
+                     <div>
+                        <label for="pace" class="form-label">Preferred Pace</label>
                         <select id="pace" class="input-field-light">
-                            <option value="fast-track">Fast-Track (Intensive)</option>
-                            <option value="balanced" selected>Balanced (Standard)</option>
-                            <option value="slow">Slow (Flexible)</option>
+                            <option value="Fast-track">Fast-track</option>
+                            <option value="Balanced" selected>Balanced</option>
+                            <option value="Slow">Slow & Steady</option>
                         </select>
                     </div>
                     <div>
-                        <label class="form-label">What are your primary life goals?</label>
-                        <div class="grid grid-cols-2 gap-4 mt-2">
-                            <label class="flex items-center space-x-3 cursor-pointer">
-                                <input type="checkbox" name="life-goal" value="income" class="h-5 w-5 rounded bg-transparent border-white/30 text-cyan-400 focus:ring-cyan-500">
-                                <span>High Income</span>
-                            </label>
-                            <label class="flex items-center space-x-3 cursor-pointer">
-                                <input type="checkbox" name="life-goal" value="flexibility" class="h-5 w-5 rounded bg-transparent border-white/30 text-cyan-400 focus:ring-cyan-500">
-                                <span>Flexibility</span>
-                            </label>
-                            <label class="flex items-center space-x-3 cursor-pointer">
-                                <input type="checkbox" name="life-goal" value="creativity" class="h-5 w-5 rounded bg-transparent border-white/30 text-cyan-400 focus:ring-cyan-500">
-                                <span>Creativity</span>
-                            </label>
-                            <label class="flex items-center space-x-3 cursor-pointer">
-                                <input type="checkbox" name="life-goal" value="stability" class="h-5 w-5 rounded bg-transparent border-white/30 text-cyan-400 focus:ring-cyan-500">
-                                <span>Stability</span>
-                            </label>
+                        <label class="form-label">Life Goals (Select all that apply)</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Income"><span>Income</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Flexibility"><span>Flexibility</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Creativity"><span>Creativity</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Stability"><span>Stability</span></label>
                         </div>
                     </div>
-                    <button type="submit" class="wizard-btn primary w-full text-lg">Get My Career Path ✨</button>
+                    <button type="submit" class="submit-btn">Get My Career Path ✨</button>
+                </form>
+            </div>
+        </main>
+        
+        <!-- PAGE 3: ASSESSMENT (NEW) -->
+        <main id="assessment-page" class="page">
+            <div class="input-card">
+                <h2 class="form-title">Interest Assessment</h2>
+                <p class="form-subtitle">Answer these questions to discover your interests.</p>
+                <form id="assessment-form" class="mt-8 space-y-6">
+                    <div class="assessment-question">
+                        <p class="form-label">1. On a free weekend, you would most likely be found:</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q1" value="building something"> Building something with your hands or on a computer.</label>
+                            <label class="assessment-option"><input type="radio" name="q1" value="exploring a museum or creating art"> Exploring a museum or creating art.</label>
+                            <label class="assessment-option"><input type="radio" name="q1" value="helping friends with their problems"> Helping friends with their problems or volunteering.</label>
+                            <label class="assessment-option"><input type="radio" name="q1" value="analyzing data or solving complex puzzles"> Analyzing data or solving complex puzzles.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">2. Which of these topics fascinates you the most?</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q2" value="The future of technology and AI"> The future of technology and AI.</label>
+                            <label class="assessment-option"><input type="radio" name="q2" value="Human psychology and storytelling"> Human psychology and storytelling.</label>
+                            <label class="assessment-option"><input type="radio" name="q2" value="Business strategies and market trends"> Business strategies and market trends.</label>
+                            <label class="assessment-option"><input type="radio" name="q2" value="Environmental science and sustainability"> Environmental science and sustainability.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">3. You enjoy tasks that involve:</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q3" value="Logical thinking and clear steps"> Logical thinking and clear, defined steps.</label>
+                            <label class="assessment-option"><input type="radio" name="q3" value="Creative expression and originality"> Creative expression and thinking outside the box.</label>
+                            <label class="assessment-option"><input type="radio" name="q3" value="Collaboration and leading a team"> Collaboration, communication, and leading a team.</label>
+                            <label class="assessment-option"><input type="radio" name="q3" value="Research, investigation, and finding answers"> Research, investigation, and finding answers.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">4. If you were to start a new project, what would it be?</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q4" value="Developing a new app or website"> Developing a new app or website.</label>
+                            <label class="assessment-option"><input type="radio" name="q4" value="Writing a novel or directing a short film"> Writing a novel or directing a short film.</label>
+                            <label class="assessment-option"><input type="radio" name="q4" value="Starting a small business or an online store"> Starting a small business or an online store.</label>
+                            <label class="assessment-option"><input type="radio" name="q4" value="Organizing a community clean-up event"> Organizing a community clean-up event or a fundraiser.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">5. You are most comfortable working with:</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q5" value="Data and numbers"> Data, numbers, and logical systems.</label>
+                            <label class="assessment-option"><input type="radio" name="q5" value="Ideas and concepts"> Ideas, concepts, and visual designs.</label>
+                            <label class="assessment-option"><input type="radio" name="q5" value="People and teams"> People, teams, and communication.</label>
+                            <label class="assessment-option"><input type="radio" name="q5" value="Hands-on tools and physical objects"> Hands-on tools and physical objects.</label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-8">
+                        <button type="button" id="cancel-assessment-btn" class="wizard-btn secondary">Cancel</button>
+                        <button type="submit" class="wizard-btn primary">Find My Interests</button>
+                    </div>
                 </form>
             </div>
         </main>
 
-        <!-- PAGE 3: CAREER OPTIONS -->
-        <main id="careers-page" class="page w-full px-6 md:px-12">
-            <div class="w-full max-w-7xl mx-auto flex flex-col flex-grow">
-                <div class="text-center pt-8 mb-12">
-                    <h2 class="text-5xl font-extrabold text-white tracking-tight text-shadow">Here Are Your Custom Paths</h2>
-                    <p id="careers-subtitle" class="text-white/70 mt-3 text-lg">Click a card to discover your roadmap.</p>
+        <!-- PAGE 4: CAREER OPTIONS -->
+        <main id="careers-page" class="page w-full p-4 md:p-8">
+             <div class="w-full max-w-7xl mx-auto flex-grow flex flex-col">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-extrabold" style="color: var(--text-primary);">Here Are Your Custom Paths</h2>
+                    <p id="careers-subtitle" class="mt-2" style="color: var(--text-secondary);">Click a card to discover your roadmap.</p>
                 </div>
-                <div class="flex-grow">
-                    <div id="careers-loader" class="loader hidden"></div>
-                    <div id="careers-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
-                </div>
-                <div class="text-center py-8 space-x-4">
+                <div id="careers-loader" class="loader hidden"></div>
+                <div id="careers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 flex-grow"></div>
+                <div class="text-center mt-8 space-x-4">
                     <button id="back-to-input-btn" class="back-btn-bottom">Go Back & Edit</button>
                     <button id="toggle-compare-mode-btn" class="back-btn-bottom">Compare Roadmaps</button>
                     <button id="view-comparison-btn" class="back-btn-bottom hidden">View Comparison</button>
@@ -609,32 +397,86 @@
             </div>
         </main>
 
-        <!-- PAGE 4: ROADMAP -->
-        <main id="roadmap-page" class="page w-full">
-             <div class="roadmap-card w-full max-w-5xl p-8">
-                <button id="back-to-careers-btn" class="wizard-btn secondary mb-6">
-                    &larr; Back to Career Options
-                </button>
-                <h2 id="roadmap-title" class="text-3xl font-extrabold text-white text-center mb-12"></h2>
+        <!-- PAGE 5: ROADMAP (REDESIGNED) -->
+        <main id="roadmap-page" class="page w-full p-4 md:p-8">
+             <div class="w-full">
+                <div class="flex justify-between items-center w-full max-w-4xl mx-auto mb-6">
+                    <button id="back-to-careers-btn" class="font-semibold transition flex items-center" style="color: var(--text-accent);">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Careers
+                    </button>
+                     <div class="flex gap-4">
+                        <button id="analyze-skills-btn-roadmap" class="wizard-btn secondary">Analyze My Skills</button>
+                        <button id="case-study-btn-roadmap" class="wizard-btn primary">View Case Studies</button>
+                    </div>
+                </div>
+                <h2 id="roadmap-title" class="text-3xl font-extrabold text-center mb-10" style="color: var(--text-primary);"></h2>
                 <div id="roadmap-loader" class="loader hidden"></div>
-                <div id="roadmap-content" class="w-full max-w-3xl mx-auto">
-                    <!-- Milestones will be injected here -->
+                <div id="roadmap-content" class="roadmap-container">
+                    <!-- Milestones will be injected here by JS -->
                 </div>
             </div>
         </main>
-
-        <!-- PAGE 5: COMPARISON (NEW) -->
-        <main id="comparison-page" class="page scrollable-page w-full px-6 md:px-12">
-            <div class="w-full max-w-7xl mx-auto flex flex-col flex-grow">
-                <div class="text-center pt-8 mb-12">
-                    <h2 class="text-5xl font-extrabold text-white tracking-tight text-shadow">Comparison of Career Roadmaps</h2>
-                </div>
+        
+        <!-- PAGE 6: COMPARISON (REDESIGNED) -->
+        <main id="comparison-page" class="page w-full max-w-7xl mx-auto p-4 md:p-8">
+             <div class="w-full">
+                <button id="back-to-careers-from-compare-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Career Options
+                </button>
+                <h2 class="text-4xl font-extrabold text-center mb-8" style="color: var(--text-primary);">Comparison of Career Roadmaps</h2>
                 <div id="comparison-loader" class="loader hidden"></div>
-                <div id="comparison-grid" class="comparison-grid flex-grow">
-                    <!-- Comparison columns will be injected here -->
-                </div>
-                 <div class="text-center py-8">
-                    <button id="back-to-careers-from-compare-btn" class="back-btn-bottom">Back to Career Selection</button>
+                <div id="comparison-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </main>
+
+        <!-- PAGE 7: CASE STUDIES (NEW) -->
+        <main id="case-studies-page" class="page w-full max-w-5xl mx-auto p-4 md:p-8">
+            <div class="w-full">
+                <button id="back-to-roadmap-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Previous Page
+                </button>
+                <h2 id="case-studies-title" class="text-4xl font-extrabold text-center mb-8" style="color: var(--text-primary);"></h2>
+                <div id="case-studies-loader" class="loader hidden"></div>
+                <div id="case-studies-grid" class="space-y-8"></div>
+            </div>
+        </main>
+
+        <!-- PAGE 8: SKILL GAP ANALYSIS (NEW) -->
+        <main id="skill-gap-page" class="page w-full max-w-4xl mx-auto p-4 md:p-8">
+            <div class="input-card w-full">
+                <button id="back-to-roadmap-from-gap-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Roadmap
+                </button>
+                <h2 id="skill-gap-title" class="form-title text-center mb-4"></h2>
+                <p class="form-subtitle text-center">Enter your current skills to see how you measure up.</p>
+                <form id="skill-gap-form" class="mt-8 space-y-6">
+                    <div>
+                        <label for="user-skills-input" class="form-label">Your Skills (comma-separated)</label>
+                        <textarea id="user-skills-input" rows="4" placeholder="e.g., HTML, CSS, JavaScript, React, Node.js" class="input-field-light"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Analyze My Skills</button>
+                </form>
+                <div id="skill-gap-results" class="mt-8 hidden">
+                    <h3 class="text-2xl font-bold mb-4">Your Progress</h3>
+                    <div class="progress-bar-container">
+                        <div id="progress-bar-fill" class="progress-bar-fill flex items-center justify-end pr-2 text-white text-sm" style="width: 0%;">
+                           <span id="progress-bar-text">0%</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">✅ Skills You Have</h4>
+                            <ul id="skills-have-list" class="space-y-2"></ul>
+                        </div>
+                        <div>
+                             <h4 class="font-bold text-lg mb-2">🎯 Skills to Learn</h4>
+                            <ul id="skills-to-learn-list" class="space-y-2"></ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -642,363 +484,459 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-    // The URL where your Python backend is running
-    const API_URL = 'http://127.0.0.1:5001';
+            const API_URL = 'http://127.0.0.1:5001';
 
-    // --- SECTION 1: DOM ELEMENT REFERENCES ---
-    const body = document.body;
-    const pages = {
-        landing: document.getElementById('landing-page'),
-        auth: document.getElementById('auth-page'),
-        input: document.getElementById('input-page'),
-        careers: document.getElementById('careers-page'),
-        roadmap: document.getElementById('roadmap-page'),
-        comparison: document.getElementById('comparison-page'),
-    };
-    const appHeader = document.getElementById('app-header');
-    const userEmailDisplay = document.getElementById('user-email');
-    const getStartedBtn = document.getElementById('get-started-btn');
-    const signinTab = document.getElementById('signin-tab');
-    const signupTab = document.getElementById('signup-tab');
-    const otpTab = document.getElementById('otp-tab');
-    const signinForm = document.getElementById('signin-form');
-    const signupForm = document.getElementById('signup-form');
-    const otpForm = document.getElementById('otp-form');
-    const otpPhoneStep = document.getElementById('otp-phone-step');
-    const otpVerifyStep = document.getElementById('otp-verify-step');
-    const sendOtpBtn = document.getElementById('send-otp-btn');
-    const otpPhoneDisplay = document.getElementById('otp-phone-display');
-    const authError = document.getElementById('auth-error');
-    const inputForm = document.getElementById('input-form');
-    const careersLoader = document.getElementById('careers-loader');
-    const careersList = document.getElementById('careers-list');
-    const careersSubtitle = document.getElementById('careers-subtitle');
-    const roadmapLoader = document.getElementById('roadmap-loader');
-    const roadmapContent = document.getElementById('roadmap-content');
-    const roadmapTitle = document.getElementById('roadmap-title');
-    const toggleCompareModeBtn = document.getElementById('toggle-compare-mode-btn');
-    const viewComparisonBtn = document.getElementById('view-comparison-btn');
-    const comparisonLoader = document.getElementById('comparison-loader');
-    const comparisonGrid = document.getElementById('comparison-grid');
+            // --- THEME TOGGLE LOGIC ---
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcon = document.getElementById('theme-icon-moon');
+            const body = document.body;
 
-    let currentUserEmail = null;
-    let careersToCompare = new Set();
-    let isCompareModeActive = false;
+            function applyTheme(theme) {
+                if (theme === 'dark') { body.classList.add('dark'); sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden'); } 
+                else { body.classList.remove('dark'); sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden'); }
+            }
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            applyTheme(savedTheme);
 
-    // --- SECTION 2: UI NAVIGATION & LOGIC ---
-    function navigateTo(pageName) {
-        if (pageName === 'landing') {
-            body.classList.remove('bg-main-app');
-            body.classList.add('bg-landing');
-        } else {
-            body.classList.remove('bg-landing');
-            body.classList.add('bg-main-app');
-        }
-        Object.values(pages).forEach(page => page.classList.remove('active'));
-        if (pages[pageName]) {
-            pages[pageName].classList.add('active');
-        }
-    }
-
-    // --- EVENT LISTENERS ---
-    getStartedBtn.addEventListener('click', () => navigateTo('auth'));
-
-    function setActiveTab(activeTab) {
-        [signinTab, signupTab, otpTab].forEach(tab => tab.classList.remove('active'));
-        activeTab.classList.add('active');
-        signinForm.classList.toggle('hidden', activeTab !== signinTab);
-        signupForm.classList.toggle('hidden', activeTab !== signupTab);
-        otpForm.classList.toggle('hidden', activeTab !== otpTab);
-    }
-
-    signinTab.addEventListener('click', () => setActiveTab(signinTab));
-    signupTab.addEventListener('click', () => setActiveTab(signupTab));
-    otpTab.addEventListener('click', () => setActiveTab(otpTab));
-    
-    async function handleApiResponse(response) {
-        const result = await response.json();
-        if (!response.ok) {
-            throw new Error(result.error || 'An unknown error occurred.');
-        }
-        return result;
-    }
-
-    signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        
-        try {
-            const response = await fetch(`${API_URL}/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
+                applyTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
             });
-            const result = await handleApiResponse(response);
-            alert(result.message);
-            signinTab.click();
-        } catch (error) {
-            authError.textContent = error.message;
-        }
-    });
 
-    function loginUser(identifier) {
-        authError.textContent = '';
-        currentUserEmail = identifier;
-        userEmailDisplay.textContent = currentUserEmail;
-        appHeader.classList.remove('hidden');
-        appHeader.classList.add('flex');
-        navigateTo('input');
-    }
+            // --- APP LOGIC ---
+            const pages = { landing: document.getElementById('landing-page'), auth: document.getElementById('auth-page'), input: document.getElementById('input-page'), assessment: document.getElementById('assessment-page'), careers: document.getElementById('careers-page'), roadmap: document.getElementById('roadmap-page'), comparison: document.getElementById('comparison-page'), case_studies: document.getElementById('case-studies-page'), skill_gap: document.getElementById('skill-gap-page') };
+            const appHeader = document.getElementById('app-header');
+            const userEmailDisplay = document.getElementById('user-email');
+            const getStartedBtn = document.getElementById('get-started-btn');
+            const signinTab = document.getElementById('signin-tab');
+            const signupTab = document.getElementById('signup-tab');
+            const otpTab = document.getElementById('otp-tab');
+            const signinForm = document.getElementById('signin-form');
+            const signupForm = document.getElementById('signup-form');
+            const otpForm = document.getElementById('otp-form');
+            const otpPhoneStep = document.getElementById('otp-phone-step');
+            const otpVerifyStep = document.getElementById('otp-verify-step');
+            const sendOtpBtn = document.getElementById('send-otp-btn');
+            const otpPhoneDisplay = document.getElementById('otp-phone-display');
+            const authError = document.getElementById('auth-error');
+            const inputForm = document.getElementById('input-form');
+            const careersLoader = document.getElementById('careers-loader');
+            const careersList = document.getElementById('careers-list');
+            const careersSubtitle = document.getElementById('careers-subtitle');
+            const roadmapLoader = document.getElementById('roadmap-loader');
+            const roadmapContent = document.getElementById('roadmap-content');
+            const roadmapTitle = document.getElementById('roadmap-title');
+            const toggleCompareModeBtn = document.getElementById('toggle-compare-mode-btn');
+            const viewComparisonBtn = document.getElementById('view-comparison-btn');
+            const comparisonLoader = document.getElementById('comparison-loader');
+            const comparisonGrid = document.getElementById('comparison-grid');
+            const startAssessmentBtn = document.getElementById('start-assessment-btn');
+            const assessmentForm = document.getElementById('assessment-form');
+            const cancelAssessmentBtn = document.getElementById('cancel-assessment-btn');
+            const caseStudyBtnRoadmap = document.getElementById('case-study-btn-roadmap');
+            const caseStudiesLoader = document.getElementById('case-studies-loader');
+            const caseStudiesGrid = document.getElementById('case-studies-grid');
+            const caseStudiesTitle = document.getElementById('case-studies-title');
+            const backToRoadmapBtn = document.getElementById('back-to-roadmap-btn');
+            const analyzeSkillsBtnRoadmap = document.getElementById('analyze-skills-btn-roadmap');
+            const skillGapPage = document.getElementById('skill-gap-page');
+            const skillGapTitle = document.getElementById('skill-gap-title');
+            const skillGapForm = document.getElementById('skill-gap-form');
+            const userSkillsInput = document.getElementById('user-skills-input');
+            const skillGapResults = document.getElementById('skill-gap-results');
+            const progressBarFill = document.getElementById('progress-bar-fill');
+            const progressBarText = document.getElementById('progress-bar-text');
+            const skillsHaveList = document.getElementById('skills-have-list');
+            const skillsToLearnList = document.getElementById('skills-to-learn-list');
+            const backToRoadmapFromGapBtn = document.getElementById('back-to-roadmap-from-gap-btn');
 
-    signinForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signin-email').value;
-        const password = document.getElementById('signin-password').value;
-        
-        try {
-            const response = await fetch(`${API_URL}/signin`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-            const result = await handleApiResponse(response);
-            loginUser(result.identifier);
-        } catch (error) {
-            authError.textContent = error.message;
-        }
-    });
+            let currentUserEmail = null;
+            let careersToCompare = new Set();
+            let isCompareModeActive = false;
+            let currentCareer = '';
+            let currentRoadmapForAnalysis = null;
+            let lastPage = 'landing';
 
-    sendOtpBtn.addEventListener('click', async () => {
-        const phone = document.getElementById('phone-number').value;
-        if (!phone) {
-            authError.textContent = "Please enter a phone number.";
-            return;
-        }
-        
-        try {
-            const response = await fetch(`${API_URL}/send-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone }),
-            });
-            const result = await handleApiResponse(response);
-            authError.textContent = result.message;
-            authError.classList.remove('text-pink-300');
-            authError.classList.add('text-green-300');
-            setTimeout(() => { authError.textContent = ''; authError.classList.remove('text-green-300'); authError.classList.add('text-pink-300'); }, 3000);
+            function navigateTo(pageName) {
+                const currentPage = Object.keys(pages).find(key => pages[key].classList.contains('active'));
+                if (currentPage) lastPage = currentPage;
+
+                if (pageName === 'landing') { body.classList.remove('bg-main-app'); body.classList.add('bg-landing'); document.getElementById('theme-toggle-container').classList.remove('hidden'); appHeader.classList.add('hidden'); } 
+                else { body.classList.remove('bg-landing'); body.classList.add('bg-main-app'); document.getElementById('theme-toggle-container').classList.add('hidden'); appHeader.classList.remove('hidden');}
+                Object.values(pages).forEach(page => page.classList.remove('active'));
+                if (pages[pageName]) { pages[pageName].classList.add('active'); }
+            }
+
+            function setActiveTab(activeTab) {
+                [signinTab, signupTab, otpTab].forEach(tab => tab.classList.remove('active'));
+                activeTab.classList.add('active');
+                signinForm.classList.toggle('hidden', activeTab !== signinTab);
+                signupForm.classList.toggle('hidden', activeTab !== signupTab);
+                otpForm.classList.toggle('hidden', activeTab !== otpTab);
+            }
+
+            function loginUser(identifier) {
+                authError.textContent = '';
+                currentUserEmail = identifier;
+                userEmailDisplay.textContent = currentUserEmail;
+                appHeader.classList.remove('hidden');
+                navigateTo('input');
+            }
             
-            otpPhoneDisplay.textContent = phone;
-            otpPhoneStep.classList.add('hidden');
-            otpVerifyStep.classList.remove('hidden');
-        } catch (error) {
-            authError.textContent = error.message;
-        }
-    });
+            async function handleApiResponse(response) {
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.error || 'An unknown error occurred.');
+                }
+                return result;
+            }
 
-    otpForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const code = document.getElementById('otp-code').value;
-        const phone = otpPhoneDisplay.textContent;
-        
-        try {
-            const response = await fetch(`${API_URL}/verify-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone, code }),
-            });
-            const result = await handleApiResponse(response);
-            loginUser(result.identifier);
-        } catch (error) {
-            authError.textContent = error.message;
-        }
-    });
+            getStartedBtn.addEventListener('click', () => navigateTo('auth'));
+            signinTab.addEventListener('click', () => setActiveTab(signinTab));
+            signupTab.addEventListener('click', () => setActiveTab(signupTab));
+            otpTab.addEventListener('click', () => setActiveTab(otpTab));
 
-    document.getElementById('signout-btn').addEventListener('click', () => {
-        currentUserEmail = null;
-        appHeader.classList.add('hidden');
-        navigateTo('landing');
-    });
-
-    inputForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        navigateTo('careers');
-        careersList.innerHTML = '';
-        careersLoader.classList.remove('hidden');
-
-        const name = document.getElementById('name').value;
-        const interests = document.getElementById('interests').value;
-        const skills = document.getElementById('skills').value;
-        const pace = document.getElementById('pace').value;
-        const lifeGoals = Array.from(document.querySelectorAll('input[name="life-goal"]:checked')).map(el => el.value);
-
-        try {
-            const response = await fetch(`${API_URL}/generate-careers`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, interests, skills, pace, lifeGoals }),
-            });
-            const result = await handleApiResponse(response);
-            displayCareerOptions(result);
-        } catch (error) {
-            careersList.innerHTML = `<p class="text-pink-300 col-span-full text-center">${error.message}</p>`;
-        } finally {
-            careersLoader.classList.add('hidden');
-        }
-    });
-
-    function updateCompareButtonVisibility() {
-        viewComparisonBtn.classList.toggle('hidden', careersToCompare.size < 2);
-    }
-
-    function displayCareerOptions(careers) {
-        careersList.innerHTML = '';
-        careers.forEach(career => {
-            const card = document.createElement('div');
-            card.className = 'career-card';
-            card.dataset.title = career.title;
-            card.innerHTML = `<h3 class="text-xl font-bold mb-2">${career.title}</h3><p class="opacity-80">${career.description}</p>`;
-            card.addEventListener('click', () => {
-                if (isCompareModeActive) {
-                    if (careersToCompare.has(career.title)) {
-                        careersToCompare.delete(career.title);
-                        card.classList.remove('selected');
-                    } else {
-                        careersToCompare.add(career.title);
-                        card.classList.add('selected');
-                    }
-                    updateCompareButtonVisibility();
-                } else {
-                    fetchAndDisplayRoadmap(career.title);
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                try {
+                    const response = await fetch(`${API_URL}/signup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password }),
+                    });
+                    const result = await handleApiResponse(response);
+                    alert(result.message);
+                    signinTab.click();
+                } catch (error) {
+                    authError.textContent = error.message;
                 }
             });
-            careersList.appendChild(card);
-        });
-    }
 
-    async function fetchAndDisplayRoadmap(careerTitle) {
-        navigateTo('roadmap');
-        roadmapTitle.textContent = `Roadmap to Becoming a ${careerTitle}`;
-        roadmapContent.innerHTML = '';
-        roadmapLoader.classList.remove('hidden');
-        
-        try {
-            const response = await fetch(`${API_URL}/generate-roadmap`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ careerTitle }),
+            signinForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signin-email').value;
+                const password = document.getElementById('signin-password').value;
+                try {
+                    const response = await fetch(`${API_URL}/signin`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password }),
+                    });
+                    const result = await handleApiResponse(response);
+                    loginUser(result.identifier);
+                } catch (error) {
+                    authError.textContent = error.message;
+                }
             });
-            const result = await handleApiResponse(response);
-            displayRoadmap(result);
-        } catch (error) {
-            roadmapContent.innerHTML = `<p class="text-pink-300 text-center">${error.message}</p>`;
-        } finally {
-            roadmapLoader.classList.add('hidden');
-        }
-    }
 
-    function displayRoadmap(roadmap) {
-        roadmapContent.innerHTML = '';
-        roadmap.forEach((milestone, index) => {
-            const milestoneElement = document.createElement('div');
-            milestoneElement.className = 'milestone-item';
-            const skillsList = milestone.skills.map(skill => 
-                `<li class="skill-item">
-                    <span>${skill.name}</span> - 
-                    <a href="${skill.resource.link}" target="_blank" class="text-cyan-400 hover:underline">${skill.resource.name}</a>
-                </li>`
-            ).join('');
-            milestoneElement.innerHTML = `
-                <p class="text-cyan-400 font-semibold">Milestone ${index + 1}</p>
-                <h4 class="text-2xl font-bold mb-3">${milestone.title}</h4>
-                <div>
-                    <h5 class="font-semibold mb-2 opacity-90">Skills to Learn:</h5>
-                    <ul class="list-disc list-inside space-y-1 opacity-80">${skillsList}</ul>
-                    <h5 class="font-semibold mb-2 mt-4 opacity-90">My Notes:</h5>
-                    <textarea class="notes-textarea" rows="3" placeholder="Add your own links or resources..."></textarea>
-                </div>`;
-            
-            milestoneElement.querySelectorAll('.skill-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    if (e.target.tagName !== 'A') {
-                        item.classList.toggle('completed');
-                    }
+            sendOtpBtn.addEventListener('click', async () => {
+                const phone = document.getElementById('phone-number').value;
+                if (!phone) { authError.textContent = "Please enter a phone number."; return; }
+                try {
+                    const response = await fetch(`${API_URL}/send-otp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone }),
+                    });
+                    const result = await handleApiResponse(response);
+                    authError.textContent = result.message;
+                    authError.classList.remove('text-pink-300'); authError.classList.add('text-green-300');
+                    setTimeout(() => { authError.textContent = ''; authError.classList.remove('text-green-300'); authError.classList.add('text-pink-300'); }, 3000);
+                    otpPhoneDisplay.textContent = phone;
+                    otpPhoneStep.classList.add('hidden');
+                    otpVerifyStep.classList.remove('hidden');
+                } catch (error) {
+                    authError.textContent = error.message;
+                }
+            });
+
+            otpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const code = document.getElementById('otp-code').value;
+                const phone = otpPhoneDisplay.textContent;
+                try {
+                    const response = await fetch(`${API_URL}/verify-otp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone, code }),
+                    });
+                    const result = await handleApiResponse(response);
+                    loginUser(result.identifier);
+                } catch (error) {
+                    authError.textContent = error.message;
+                }
+            });
+
+            document.getElementById('signout-btn').addEventListener('click', () => {
+                currentUserEmail = null;
+                appHeader.classList.add('hidden');
+                navigateTo('landing');
+            });
+
+            inputForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                navigateTo('careers');
+                careersList.innerHTML = '';
+                careersLoader.classList.remove('hidden');
+
+                const name = document.getElementById('name').value;
+                const interests = document.getElementById('interests').value;
+                const skills = document.getElementById('skills').value;
+                const pace = document.getElementById('pace').value;
+                const lifeGoals = Array.from(document.querySelectorAll('input[name="life-goal"]:checked')).map(el => el.value);
+
+                try {
+                    const response = await fetch(`${API_URL}/generate-careers`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, interests, skills, pace, lifeGoals }),
+                    });
+                    const result = await handleApiResponse(response);
+                    displayCareerOptions(result);
+                } catch (error) {
+                    careersList.innerHTML = `<p class="text-pink-300 col-span-full text-center">${error.message}</p>`;
+                } finally {
+                    careersLoader.classList.add('hidden');
+                }
+            });
+
+            function displayCareerOptions(careers) {
+                careersList.innerHTML = '';
+                careers.forEach(career => {
+                    const card = document.createElement('div');
+                    card.className = 'career-card';
+                    card.dataset.title = career.title;
+                    card.innerHTML = `<h3 class="text-xl font-bold mb-2">${career.title}</h3><p class="opacity-80">${career.description}</p>`;
+                    card.addEventListener('click', () => {
+                        if (isCompareModeActive) {
+                            if (careersToCompare.has(career.title)) { careersToCompare.delete(career.title); card.classList.remove('selected'); } 
+                            else { careersToCompare.add(career.title); card.classList.add('selected'); }
+                            updateCompareButtonVisibility();
+                        } else {
+                            fetchAndDisplayRoadmap(career.title);
+                        }
+                    });
+                    careersList.appendChild(card);
                 });
-            });
-
-            roadmapContent.appendChild(milestoneElement);
-        });
-    }
-
-    async function fetchAndDisplayComparison() {
-        navigateTo('comparison');
-        comparisonGrid.innerHTML = '';
-        comparisonLoader.classList.remove('hidden');
-
-        const roadmapPromises = Array.from(careersToCompare).map(title => 
-            fetch(`${API_URL}/generate-roadmap`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ careerTitle: title }),
-            })
-            .then(res => handleApiResponse(res))
-            .then(data => ({ title, roadmap: data }))
-        );
-
-        try {
-            const roadmaps = await Promise.all(roadmapPromises);
-            comparisonLoader.classList.add('hidden');
+            }
             
-            roadmaps.forEach(data => {
-                const column = document.createElement('div');
-                column.className = 'comparison-column';
+            function updateCompareButtonVisibility() { viewComparisonBtn.classList.toggle('hidden', careersToCompare.size < 2); }
+
+            const getMilestoneIcon = (title) => {
+                const lowerTitle = title.toLowerCase();
+                if (lowerTitle.includes('foundation') || lowerTitle.includes('knowledge')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+                if (lowerTitle.includes('mastery') || lowerTitle.includes('framework')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20v-6m4 6v-6m4 6v-6M4 20h16"/><path d="M4 10h16"/><path d="M10 4v6m4-6v6m-8 6h16"/></svg>`;
+                if (lowerTitle.includes('advanced') || lowerTitle.includes('specialization')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path></svg>`;
+                if (lowerTitle.includes('project') || lowerTitle.includes('portfolio')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"></path><path d="M5 12A2 2 0 0 1 7 10h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"></path></svg>`;
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>`;
+            };
+            
+            async function fetchAndDisplayRoadmap(careerTitle) {
+                currentCareer = careerTitle;
+                navigateTo('roadmap');
+                roadmapTitle.textContent = `Roadmap to Becoming a ${careerTitle}`;
+                roadmapContent.innerHTML = '';
+                roadmapLoader.classList.remove('hidden');
+                try {
+                    const response = await fetch(`${API_URL}/generate-roadmap`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ careerTitle }),
+                    });
+                    const result = await handleApiResponse(response);
+                    currentRoadmapForAnalysis = result;
+                    displayRoadmap(result);
+                } catch (error) {
+                    roadmapContent.innerHTML = `<p class="text-pink-300 text-center">${error.message}</p>`;
+                } finally {
+                    roadmapLoader.classList.add('hidden');
+                }
+            }
+
+            function displayRoadmap(roadmap) {
+                roadmapContent.innerHTML = '<div class="roadmap-timeline-line"></div>';
+                roadmap.forEach((milestone, index) => {
+                    const milestoneElement = document.createElement('div');
+                    milestoneElement.className = 'roadmap-milestone';
+                    milestoneElement.style.animationDelay = `${index * 0.2}s`;
+                    const skillsList = milestone.skills.map(skill => `<li class="skill-item"><span>${skill.name}</span> - <a href="${skill.resource.link}" target="_blank" class="hover:underline" style="color: var(--text-accent);">${skill.resource.name}</a></li>`).join('');
+                    milestoneElement.innerHTML = `<div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div><div class="milestone-content"><p class="font-semibold" style="color: var(--text-accent);">Milestone ${index + 1}</p><h4 class="text-xl font-bold mb-3">${milestone.title}</h4><div><h5 class="font-semibold mb-2 opacity-90">Skills to Learn:</h5><ul class="list-disc list-inside space-y-1 opacity-80">${skillsList}</ul><h5 class="font-semibold mb-2 mt-4 opacity-90">My Notes:</h5><textarea class="notes-textarea" rows="3" placeholder="Add your own links or resources..."></textarea></div></div>`;
+                    milestoneElement.querySelectorAll('.skill-item').forEach(item => { item.addEventListener('click', (e) => { if (e.target.tagName !== 'A') { item.classList.toggle('completed'); } }); });
+                    roadmapContent.appendChild(milestoneElement);
+                });
+            }
+            
+            async function fetchAndDisplayComparison() {
+                navigateTo('comparison');
+                comparisonGrid.innerHTML = '';
+                comparisonLoader.classList.remove('hidden');
+                try {
+                    const response = await fetch(`${API_URL}/generate-comparison`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ careerTitles: Array.from(careersToCompare) }),
+                    });
+                    const result = await handleApiResponse(response);
+                    displayComparison(result);
+                } catch (error) {
+                    comparisonGrid.innerHTML = `<p class="text-pink-300 text-center">${error.message}</p>`;
+                } finally {
+                    comparisonLoader.classList.add('hidden');
+                }
+            }
+
+            function displayComparison(roadmaps) {
+                comparisonGrid.innerHTML = '';
+                const numColumns = roadmaps.length;
+                if (numColumns === 2) { comparisonGrid.classList.remove('lg:grid-cols-3'); comparisonGrid.classList.add('md:grid-cols-2'); } 
+                else { comparisonGrid.classList.remove('md:grid-cols-2'); comparisonGrid.classList.add('lg:grid-cols-3'); }
                 
-                const milestonesHtml = data.roadmap.map(milestone => `
-                    <div class="comparison-milestone">
-                        <div class="comparison-milestone-dot"></div>
-                        <p class="font-bold">${milestone.title}</p>
-                        <ul class="list-disc list-inside opacity-80 pl-2">
-                            ${milestone.skills.map(skill => `<li>${skill.name} (<a href="${skill.resource.link}" target="_blank" class="text-cyan-400 hover:underline">${skill.resource.name}</a>)</li>`).join('')}
-                        </ul>
-                    </div>
-                `).join('');
+                roadmaps.forEach(data => {
+                    const column = document.createElement('div');
+                    column.className = 'comparison-column';
+                    const milestonesHtml = `<div class="roadmap-container"><div class="roadmap-timeline-line"></div>` + data.summary_roadmap.map((milestone, index) => {
+                         return `<div class="roadmap-milestone" style="animation-delay: ${index * 0.2}s"><div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div><div class="milestone-content"><p class="font-bold">${milestone.title}</p><p class="opacity-80 text-sm">${milestone.description}</p></div></div>`;
+                    }).join('') + `</div>`;
+                    
+                    const caseStudyBtnHtml = `<div class="text-center mt-4"><button data-career-title="${data.title}" class="wizard-btn primary text-sm view-case-studies-comparison-btn">View Case Studies</button></div>`;
+                    column.innerHTML = `<h3 class="text-2xl font-bold mb-6 text-center">${data.title}</h3>${milestonesHtml}${caseStudyBtnHtml}`;
+                    comparisonGrid.appendChild(column);
+                });
 
-                column.innerHTML = `
-                    <h3 class="text-2xl font-bold mb-6 text-center">${data.title}</h3>
-                    <div class="comparison-timeline">${milestonesHtml}</div>
-                `;
-                comparisonGrid.appendChild(column);
-            });
-        } catch (error) {
-            comparisonGrid.innerHTML = `<p class="text-pink-300 text-center">${error.message}</p>`;
-        }
-    }
-
-    toggleCompareModeBtn.addEventListener('click', () => {
-        isCompareModeActive = !isCompareModeActive;
-        if (isCompareModeActive) {
-            toggleCompareModeBtn.textContent = "Cancel Comparison";
-            careersSubtitle.textContent = "Select 2 or more careers to compare.";
-            document.getElementById('back-to-input-btn').classList.add('hidden');
-        } else {
-            toggleCompareModeBtn.textContent = "Compare Roadmaps";
-            careersSubtitle.textContent = "Click a card to discover your roadmap.";
-            document.getElementById('back-to-input-btn').classList.remove('hidden');
-            careersToCompare.clear();
-            document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected'));
-            updateCompareButtonVisibility();
-        }
-    });
-
-    viewComparisonBtn.addEventListener('click', fetchAndDisplayComparison);
-    document.getElementById('back-to-input-btn').addEventListener('click', () => navigateTo('input'));
-    document.getElementById('back-to-careers-btn').addEventListener('click', () => navigateTo('careers'));
-    document.getElementById('back-to-careers-from-compare-btn').addEventListener('click', () => navigateTo('careers'));
+                comparisonGrid.querySelectorAll('.view-case-studies-comparison-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => { 
+                        fetchAndDisplayCaseStudies(e.currentTarget.dataset.careerTitle); 
+                    });
+                });
+            }
+            
+            toggleCompareModeBtn.addEventListener('click', () => { isCompareModeActive = !isCompareModeActive; if (isCompareModeActive) { toggleCompareModeBtn.textContent = "Cancel Comparison"; careersSubtitle.textContent = "Select 2 or more careers to compare."; document.getElementById('back-to-input-btn').classList.add('hidden'); } else { toggleCompareModeBtn.textContent = "Compare Roadmaps"; careersSubtitle.textContent = "Click a card to discover your roadmap."; document.getElementById('back-to-input-btn').classList.remove('hidden'); careersToCompare.clear(); document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected')); updateCompareButtonVisibility(); } });
+            startAssessmentBtn.addEventListener('click', () => navigateTo('assessment'));
+            cancelAssessmentBtn.addEventListener('click', () => navigateTo('input'));
     
-    // Initial view
-    navigateTo('landing');
-});
+            assessmentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const answers = { q1: document.querySelector('input[name="q1"]:checked')?.value, q2: document.querySelector('input[name="q2"]:checked')?.value, q3: document.querySelector('input[name="q3"]:checked')?.value, q4: document.querySelector('input[name="q4"]:checked')?.value, q5: document.querySelector('input[name="q5"]:checked')?.value, };
+                if (Object.values(answers).some(answer => !answer)) { alert("Please answer all questions."); return; }
+                const submitBtn = assessmentForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true; submitBtn.textContent = 'Analyzing...';
+                try {
+                    const response = await fetch(`${API_URL}/find-interests`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ answers }),
+                    });
+                    const result = await handleApiResponse(response);
+                    document.getElementById('interests').value = result.interests;
+                    navigateTo('input');
+                } catch (error) {
+                    alert(`Error: ${error.message}`);
+                } finally {
+                    submitBtn.disabled = false; submitBtn.textContent = 'Find My Interests';
+                }
+            });
 
+            viewComparisonBtn.addEventListener('click', fetchAndDisplayComparison);
+            document.getElementById('back-to-input-btn').addEventListener('click', () => navigateTo('input'));
+            document.getElementById('back-to-careers-btn').addEventListener('click', () => navigateTo('careers'));
+            document.getElementById('back-to-careers-from-compare-btn').addEventListener('click', () => navigateTo('careers'));
+            
+            // CASE STUDY PAGE LOGIC
+            caseStudyBtnRoadmap.addEventListener('click', () => fetchAndDisplayCaseStudies(currentCareer));
+            backToRoadmapBtn.addEventListener('click', () => navigateTo(lastPage));
+
+            async function fetchAndDisplayCaseStudies(careerTitle) {
+                navigateTo('case_studies');
+                caseStudiesTitle.textContent = `Career Case Studies: ${careerTitle}`;
+                caseStudiesGrid.innerHTML = '';
+                caseStudiesLoader.classList.remove('hidden');
+                try {
+                    const response = await fetch(`${API_URL}/get-case-studies`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ careerTitle }),
+                    });
+                    const result = await handleApiResponse(response);
+                    displayCaseStudies(result);
+                } catch (error) {
+                     caseStudiesGrid.innerHTML = `<p class="text-pink-300 text-center col-span-full">${error.message}</p>`;
+                } finally {
+                    caseStudiesLoader.classList.add('hidden');
+                }
+            }
+            
+            function displayCaseStudies(studies) {
+                caseStudiesGrid.innerHTML = '';
+                studies.forEach(study => {
+                    const card = document.createElement('div');
+                    card.className = 'case-study-card';
+                    const skillsHtml = study.keySkills.map(skill => `<span class="case-study-skill-tag">${skill}</span>`).join('');
+                    const resourceButtonHtml = study.resource.link ? `<a href="${study.resource.link}" target="_blank" class="submit-btn mt-4 w-full text-center">${study.resource.type === 'video' ? 'Watch Story' : 'Read Full Story'}</a>` : '';
+                    card.innerHTML = `
+                        <div class="case-study-header">
+                            <img src="${study.photo}" alt="${study.name}" class="case-study-photo">
+                            <div>
+                                <h3 class="case-study-name">${study.name}</h3>
+                                <p class="case-study-title">${study.title}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="case-study-section-title">Career Journey</h4>
+                            <p class="case-study-text">${study.journey}</p>
+                        </div>
+                        <div>
+                            <h4 class="case-study-section-title">Key Skills in Action</h4>
+                            <div class="case-study-skills">${skillsHtml}</div>
+                        </div>
+                        <div>
+                            <h4 class="case-study-section-title">Pro Tip</h4>
+                            <p class="case-study-text case-study-protip">"${study.proTip}"</p>
+                        </div>
+                        ${resourceButtonHtml}
+                    `;
+                    caseStudiesGrid.appendChild(card);
+                });
+            }
+
+            // SKILL GAP ANALYSIS LOGIC
+            analyzeSkillsBtnRoadmap.addEventListener('click', () => {
+                skillGapTitle.textContent = `Skill Gap Analysis: ${currentCareer}`;
+                skillGapResults.classList.add('hidden');
+                userSkillsInput.value = '';
+                navigateTo('skill_gap');
+            });
+
+            skillGapForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userSkills = userSkillsInput.value;
+                if (!userSkills || !currentRoadmapForAnalysis) return;
+
+                try {
+                    const response = await fetch(`${API_URL}/analyze-skills`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userSkills, roadmap: currentRoadmapForAnalysis }),
+                    });
+                    const result = await handleApiResponse(response);
+                    
+                    progressBarFill.style.width = `${result.percentage}%`;
+                    progressBarText.textContent = `${result.percentage}%`;
+                    skillsHaveList.innerHTML = result.skillsHave.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">No matching skills found.</li>';
+                    skillsToLearnList.innerHTML = result.skillsToLearn.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">You have all the skills!</li>';
+                    skillGapResults.classList.remove('hidden');
+                } catch (error) {
+                    alert(`Error: ${error.message}`);
+                }
+            });
+            backToRoadmapFromGapBtn.addEventListener('click', () => navigateTo('roadmap'));
+            
+            navigateTo('landing');
+        });
     </script>
 </body>
 </html>
+
