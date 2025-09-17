@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARGEN AI - Career Advisor</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/motion@10.16.4/dist/motion.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: false });
+        window.mermaid = mermaid; 
+    </script>
+    
     <style>
-        /* --- STYLES WITH DARK/LIGHT MODE --- */
+        
         :root {
-            /* Light Theme Variables */
+           
             --bg-landing: #f0f4f8;
             --bg-main-app: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
             --text-primary: #111827;
@@ -29,7 +33,8 @@
             --btn-primary-text: white;
             --tab-bg: rgba(0, 0, 0, 0.05);
             --tab-active-bg: white;
-            --timeline-line: #d1d5db;
+            --chat-bubble-ai-bg: #e5e7eb;
+            --chat-bubble-user-bg: #4f46e5;
         }
 
         body.dark {
@@ -46,7 +51,8 @@
             --btn-primary-text: white;
             --tab-bg: rgba(0, 0, 0, 0.2);
             --tab-active-bg: rgba(255, 255, 255, 0.1);
-            --timeline-line: rgba(255, 255, 255, 0.2);
+            --chat-bubble-ai-bg: #374151;
+            --chat-bubble-user-bg: #14b8a6;
         }
 
         body { 
@@ -98,8 +104,8 @@
         .auth-promo-panel h2 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; }
         .auth-promo-panel p { margin-top: 1rem; color: var(--text-secondary); }
         .auth-form-panel { padding: 2.5rem; background: rgba(0,0,0,0.1); }
-        .form-title { font-size: 3.5rem; font-weight: 800; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.2); color: var(--text-primary); line-height: 1.2; }
-        .form-subtitle { font-size: 1.5rem; text-align: center; color: var(--text-secondary) !important; opacity: 0.8; margin-top: 0.5rem; margin-bottom: 2rem; font-weight: 500; }
+        .form-title { font-size: 2rem; font-weight: 700; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.2); color: var(--text-primary); }
+        .form-subtitle { text-align: center; color: var(--text-secondary) !important; opacity: 0.8; margin-top: 0.5rem; margin-bottom: 2rem; }
         .tab-container { display: flex; background: var(--tab-bg); border-radius: 10px; padding: 5px; margin-bottom: 2rem; }
         .tab { flex: 1; padding: 0.75rem; border-radius: 8px; border: none; background: transparent; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: background 0.3s ease; font-size: 0.875rem; }
         .tab.active { background: var(--tab-active-bg); }
@@ -112,7 +118,7 @@
         
         /* --- INPUT & ASSESSMENT PAGE --- */
         .input-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 600px; color: var(--text-primary); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
-        .form-label { display: block; align-items: center; font-weight: 600; margin-bottom: 0.5rem; }
+        .form-label { display: flex; align-items: center; font-weight: 600; margin-bottom: 0.5rem; }
         .input-field-light { width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-primary); transition: all 0.3s ease; }
         .input-field-light::placeholder { color: var(--text-secondary); }
         .input-field-light:focus { outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5); border-color: var(--text-accent); }
@@ -122,32 +128,6 @@
         body.dark .goal-checkbox:has(input:checked) { background: rgba(20, 184, 166, 0.3); }
         .goal-checkbox input { display: none; }
         .goal-checkbox span { flex-grow: 1; }
-        
-        /* START: NEW STYLES FOR USER TYPE SELECTION */
-        .user-type-card {
-            background: var(--input-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        .user-type-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--text-accent);
-        }
-        .user-type-card.selected {
-            border-color: var(--text-accent);
-            background: rgba(79, 70, 229, 0.2);
-        }
-        body.dark .user-type-card.selected {
-            background: rgba(20, 184, 166, 0.3);
-        }
-        .user-type-card h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
-        .user-type-card p { font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem; }
-        /* END: NEW STYLES */
-
         .wizard-btn { padding: 0.75rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
         .wizard-btn.primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
         .wizard-btn.primary:hover { transform: translateY(-2px); }
@@ -159,188 +139,256 @@
         .assessment-option input { margin-right: 0.75rem; }
 
         /* --- CAREERS --- */
+        #roadmap-page > .w-full {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
         .career-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 1.5rem; color: var(--text-primary); transition: all 0.3s ease; cursor: pointer; }
         .career-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border-color: var(--text-accent); }
         .career-card.selected { border-color: var(--text-accent); box-shadow: 0 0 15px rgba(20, 184, 166, 0.5); }
         body.light .career-card.selected { box-shadow: 0 0 15px rgba(79, 70, 229, 0.5); }
-        
-        /* --- DASHBOARD CARDS --- */
-        .dashboard-card { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid var(--card-border); 
-            border-radius: 24px; 
-            padding: 2.5rem 2.5rem; 
-            color: var(--text-primary); 
-            transition: all 0.3s ease; 
-            cursor: pointer; 
-            min-height: 340px;
-            width: 350px;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            margin: 1rem;
-            flex-shrink: 0;
-        }
-        .dashboard-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--text-accent), #22d3ee);
-            border-radius: 24px 24px 0 0;
-        }
-        .dashboard-card:hover { 
-            transform: translateY(-12px) scale(1.03); 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); 
-            border-color: var(--text-accent); 
-        }
-        .dashboard-card .card-icon { 
-            font-size: 3.5rem; 
-            margin-bottom: 1.5rem; 
-            display: block; 
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-        }
-        .dashboard-card .card-title { 
-            font-size: 1.375rem; 
-            font-weight: 800; 
-            margin-bottom: 1rem; 
-            line-height: 1.3;
-            letter-spacing: -0.025em;
-        }
-        .dashboard-card .card-description { 
-            opacity: 0.85; 
-            margin-bottom: 2rem; 
-            line-height: 1.6;
-            flex-grow: 1;
-            font-size: 0.95rem;
-        }
-        .dashboard-card .card-button { 
-            width: 100%; 
-            margin-top: auto; 
-            padding: 0.875rem 1.5rem;
-            font-weight: 600;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-        .dashboard-card .card-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Mobile adjustments */
-        @media (max-width: 768px) {
-            .dashboard-card {
-                min-height: 300px;
-                width: 280px;
-                max-width: 280px;
-                padding: 2rem 1.5rem;
-                margin: 0.5rem;
-            }
-            .dashboard-card .card-icon {
-                font-size: 3rem;
-                margin-bottom: 1.25rem;
-            }
-            .dashboard-card .card-title {
-                font-size: 1.25rem;
-            }
-        }
-        
-        /* Tablet adjustments */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .dashboard-card {
-                width: 320px;
-                max-width: 320px;
-                margin: 0.75rem;
-            }
-        }
-        
-        /* Additional spacing for better card separation */
-        .dashboard-card {
-            margin-bottom: 1rem;
-        }
-        
-        /* Force spacing between cards */
-        .dashboard-card {
-            margin: 0.5rem !important;
-        }
-        
-        /* Responsive spacing adjustments */
-        @media (max-width: 640px) {
-            .grid {
-                gap: 1.5rem !important;
-            }
-            .dashboard-card {
-                margin: 0.25rem !important;
-            }
-        }
-        
-        @media (min-width: 641px) and (max-width: 1024px) {
-            .grid {
-                gap: 2rem !important;
-            }
-            .dashboard-card {
-                margin: 0.5rem !important;
-            }
-        }
-        
-        @media (min-width: 1025px) {
-            .grid {
-                gap: 3rem !important;
-            }
-            .dashboard-card {
-                margin: 0.75rem !important;
-            }
-        }
         .back-btn-bottom { background: rgba(0, 0, 0, 0.2); color: white; padding: 0.75rem 2rem; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.2); }
         body.light .back-btn-bottom { background: white; color: var(--text-primary); border-color: var(--card-border); }
 
         /* --- ROADMAP & COMPARISON --- */
-        #roadmap-page.page.active, #comparison-page.page.active, #case-studies-page.page.active, #skill-gap-page.page.active { justify-content: flex-start; overflow-y: auto; padding-top: 5rem; padding-bottom: 5rem; }
+        /* --- ROADMAP & COMPARISON (UPDATED) --- */
+/* --- ROADMAP & COMPARISON (UPDATED FOR LAYOUT FIX) --- */
+#roadmap-page.page.active, 
+#comparison-page.page.active, 
+#skill-gap-page.page.active, 
+#interview-page.page.active, 
+#project-pitch-page.page.active {
+    display: flex; /* Ensure it's a flex container for centering its child */
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: flex-start; /* Align content to the top */
+    overflow-y: auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    width: 100%; /* Ensure the page itself takes full width */
+}
+
+/* MERMAID ROADMAP STYLES */
+#roadmap-content { width: 100%; margin: auto; padding: 6rem 0; }
+.mermaid { text-align: center; }
+.mermaid svg { max-width: 100%; height: auto; margin: auto; }
+#roadmap-content svg {
+    transform: scale(1.3); 
+    transform-origin: center;
+}
+
+/* --- COMPARISON PAGE STYLES --- */
+/* The main grid container for the two columns */
+#comparison-grid { 
+    display: flex; /* Use flexbox for the columns */
+    justify-content: center; /* Center the columns horizontally */
+    align-items: flex-start; /* Align columns to the top */
+    gap: 4rem; /* Space between the two career columns */
+    width: 100%; /* Allows the grid to potentially span wider */
+    max-width: 88rem; /* Maximum width for the content */
+    padding: 0 2rem; /* Horizontal padding for responsiveness */
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens if needed */
+}
+
+/* Each comparison column (e.g., UX/UI Designer, Frontend Developer) */
+.comparison-column { 
+    color: var(--text-primary); 
+    flex-basis: 40%; /* Each column takes about 40% of the available space */
+    min-width: 300px; /* Minimum width to prevent squishing */
+    max-width: 450px; /* Max width for each column */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the title and milestones within the column */
+}
+
+.comparison-column h3 {
+    width: 100%; /* Ensure title takes full width to center text */
+}
+
+.roadmap-container {
+    width: 100%; /* Ensure roadmap content fills its column */
+}
+
+/* Styles for the milestone cards */
+.roadmap-milestone {
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem; /* 16px */
+    padding: 1.5rem; /* 24px */
+    margin-bottom: 1.5rem; /* 24px - Space between milestones */
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem; /* 16px */
+    transition: all 0.3s ease;
+}
+.milestone-icon {
+    flex-shrink: 0;
+    margin-top: 4px; /* Aligns icon with the first line of text */
+}
+.milestone-content {
+    flex-grow: 1;
+}
+
+/* Styles for each skill row */
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--input-bg);
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.skill-item:not(:last-child) {
+    margin-bottom: 0.5rem; /* Adds space between skill items */
+}
+.skill-item:hover {
+    background: rgba(0,0,0,0.1);
+    border-color: var(--card-border);
+}
+body.dark .skill-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Styles for the resource links */
+.resource-link {
+    color: var(--text-accent);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap; /* Prevents the link from wrapping */
+    margin-left: 0.5rem; /* Add a slight margin to separate from skill name */
+}
+.resource-link:hover {
+    opacity: 0.8;
+}
+/* MERMAID ROADMAP STYLES */
+#roadmap-content { width: 100%; margin: auto; padding: 6rem 0; }
+.mermaid { text-align: center; }
+.mermaid svg { max-width: 100%; height: auto; margin: auto; }
+#roadmap-content svg {
+    transform: scale(1.3); 
+    transform-origin: center;
+}
+
+/* --- COMPARISON PAGE STYLES --- */
+#comparison-page .w-full { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+#comparison-grid { 
+    justify-content: center; 
+    gap: 4rem; /* The space between columns */
+    width: 124%;
+    max-width: 83rem; 
+    padding: 0 2rem; 
+}
+.comparison-column { 
+    color: var(--text-primary); 
+}
+
+/* New styles for the milestone cards */
+.roadmap-milestone {
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem; /* 16px */
+    padding: 1.5rem; /* 24px */
+    margin-bottom: 1.5rem; /* 24px */
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem; /* 16px */
+    transition: all 0.3s ease;
+}
+.milestone-icon {
+    flex-shrink: 0;
+    margin-top: 4px; /* Aligns icon with the first line of text */
+}
+.milestone-content {
+    flex-grow: 1;
+}
+
+/* New styles for each skill row */
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--input-bg);
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.skill-item:not(:last-child) {
+    margin-bottom: 0.5rem; /* Adds space between skill items */
+}
+.skill-item:hover {
+    background: rgba(0,0,0,0.1);
+    border-color: var(--card-border);
+}
+body.dark .skill-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* New styles for the resource links */
+.resource-link {
+    color: var(--text-accent);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap; /* Prevents the link from wrapping */
+}
+.resource-link:hover {
+    opacity: 0.8;
+}
         
-        /* Individual Roadmap (CREATIVE & CENTERED) */
-        .roadmap-container { position: relative; width: 100%; max-width: 800px; color: var(--text-primary); margin: 0 auto; }
-        .roadmap-timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background-color: var(--timeline-line); transform: translateX(-50%); }
-        .roadmap-milestone { position: relative; width: 50%; padding: 1rem; margin-bottom: 2rem; opacity: 0; transform: translateY(50px); animation: slideInUp 0.6s ease-out forwards; }
-        @keyframes slideInUp { to { opacity: 1; transform: translateY(0); } }
-        .roadmap-milestone:nth-child(odd) { left: 0; padding-right: 3rem; }
-        .roadmap-milestone:nth-child(even) { left: 50%; padding-left: 3rem; }
-        .milestone-content { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); }
-        .milestone-icon { position: absolute; top: 0; width: 40px; height: 40px; background: var(--text-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid; border-color: var(--bg-main-app); }
-        body.light .milestone-icon { border-color: #e0e7ff; }
-        .milestone-icon svg { width: 20px; height: 20px; color: white; }
-        .roadmap-milestone:nth-child(odd) .milestone-icon { right: -20px; transform: translateX(50%); }
-        .roadmap-milestone:nth-child(even) .milestone-icon { left: -20px; transform: translateX(-50%); }
-        .skill-item { cursor: pointer; }
-        .skill-item.completed { text-decoration: line-through; opacity: 0.5; }
-        .notes-textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.5rem; color: var(--text-primary); }
+        /* MERMAID ROADMAP STYLES */
+        #roadmap-content { width: 100%; margin : auto;padding: 6rem 0; }
+        .mermaid { text-align: center; }
+        .mermaid svg { max-width: 100%; height: auto; margin: auto; }
+        #roadmap-content svg {
+    /* You can adjust the scale value to make it bigger or smaller */
+    transform: scale(1.3); 
+    transform-origin: center;
+}
 
         /* Comparison Page */
         .comparison-column { color: var(--text-primary); }
-        .comparison-column .roadmap-container { padding: 0; max-width: none; }
-        .comparison-column .roadmap-timeline-line { left: 1.25rem; }
-        .comparison-column .roadmap-milestone { width: 100%; left: 0 !important; padding-left: 3.5rem !important; padding-right: 1rem !important; }
-        .comparison-column .milestone-icon { left: 1.25rem !important; transform: translateX(-50%) !important; }
+        #comparison-page .w-full { display: flex; flex-direction: column; align-items: center;}
+        #comparison-grid { justify-content: center; }
 
-        /* CASE STUDIES PAGE (NEW) */
-        .case-study-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 1rem;}
-        .case-study-header { display: flex; align-items: center; gap: 1rem; }
-        .case-study-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--text-accent); }
-        .case-study-name { font-weight: 700; font-size: 1.25rem; color: var(--text-primary); }
-        .case-study-title { color: var(--text-secondary); }
-        .case-study-section-title { font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text-primary); }
-        .case-study-text { font-size: 0.875rem; color: var(--text-secondary); }
-        .case-study-skills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-        .case-study-skill-tag { background: var(--input-bg); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; }
-        .case-study-protip { border-left: 4px solid var(--text-accent); padding-left: 1rem; margin-top: 0.5rem; font-style: italic; }
-        
-        /* SKILL GAP ANALYSIS PAGE (NEW) */
+        /* --- MOCK INTERVIEW PAGE (NEW) --- */
+        .chat-container { width: 100%; max-width: 800px; height: 80vh; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; backdrop-filter: blur(25px); display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { padding: 1rem; border-bottom: 1px solid var(--card-border); }
+        .chat-messages { flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; }
+        .chat-bubble { max-width: 75%; padding: 0.75rem 1rem; border-radius: 1.25rem; margin-bottom: 0.5rem; line-height: 1.4; }
+        .chat-bubble.ai { background: var(--chat-bubble-ai-bg); color: var(--text-primary); border-bottom-left-radius: 0.25rem; align-self: flex-start; }
+        .chat-bubble.user { background: var(--chat-bubble-user-bg); color: white; border-bottom-right-radius: 0.25rem; align-self: flex-end; }
+        .chat-input-form { display: flex; padding: 1rem; border-top: 1px solid var(--card-border); }
+        .chat-input { flex-grow: 1; background: var(--input-bg); color: var(--text-primary); border-radius: 9999px; padding: 0.75rem 1rem; border: 1px solid transparent; }
+        .chat-input:focus { outline: none; border-color: var(--text-accent); }
+        .chat-send-btn { background: var(--text-accent); color: white; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-left: 0.75rem; flex-shrink: 0; }
+        .typing-indicator { align-self: flex-start; display: flex; align-items: center; padding: 0.75rem 1rem; }
+        .typing-dot { width: 8px; height: 8px; background-color: var(--text-secondary); border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+        /* SKILL GAP ANALYSIS PAGE */
         .progress-bar-container { background-color: var(--input-bg); border-radius: 999px; height: 1.5rem; overflow: hidden; width: 100%; border: 1px solid var(--card-border); }
         .progress-bar-fill { background: var(--btn-primary-bg); height: 100%; transition: width 0.5s ease-out; }
         .skill-list-item { background: var(--input-bg); padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; }
@@ -348,380 +396,19 @@
         .loader { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ffffff; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 2rem auto; }
         body.light .loader { border-color: #e5e7eb; border-top-color: #4f46e5; }
         .hidden { display: none; }
-        
-        /* Magnet Effect Styles */
-        .magnet-wrapper { 
-            position: relative; 
-            display: inline-block; 
-            margin: 0 auto;
-        }
-        .magnet-inner { 
-            transition: transform 0.3s ease-out; 
-            will-change: transform;
-        }
-        .magnet-inner.active { 
-            transition: transform 0.3s ease-out; 
-        }
-        .magnet-inner.inactive { 
-            transition: transform 0.5s ease-in-out; 
-        }
-        
-        /* LogoLoop Styles */
-        .logoloop {
-            position: relative;
-            overflow-x: hidden;
-            --logoloop-gap: 32px;
-            --logoloop-logoHeight: 28px;
-            --logoloop-fadeColorAuto: #ffffff;
-        }
-
-        .logoloop--scale-hover {
-            padding-top: calc(var(--logoloop-logoHeight) * 0.1);
-            padding-bottom: calc(var(--logoloop-logoHeight) * 0.1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .logoloop {
-                --logoloop-fadeColorAuto: #0b0b0b;
-            }
-        }
-
-        .logoloop__track {
-            display: flex;
-            width: max-content;
-            will-change: transform;
-            user-select: none;
-        }
-
-        .logoloop__list {
-            display: flex;
-            align-items: center;
-        }
-
-        .logoloop__item {
-            flex: 0 0 auto;
-            margin-right: var(--logoloop-gap);
-            font-size: var(--logoloop-logoHeight);
-            line-height: 1;
-        }
-
-        .logoloop__item:last-child {
-            margin-right: var(--logoloop-gap);
-        }
-
-        .logoloop__node {
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .logoloop__item img {
-            height: var(--logoloop-logoHeight);
-            width: auto;
-            display: block;
-            object-fit: contain;
-            image-rendering: -webkit-optimize-contrast;
-            -webkit-user-drag: none;
-            pointer-events: none;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .logoloop--scale-hover .logoloop__item {
-            overflow: visible;
-        }
-
-        .logoloop--scale-hover .logoloop__item:hover img,
-        .logoloop--scale-hover .logoloop__item:hover .logoloop__node {
-            transform: scale(1.2);
-            transform-origin: center center;
-        }
-
-        .logoloop--scale-hover .logoloop__node {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .logoloop__link {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: opacity 0.2s ease;
-        }
-
-        .logoloop__link:hover {
-            opacity: 0.8;
-        }
-
-        .logoloop__link:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 2px;
-        }
-
-        .logoloop--fade::before,
-        .logoloop--fade::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: clamp(24px, 8%, 120px);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .logoloop--fade::before {
-            left: 0;
-            background: linear-gradient(
-                to right,
-                var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-                rgba(0, 0, 0, 0) 100%
-            );
-        }
-
-        .logoloop--fade::after {
-            right: 0;
-            background: linear-gradient(
-                to left,
-                var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-                rgba(0, 0, 0, 0) 100%
-            );
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .logoloop__track {
-                transform: translate3d(0, 0, 0) !important;
-            }
-
-            .logoloop__item img,
-            .logoloop__node {
-                transition: none !important;
-            }
-        }
-        
-        /* MagicBento Styles */
-        :root {
-            --hue: 27;
-            --sat: 69%;
-            --white: hsl(0, 0%, 100%);
-            --purple-primary: rgba(132, 0, 255, 1);
-            --purple-glow: rgba(132, 0, 255, 0.2);
-            --purple-border: rgba(132, 0, 255, 0.8);
-            --border-color: #392e4e;
-            --background-dark: #060010;
-            color-scheme: light dark;
-        }
-
-        .card-grid {
-            display: grid;
-            gap: 1em;
-            padding: 0.75em;
-            max-width: 80em;
-            font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
-        }
-
-        .card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            aspect-ratio: 3/2;
-            min-height: 280px;
-            width: 100%;
-            max-width: 100%;
-            padding: 2em;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            background: var(--background-dark);
-            font-weight: 300;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-
-            --glow-x: 50%;
-            --glow-y: 50%;
-            --glow-intensity: 0;
-            --glow-radius: 200px;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .card__header,
-        .card__content {
-            display: flex;
-            position: relative;
-            color: var(--white);
-        }
-
-        .card__header {
-            gap: 0.75em;
-            justify-content: space-between;
-        }
-
-        .card__content {
-            flex-direction: column;
-        }
-
-        .card__label {
-            font-size: 18px;
-        }
-
-        .card__title,
-        .card__description {
-            --clamp-title: 1;
-            --clamp-desc: 2;
-        }
-
-        .card__title {
-            font-weight: 600;
-            font-size: 28px;
-            margin: 0 0 0.5em;
-            color: var(--white);
-        }
-
-        .card__description {
-            font-size: 16px;
-            line-height: 1.4;
-            opacity: 0.9;
-        }
-
-        .card--text-autohide .card__title,
-        .card--text-autohide .card__description {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card--text-autohide .card__title {
-            -webkit-line-clamp: var(--clamp-title);
-            line-clamp: var(--clamp-title);
-        }
-
-        .card--text-autohide .card__description {
-            -webkit-line-clamp: var(--clamp-desc);
-            line-clamp: var(--clamp-desc);
-        }
-
-        @media (max-width: 599px) {
-            .card-grid {
-                grid-template-columns: 1fr;
-                width: 90%;
-                margin: 0 auto;
-                padding: 0.5em;
-            }
-
-            .card {
-                width: 100%;
-                min-height: 240px;
-                padding: 1.5em;
-            }
-            
-            .card__title {
-                font-size: 24px;
-            }
-            
-            .card__description {
-                font-size: 14px;
-            }
-        }
-
-        @media (min-width: 600px) {
-            .card-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5em;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .card-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 2em;
-            }
-        }
-
-        /* Border glow effect */
-        .card--border-glow::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            padding: 6px;
-            background: radial-gradient(
-                var(--glow-radius) circle at var(--glow-x) var(--glow-y),
-                rgba(132, 0, 255, calc(var(--glow-intensity) * 0.8)) 0%,
-                rgba(132, 0, 255, calc(var(--glow-intensity) * 0.4)) 30%,
-                transparent 60%
-            );
-            border-radius: inherit;
-            mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            mask-composite: subtract;
-            -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        .card--border-glow:hover::after {
-            opacity: 1;
-        }
-
-        .card--border-glow:hover {
-            box-shadow:
-                0 4px 20px rgba(46, 24, 78, 0.4),
-                0 0 30px var(--purple-glow);
-        }
-
-        .particle-container {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .particle::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: rgba(132, 0, 255, 0.2);
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        .particle-container:hover {
-            box-shadow:
-                0 4px 20px rgba(46, 24, 78, 0.2),
-                0 0 30px var(--purple-glow);
-        }
-
-        /* Global spotlight styles */
-        .global-spotlight {
-            mix-blend-mode: screen;
-            will-change: transform, opacity;
-            z-index: 200 !important;
-            pointer-events: none;
-        }
-
-        .bento-section {
-            position: relative;
-            user-select: none;
-        }
     </style>
 </head>
 <body class="gradient-background">
     <div id="app-container">
+        <!-- THEME TOGGLE BUTTON -->
         <div id="theme-toggle-container" class="fixed top-6 right-6 z-50">
              <button id="theme-toggle-btn" class="theme-toggle-btn !static">
-                 <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                 <svg id="theme-icon-moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <svg id="theme-icon-moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             </button>
         </div>
 
+        <!-- Header (Visible when logged in) -->
         <header id="app-header" class="hidden">
             <div id="app-header-left">
                 <h1 class="text-2xl font-bold tracking-wider" style="color: var(--text-primary);">MARGEN AI</h1>
@@ -734,14 +421,13 @@
             </div>
         </header>
 
+        <!-- PAGE 0: LANDING PAGE -->
         <main id="landing-page" class="page active">
             <div class="landing-content">
                 <p>Welcome to</p>
                 <h1 class="landing-title">MARGEN AI</h1>
                 <p class="landing-subtitle">Your personalized guide to professional growth. Navigate your career path with confidence.</p>
-                <div id="magnet-wrapper" class="magnet-wrapper">
                 <button id="get-started-btn" class="get-started-btn mx-auto mt-10">Get Started</button>
-                </div>
                 <div class="compact-features">
                     <div class="compact-feature-item">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
@@ -756,15 +442,11 @@
                         <span>AI Powered</span>
                     </div>
                 </div>
-                
-                <!-- Career Logos Section -->
-                <div class="mt-12">
-                    <p class="text-center mb-6" style="color: var(--text-secondary); font-size: 0.875rem;">Explore Career Paths</p>
-                    <div id="career-logos" class="logoloop logoloop--fade logoloop--scale-hover" style="width: 100%; --logoloop-logoHeight: 40px; --logoloop-gap: 48px;"></div>
-                </div>
             </div>
         </main>
 
+       <!-- ... ALL OTHER HTML PAGES ARE IDENTICAL ... -->
+       <!-- I'm omitting them for brevity, but they are in the full file -->
         <main id="auth-page" class="page">
              <div class="auth-container">
                 <div class="auth-promo-panel">
@@ -809,208 +491,45 @@
                 </div>
             </div>
         </main>
-
         <main id="input-page" class="page">
             <div class="input-card">
-                <div id="animated-title-container"></div>
-
-                <div id="user-type-selection" class="mt-8 space-y-4">
-                    <label class="form-label text-center">pick the track that matches your need...!</label>
-                    <div id="magic-bento-container" class="card-grid bento-section">
-                        <!-- Cards will be dynamically generated here -->
+                <h2 class="form-title">Tell Us About You</h2>
+                <p class="form-subtitle">This helps us find the perfect career path for you.</p>
+                <form id="input-form" class="mt-8 space-y-6">
+                    <div>
+                        <label for="name" class="form-label">What's your name?</label>
+                        <input id="name" type="text" placeholder="Enter your name" class="input-field-light">
                     </div>
-                </div>
-                <div id="student-form-container" class="hidden mt-6">
-                    <button id="change-goal-btn-1" class="text-sm mb-4" style="color: var(--text-accent);">&larr; Change goal</button>
-                    <form id="student-form" class="space-y-6">
-                        <div>
-                            <label for="student-name" class="form-label">What's your name?</label>
-                            <input id="student-name" type="text" placeholder="Enter your name" class="input-field-light">
+                    <div>
+                        <label for="interests" class="form-label">Your Interests</label>
+                        <input id="interests" type="text" placeholder="e.g., Technology, Art, Healthcare" class="input-field-light">
+                        <button type="button" id="start-assessment-btn" class="text-sm mt-2" style="color: var(--text-accent);">Don't know? Tap to take an interest assessment.</button>
+                    </div>
+                    <div>
+                        <label for="skills" class="form-label">Your Current Skills</label>
+                        <input id="skills" type="text" placeholder="e.g., Python, Communication, Teamwork" class="input-field-light">
+                    </div>
+                     <div>
+                        <label for="pace" class="form-label">Preferred Pace</label>
+                        <select id="pace" class="input-field-light">
+                            <option value="Fast-track">Fast-track</option>
+                            <option value="Balanced" selected>Balanced</option>
+                            <option value="Slow">Slow & Steady</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Life Goals (Select all that apply)</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Income"><span>Income</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Flexibility"><span>Flexibility</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Creativity"><span>Creativity</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Stability"><span>Stability</span></label>
                         </div>
-                        <div>
-                            <label for="student-interests" class="form-label">Your Interests</label>
-                            <input id="student-interests" type="text" placeholder="e.g., Technology, Art, Healthcare" class="input-field-light">
-                            <button type="button" id="start-assessment-btn" class="text-sm mt-2" style="color: var(--text-accent);">Don't know? Tap to take an interest assessment.</button>
-                        </div>
-                        <div>
-                            <label for="student-skills" class="form-label">Your Current Skills</label>
-                            <input id="student-skills" type="text" placeholder="e.g., Python, Communication, Teamwork" class="input-field-light">
-                        </div>
-                         <div>
-                            <label for="student-pace" class="form-label">Preferred Learning Pace</label>
-                            <select id="student-pace" class="input-field-light">
-                                <option value="Fast-track">Fast-track</option>
-                                <option value="Balanced" selected>Balanced</option>
-                                <option value="Slow">Slow & Steady</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label">Life Goals (Select all that apply)</label>
-                            <div class="grid grid-cols-2 gap-4">
-                                <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Income"><span>High Income</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Flexibility"><span>Flexibility</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Creativity"><span>Creativity</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Stability"><span>Stability</span></label>
-                            </div>
-                        </div>
-                        <button type="submit" class="submit-btn">Get My Career Path ✨</button>
-                    </form>
-                </div>
-                <div id="job-seeker-form-container" class="hidden mt-6">
-                    <button id="change-goal-btn-2" class="text-sm mb-4" style="color: var(--text-accent);">&larr; Change goal</button>
-                    <form id="job-seeker-form" class="space-y-6">
-                        <!-- Current Status -->
-                        <div>
-                            <label for="current-status" class="form-label">Current Status</label>
-                            <select id="current-status" class="input-field-light" required>
-                                <option value="">Select your current status</option>
-                                <option value="Final Year Student">Final Year Student</option>
-                                <option value="Graduate">Graduate</option>
-                                <option value="PG Student">PG Student</option>
-                            </select>
-                        </div>
-
-                        <!-- Target -->
-                        <div>
-                            <label for="target" class="form-label">Target</label>
-                            <select id="target" class="input-field-light" required>
-                                <option value="">Select your target</option>
-                                <option value="Internship">Internship</option>
-                                <option value="Placement">Placement</option>
-                                <option value="Off-campus Job">Off-campus Job</option>
-                            </select>
-                        </div>
-
-                        <!-- College Type -->
-                        <div>
-                            <label for="college-type" class="form-label">College Type</label>
-                            <select id="college-type" class="input-field-light" required>
-                                <option value="">Select your college type</option>
-                                <option value="Tier-1 IIT/NIT/IIIT">Tier-1 IIT/NIT/IIIT</option>
-                                <option value="Tier-2 Private">Tier-2 Private</option>
-                                <option value="Tier-3 Local College">Tier-3 Local College</option>
-                            </select>
-                        </div>
-
-                        <!-- Branch/Stream -->
-                        <div>
-                            <label for="branch-stream" class="form-label">Branch/Stream</label>
-                            <select id="branch-stream" class="input-field-light" required>
-                                <option value="">Select your branch/stream</option>
-                                <option value="CSE">CSE (Computer Science Engineering)</option>
-                                <option value="ECE">ECE (Electronics & Communication)</option>
-                                <option value="Mechanical">Mechanical Engineering</option>
-                                <option value="Civil">Civil Engineering</option>
-                                <option value="Commerce">Commerce</option>
-                                <option value="Arts">Arts</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <!-- Target Role -->
-                        <div>
-                            <label for="target-role" class="form-label">Target Role</label>
-                            <select id="target-role" class="input-field-light" required>
-                                <option value="">Select your target role</option>
-                                <option value="Software Developer">Software Developer</option>
-                                <option value="Data Analyst">Data Analyst</option>
-                                <option value="Business Analyst">Business Analyst</option>
-                                <option value="Marketing Intern">Marketing Intern</option>
-                                <option value="Designer">Designer</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <!-- Industry Preference -->
-                        <div>
-                            <label for="industry-preference" class="form-label">Industry Preference</label>
-                            <select id="industry-preference" class="input-field-light" required>
-                                <option value="">Select your industry preference</option>
-                                <option value="IT Services (TCS, Infosys, Wipro)">IT Services (TCS, Infosys, Wipro)</option>
-                                <option value="Product Companies (Microsoft, Google, Swiggy)">Product Companies (Microsoft, Google, Swiggy)</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Consulting">Consulting</option>
-                                <option value="Startups">Startups</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <!-- Recruitment Type -->
-                        <div>
-                            <label for="recruitment-type" class="form-label">Recruitment Type</label>
-                            <select id="recruitment-type" class="input-field-light" required>
-                                <option value="">Select recruitment type</option>
-                                <option value="Campus placement">Campus placement</option>
-                                <option value="Off-campus">Off-campus</option>
-                                <option value="Govt. job exams (Bank PO, SSC, etc.)">Govt. job exams (Bank PO, SSC, etc.)</option>
-                            </select>
-                        </div>
-
-                        <!-- Skills Already Learned -->
-                        <div>
-                            <label for="skills-learned" class="form-label">Skills Already Learned (Select all that apply)</label>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="DSA"><span>DSA</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="Python"><span>Python</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="Java"><span>Java</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="SQL"><span>SQL</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="Excel"><span>Excel</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="Designing"><span>Designing</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="Communication"><span>Communication</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="skills-learned" value="Aptitude"><span>Aptitude</span></label>
-                            </div>
-                            <div>
-                                <label for="custom-skills-learned" class="form-label text-sm">Add more skills (comma-separated)</label>
-                                <input id="custom-skills-learned" type="text" placeholder="e.g., React, Machine Learning, Project Management" class="input-field-light">
-                            </div>
-                        </div>
-
-                        <!-- Weak Areas -->
-                        <div>
-                            <label for="weak-areas" class="form-label">Weak Areas (Select areas you need to improve)</label>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <label class="goal-checkbox"><input type="checkbox" name="weak-areas" value="Coding"><span>Coding</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="weak-areas" value="Aptitude"><span>Aptitude</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="weak-areas" value="Resume"><span>Resume</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="weak-areas" value="GD/PI"><span>GD/PI</span></label>
-                                <label class="goal-checkbox"><input type="checkbox" name="weak-areas" value="Communication skills"><span>Communication skills</span></label>
-                            </div>
-                            <div>
-                                <label for="custom-weak-areas" class="form-label text-sm">Add more weak areas (comma-separated)</label>
-                                <input id="custom-weak-areas" type="text" placeholder="e.g., Leadership, Time Management, Technical Writing" class="input-field-light">
-                            </div>
-                        </div>
-
-                        <!-- Job Exam Preference (if govt.) -->
-                        <div id="job-exam-section" class="hidden">
-                            <label for="job-exam-preference" class="form-label">Job Exam Preference</label>
-                            <select id="job-exam-preference" class="input-field-light">
-                                <option value="">Select exam preference</option>
-                                <option value="SSC">SSC</option>
-                                <option value="UPSC">UPSC</option>
-                                <option value="Banking">Banking</option>
-                                <option value="PSU">PSU</option>
-                                <option value="Defence">Defence</option>
-                            </select>
-                        </div>
-
-                        <!-- Expected Job Location -->
-                        <div>
-                            <label for="job-location" class="form-label">Expected Job Location</label>
-                            <select id="job-location" class="input-field-light" required>
-                                <option value="">Select preferred location</option>
-                                <option value="Metro cities">Metro cities</option>
-                                <option value="Tier-2 cities">Tier-2 cities</option>
-                                <option value="Flexible">Flexible</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="submit-btn">Find Opportunities 🚀</button>
-                    </form>
-                </div>
-                </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Get My Career Path ✨</button>
+                </form>
+            </div>
         </main>
-        
         <main id="assessment-page" class="page">
             <div class="input-card">
                 <h2 class="form-title">Interest Assessment</h2>
@@ -1068,11 +587,10 @@
                 </form>
             </div>
         </main>
-
         <main id="careers-page" class="page w-full p-4 md:p-8">
              <div class="w-full max-w-7xl mx-auto flex-grow flex flex-col">
                 <div class="text-center mb-8">
-                    <h2 id="careers-title" class="text-4xl font-extrabold" style="color: var(--text-primary);">Here Are Your Custom Paths</h2>
+                    <h2 class="text-4xl font-extrabold" style="color: var(--text-primary);">Here Are Your Custom Paths</h2>
                     <p id="careers-subtitle" class="mt-2" style="color: var(--text-secondary);">Click a card to discover your roadmap.</p>
                 </div>
                 <div id="careers-loader" class="loader hidden"></div>
@@ -1084,7 +602,6 @@
                 </div>
             </div>
         </main>
-
         <main id="roadmap-page" class="page w-full p-4 md:p-8">
              <div class="w-full">
                 <div class="flex justify-between items-center w-full max-w-4xl mx-auto mb-6">
@@ -1094,16 +611,14 @@
                     </button>
                      <div class="flex gap-4">
                         <button id="analyze-skills-btn-roadmap" class="wizard-btn secondary">Analyze My Skills</button>
-                        <button id="case-study-btn-roadmap" class="wizard-btn primary">View Case Studies</button>
+                        <button id="start-interview-btn-roadmap" class="wizard-btn primary">Start Mock Interview</button>
                     </div>
                 </div>
                 <h2 id="roadmap-title" class="text-3xl font-extrabold text-center mb-10" style="color: var(--text-primary);"></h2>
                 <div id="roadmap-loader" class="loader hidden"></div>
-                <div id="roadmap-content" class="roadmap-container">
-                    </div>
+                <pre id="roadmap-content" class="mermaid"></pre>
             </div>
         </main>
-        
         <main id="comparison-page" class="page w-full max-w-7xl mx-auto p-4 md:p-8">
              <div class="w-full">
                 <button id="back-to-careers-from-compare-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
@@ -1115,19 +630,25 @@
                 <div id="comparison-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             </div>
         </main>
-
-        <main id="case-studies-page" class="page w-full max-w-5xl mx-auto p-4 md:p-8">
-            <div class="w-full">
-                <button id="back-to-roadmap-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Back to Previous Page
-                </button>
-                <h2 id="case-studies-title" class="text-4xl font-extrabold text-center mb-8" style="color: var(--text-primary);"></h2>
-                <div id="case-studies-loader" class="loader hidden"></div>
-                <div id="case-studies-grid" class="space-y-8"></div>
+        <main id="interview-page" class="page w-full p-4 md:p-8">
+            <div class="chat-container">
+                <div class="chat-header">
+                     <button id="back-to-roadmap-from-interview-btn" class="font-semibold transition flex items-center mb-2" style="color: var(--text-accent);">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Roadmap
+                    </button>
+                    <h2 id="interview-title" class="text-xl font-bold text-center" style="color: var(--text-primary);"></h2>
+                </div>
+                <div id="chat-messages" class="chat-messages flex flex-col">
+                </div>
+                <form id="chat-form" class="chat-input-form">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Type your answer..." autocomplete="off">
+                    <button type="submit" class="chat-send-btn">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                    </button>
+                </form>
             </div>
         </main>
-
         <main id="skill-gap-page" class="page w-full max-w-4xl mx-auto p-4 md:p-8">
             <div class="input-card w-full">
                 <button id="back-to-roadmap-from-gap-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
@@ -1163,705 +684,21 @@
                 </div>
             </div>
         </main>
+        <main id="project-pitch-page" class="page w-full max-w-4xl mx-auto p-4 md:p-8">
+            <div class="input-card w-full">
+                <button id="back-to-roadmap-from-pitch-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Roadmap
+                </button>
+                <h2 id="project-pitch-title" class="form-title text-center mb-4"></h2>
+                <div id="project-pitch-loader" class="loader hidden"></div>
+                <p id="project-pitch-content" class="text-center" style="color: var(--text-secondary);"></p>
+            </div>
+        </main>
     </div>
     
     <script>
-        // Magnet Effect Class
-        class MagnetEffect {
-            constructor(element, options = {}) {
-                this.element = element;
-                this.padding = options.padding || 100;
-                this.disabled = options.disabled || false;
-                this.magnetStrength = options.magnetStrength || 2;
-                this.activeTransition = options.activeTransition || 'transform 0.3s ease-out';
-                this.inactiveTransition = options.inactiveTransition || 'transform 0.5s ease-in-out';
-                
-                this.isActive = false;
-                this.position = { x: 0, y: 0 };
-                
-                this.init();
-            }
-            
-            init() {
-                if (this.disabled) return;
-                
-                // Create inner wrapper for the magnet effect
-                const innerWrapper = document.createElement('div');
-                innerWrapper.className = 'magnet-inner';
-                
-                // Move the button content to the inner wrapper
-                while (this.element.firstChild) {
-                    innerWrapper.appendChild(this.element.firstChild);
-                }
-                this.element.appendChild(innerWrapper);
-                
-                this.innerElement = innerWrapper;
-                this.bindEvents();
-            }
-            
-            bindEvents() {
-                this.handleMouseMove = (e) => {
-                    if (!this.element) return;
-                    
-                    const rect = this.element.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    
-                    const distX = Math.abs(centerX - e.clientX);
-                    const distY = Math.abs(centerY - e.clientY);
-                    
-                    if (distX < rect.width / 2 + this.padding && distY < rect.height / 2 + this.padding) {
-                        this.setActive(true);
-                        
-                        const offsetX = (e.clientX - centerX) / this.magnetStrength;
-                        const offsetY = (e.clientY - centerY) / this.magnetStrength;
-                        this.setPosition(offsetX, offsetY);
-                    } else {
-                        this.setActive(false);
-                        this.setPosition(0, 0);
-                    }
-                };
-                
-                window.addEventListener('mousemove', this.handleMouseMove);
-            }
-            
-            setActive(active) {
-                if (this.isActive === active) return;
-                this.isActive = active;
-                
-                if (this.innerElement) {
-                    this.innerElement.className = `magnet-inner ${active ? 'active' : 'inactive'}`;
-                }
-            }
-            
-            setPosition(x, y) {
-                this.position = { x, y };
-                
-                if (this.innerElement) {
-                    this.innerElement.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-                }
-            }
-            
-            destroy() {
-                window.removeEventListener('mousemove', this.handleMouseMove);
-            }
-        }
-
-        // LogoLoop Class
-        class LogoLoop {
-            constructor(element, options = {}) {
-                this.element = element;
-                this.options = {
-                    speed: options.speed || 120,
-                    direction: options.direction || 'left',
-                    width: options.width || '100%',
-                    logoHeight: options.logoHeight || 28,
-                    gap: options.gap || 32,
-                    pauseOnHover: options.pauseOnHover !== false,
-                    fadeOut: options.fadeOut || false,
-                    fadeOutColor: options.fadeOutColor,
-                    scaleOnHover: options.scaleOnHover || false,
-                    ariaLabel: options.ariaLabel || 'Partner logos',
-                    logos: options.logos || []
-                };
-                
-                this.seqWidth = 0;
-                this.copyCount = 2;
-                this.isHovered = false;
-                this.offset = 0;
-                this.velocity = 0;
-                this.rafId = null;
-                this.lastTimestamp = null;
-                
-                this.init();
-            }
-            
-            init() {
-                this.setupElement();
-                this.createLogos();
-                this.setupAnimation();
-                this.bindEvents();
-                this.updateDimensions();
-            }
-            
-            setupElement() {
-                this.element.style.width = this.options.width;
-                this.element.style.setProperty('--logoloop-gap', `${this.options.gap}px`);
-                this.element.style.setProperty('--logoloop-logoHeight', `${this.options.logoHeight}px`);
-                
-                if (this.options.fadeOutColor) {
-                    this.element.style.setProperty('--logoloop-fadeColor', this.options.fadeOutColor);
-                }
-                
-                // Add CSS classes
-                if (this.options.fadeOut) this.element.classList.add('logoloop--fade');
-                if (this.options.scaleOnHover) this.element.classList.add('logoloop--scale-hover');
-                
-                this.element.setAttribute('role', 'region');
-                this.element.setAttribute('aria-label', this.options.ariaLabel);
-            }
-            
-            createLogos() {
-                const track = document.createElement('div');
-                track.className = 'logoloop__track';
-                track.style.willChange = 'transform';
-                track.style.userSelect = 'none';
-                
-                this.track = track;
-                this.element.appendChild(track);
-                
-                this.updateLogoLists();
-            }
-            
-            updateLogoLists() {
-                this.track.innerHTML = '';
-                
-                for (let i = 0; i < this.copyCount; i++) {
-                    const list = document.createElement('ul');
-                    list.className = 'logoloop__list';
-                    list.setAttribute('role', 'list');
-                    if (i > 0) list.setAttribute('aria-hidden', 'true');
-                    
-                    if (i === 0) {
-                        this.seqRef = list;
-                    }
-                    
-                    this.options.logos.forEach((logo, logoIndex) => {
-                        const item = document.createElement('li');
-                        item.className = 'logoloop__item';
-                        item.setAttribute('role', 'listitem');
-                        
-                        let content;
-                        if (logo.node) {
-                            const nodeSpan = document.createElement('span');
-                            nodeSpan.className = 'logoloop__node';
-                            nodeSpan.setAttribute('aria-hidden', logo.href && !logo.ariaLabel ? 'true' : 'false');
-                            nodeSpan.textContent = logo.node;
-                            content = nodeSpan;
-                        } else {
-                            const img = document.createElement('img');
-                            img.src = logo.src;
-                            img.alt = logo.alt || '';
-                            img.title = logo.title || '';
-                            img.loading = 'lazy';
-                            img.decoding = 'async';
-                            img.draggable = false;
-                            content = img;
-                        }
-                        
-                        if (logo.href) {
-                            const link = document.createElement('a');
-                            link.className = 'logoloop__link';
-                            link.href = logo.href;
-                            link.setAttribute('aria-label', logo.ariaLabel || logo.alt || logo.title || 'logo link');
-                            link.target = '_blank';
-                            link.rel = 'noreferrer noopener';
-                            link.appendChild(content);
-                            item.appendChild(link);
-                        } else {
-                            item.appendChild(content);
-                        }
-                        
-                        list.appendChild(item);
-                    });
-                    
-                    this.track.appendChild(list);
-                }
-            }
-            
-            updateDimensions() {
-                const containerWidth = this.element.clientWidth;
-                const sequenceWidth = this.seqRef ? this.seqRef.getBoundingClientRect().width : 0;
-                
-                if (sequenceWidth > 0) {
-                    this.seqWidth = Math.ceil(sequenceWidth);
-                    const copiesNeeded = Math.ceil(containerWidth / sequenceWidth) + 2;
-                    this.copyCount = Math.max(2, copiesNeeded);
-                    this.updateLogoLists();
-                }
-            }
-            
-            setupAnimation() {
-                this.targetVelocity = this.calculateTargetVelocity();
-                this.animate();
-            }
-            
-            calculateTargetVelocity() {
-                const magnitude = Math.abs(this.options.speed);
-                const directionMultiplier = this.options.direction === 'left' ? 1 : -1;
-                const speedMultiplier = this.options.speed < 0 ? -1 : 1;
-                return magnitude * directionMultiplier * speedMultiplier;
-            }
-            
-            animate() {
-                const animate = (timestamp) => {
-                    if (this.lastTimestamp === null) {
-                        this.lastTimestamp = timestamp;
-                    }
-                    
-                    const deltaTime = Math.max(0, timestamp - this.lastTimestamp) / 1000;
-                    this.lastTimestamp = timestamp;
-                    
-                    const target = this.options.pauseOnHover && this.isHovered ? 0 : this.targetVelocity;
-                    
-                    const easingFactor = 1 - Math.exp(-deltaTime / 0.25);
-                    this.velocity += (target - this.velocity) * easingFactor;
-                    
-                    if (this.seqWidth > 0) {
-                        let nextOffset = this.offset + this.velocity * deltaTime;
-                        nextOffset = ((nextOffset % this.seqWidth) + this.seqWidth) % this.seqWidth;
-                        this.offset = nextOffset;
-                        
-                        const translateX = -this.offset;
-                        this.track.style.transform = `translate3d(${translateX}px, 0, 0)`;
-                    }
-                    
-                    this.rafId = requestAnimationFrame(animate);
-                };
-                
-                this.rafId = requestAnimationFrame(animate);
-            }
-            
-            bindEvents() {
-                this.handleMouseEnter = () => {
-                    if (this.options.pauseOnHover) this.isHovered = true;
-                };
-                
-                this.handleMouseLeave = () => {
-                    if (this.options.pauseOnHover) this.isHovered = false;
-                };
-                
-                this.handleResize = () => {
-                    this.updateDimensions();
-                };
-                
-                this.element.addEventListener('mouseenter', this.handleMouseEnter);
-                this.element.addEventListener('mouseleave', this.handleMouseLeave);
-                window.addEventListener('resize', this.handleResize);
-            }
-            
-            destroy() {
-                if (this.rafId) {
-                    cancelAnimationFrame(this.rafId);
-                }
-                
-                this.element.removeEventListener('mouseenter', this.handleMouseEnter);
-                this.element.removeEventListener('mouseleave', this.handleMouseLeave);
-                window.removeEventListener('resize', this.handleResize);
-            }
-        }
-
-        // MagicBento Class
-        class MagicBento {
-            constructor(container, options = {}) {
-                this.container = container;
-                this.options = {
-                    textAutoHide: options.textAutoHide !== false,
-                    enableStars: options.enableStars !== false,
-                    enableSpotlight: options.enableSpotlight !== false,
-                    enableBorderGlow: options.enableBorderGlow !== false,
-                    disableAnimations: options.disableAnimations || false,
-                    spotlightRadius: options.spotlightRadius || 300,
-                    particleCount: options.particleCount || 12,
-                    enableTilt: options.enableTilt || false,
-                    glowColor: options.glowColor || '132, 0, 255',
-                    clickEffect: options.clickEffect !== false,
-                    enableMagnetism: options.enableMagnetism !== false,
-                    cards: options.cards || []
-                };
-                
-                this.isMobile = window.innerWidth <= 768;
-                this.shouldDisableAnimations = this.options.disableAnimations || this.isMobile;
-                this.spotlight = null;
-                this.particles = [];
-                this.timeouts = [];
-                
-                this.init();
-            }
-            
-            init() {
-                this.createCards();
-                if (this.options.enableSpotlight) {
-                    this.createSpotlight();
-                }
-                this.bindEvents();
-            }
-            
-            createCards() {
-                this.container.innerHTML = '';
-                
-                this.options.cards.forEach((cardData, index) => {
-                    const card = document.createElement('div');
-                    const baseClassName = `card ${this.options.textAutoHide ? 'card--text-autohide' : ''} ${this.options.enableBorderGlow ? 'card--border-glow' : ''}`;
-                    
-                    card.className = baseClassName;
-                    card.style.backgroundColor = cardData.color;
-                    card.style.setProperty('--glow-color', this.options.glowColor);
-                    card.dataset.cardType = cardData.type;
-                    
-                    card.innerHTML = `
-                        <div class="card__header">
-                            <div class="card__label">${cardData.label}</div>
-                        </div>
-                        <div class="card__content">
-                            <h2 class="card__title">${cardData.title}</h2>
-                            <p class="card__description">${cardData.description}</p>
-                        </div>
-                    `;
-                    
-                    if (this.options.enableStars) {
-                        this.addParticleEffects(card);
-                    }
-                    
-                    this.addCardInteractions(card);
-                    this.container.appendChild(card);
-                });
-            }
-            
-            addParticleEffects(card) {
-                const particleContainer = document.createElement('div');
-                particleContainer.className = 'particle-container';
-                particleContainer.style.position = 'relative';
-                particleContainer.style.overflow = 'hidden';
-                
-                // Move card content to particle container
-                while (card.firstChild) {
-                    particleContainer.appendChild(card.firstChild);
-                }
-                card.appendChild(particleContainer);
-                
-                this.setupParticleAnimation(card, particleContainer);
-            }
-            
-            setupParticleAnimation(card, container) {
-                let isHovered = false;
-                const particles = [];
-                const timeouts = [];
-                
-                const createParticle = (x, y) => {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.style.cssText = `
-                        position: absolute;
-                        width: 4px;
-                        height: 4px;
-                        border-radius: 50%;
-                        background: rgba(${this.options.glowColor}, 1);
-                        box-shadow: 0 0 6px rgba(${this.options.glowColor}, 0.6);
-                        pointer-events: none;
-                        z-index: 100;
-                        left: ${x}px;
-                        top: ${y}px;
-                    `;
-                    return particle;
-                };
-                
-                const animateParticles = () => {
-                    if (!isHovered) return;
-                    
-                    for (let i = 0; i < this.options.particleCount; i++) {
-                        const timeoutId = setTimeout(() => {
-                            if (!isHovered) return;
-                            
-                            const rect = container.getBoundingClientRect();
-                            const x = Math.random() * rect.width;
-                            const y = Math.random() * rect.height;
-                            
-                            const particle = createParticle(x, y);
-                            container.appendChild(particle);
-                            particles.push(particle);
-                            
-                            // Animate particle
-                            particle.style.transform = 'scale(0)';
-                            particle.style.opacity = '0';
-                            
-                            setTimeout(() => {
-                                particle.style.transition = 'all 0.3s ease';
-                                particle.style.transform = 'scale(1)';
-                                particle.style.opacity = '1';
-                            }, 10);
-                            
-                            // Random movement
-                            const moveX = (Math.random() - 0.5) * 100;
-                            const moveY = (Math.random() - 0.5) * 100;
-                            const rotation = Math.random() * 360;
-                            
-                            setTimeout(() => {
-                                particle.style.transition = 'all 2s ease-in-out';
-                                particle.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${rotation}deg)`;
-                                particle.style.opacity = '0.3';
-                            }, 300);
-                            
-                            // Remove particle after animation
-                            setTimeout(() => {
-                                if (particle.parentNode) {
-                                    particle.parentNode.removeChild(particle);
-                                }
-                                const index = particles.indexOf(particle);
-                                if (index > -1) {
-                                    particles.splice(index, 1);
-                                }
-                            }, 2500);
-                            
-                        }, i * 100);
-                        
-                        timeouts.push(timeoutId);
-                    }
-                };
-                
-                const clearParticles = () => {
-                    timeouts.forEach(clearTimeout);
-                    timeouts.length = 0;
-                    particles.forEach(particle => {
-                        if (particle.parentNode) {
-                            particle.parentNode.removeChild(particle);
-                        }
-                    });
-                    particles.length = 0;
-                };
-                
-                card.addEventListener('mouseenter', () => {
-                    isHovered = true;
-                    animateParticles();
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    isHovered = false;
-                    clearParticles();
-                });
-            }
-            
-            addCardInteractions(card) {
-                let isHovered = false;
-                
-                const handleMouseEnter = () => {
-                    isHovered = true;
-                    
-                    if (this.options.enableTilt && !this.shouldDisableAnimations) {
-                        card.style.transition = 'transform 0.3s ease';
-                        card.style.transform = 'perspective(1000px) rotateX(5deg) rotateY(5deg)';
-                    }
-                };
-                
-                const handleMouseLeave = () => {
-                    isHovered = false;
-                    
-                    if (this.options.enableTilt && !this.shouldDisableAnimations) {
-                        card.style.transition = 'transform 0.3s ease';
-                        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-                    }
-                    
-                    if (this.options.enableMagnetism && !this.shouldDisableAnimations) {
-                        card.style.transition = 'transform 0.3s ease';
-                        card.style.transform = 'translate(0, 0)';
-                    }
-                };
-                
-                const handleMouseMove = (e) => {
-                    if (this.shouldDisableAnimations) return;
-                    
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    
-                    if (this.options.enableTilt) {
-                        const rotateX = ((y - centerY) / centerY) * -10;
-                        const rotateY = ((x - centerX) / centerX) * 10;
-                        card.style.transition = 'transform 0.1s ease';
-                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    }
-                    
-                    if (this.options.enableMagnetism) {
-                        const magnetX = (x - centerX) * 0.05;
-                        const magnetY = (y - centerY) * 0.05;
-                        card.style.transition = 'transform 0.3s ease';
-                        card.style.transform = `translate(${magnetX}px, ${magnetY}px)`;
-                    }
-                };
-                
-                const handleClick = (e) => {
-                    if (!this.options.clickEffect || this.shouldDisableAnimations) return;
-                    
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const maxDistance = Math.max(
-                        Math.hypot(x, y),
-                        Math.hypot(x - rect.width, y),
-                        Math.hypot(x, y - rect.height),
-                        Math.hypot(x - rect.width, y - rect.height)
-                    );
-                    
-                    const ripple = document.createElement('div');
-                    ripple.style.cssText = `
-                        position: absolute;
-                        width: ${maxDistance * 2}px;
-                        height: ${maxDistance * 2}px;
-                        border-radius: 50%;
-                        background: radial-gradient(circle, rgba(${this.options.glowColor}, 0.4) 0%, rgba(${this.options.glowColor}, 0.2) 30%, transparent 70%);
-                        left: ${x - maxDistance}px;
-                        top: ${y - maxDistance}px;
-                        pointer-events: none;
-                        z-index: 1000;
-                    `;
-                    
-                    card.appendChild(ripple);
-                    
-                    ripple.style.transform = 'scale(0)';
-                    ripple.style.opacity = '1';
-                    
-                    setTimeout(() => {
-                        ripple.style.transition = 'all 0.8s ease';
-                        ripple.style.transform = 'scale(1)';
-                        ripple.style.opacity = '0';
-                    }, 10);
-                    
-                    setTimeout(() => {
-                        if (ripple.parentNode) {
-                            ripple.parentNode.removeChild(ripple);
-                        }
-                    }, 800);
-                };
-                
-                card.addEventListener('mouseenter', handleMouseEnter);
-                card.addEventListener('mouseleave', handleMouseLeave);
-                card.addEventListener('mousemove', handleMouseMove);
-                card.addEventListener('click', handleClick);
-            }
-            
-            createSpotlight() {
-                this.spotlight = document.createElement('div');
-                this.spotlight.className = 'global-spotlight';
-                this.spotlight.style.cssText = `
-                    position: fixed;
-                    width: 800px;
-                    height: 800px;
-                    border-radius: 50%;
-                    pointer-events: none;
-                    background: radial-gradient(circle,
-                        rgba(${this.options.glowColor}, 0.15) 0%,
-                        rgba(${this.options.glowColor}, 0.08) 15%,
-                        rgba(${this.options.glowColor}, 0.04) 25%,
-                        rgba(${this.options.glowColor}, 0.02) 40%,
-                        rgba(${this.options.glowColor}, 0.01) 65%,
-                        transparent 70%
-                    );
-                    z-index: 200;
-                    opacity: 0;
-                    transform: translate(-50%, -50%);
-                    mix-blend-mode: screen;
-                `;
-                document.body.appendChild(this.spotlight);
-            }
-            
-            bindEvents() {
-                if (!this.options.enableSpotlight || this.shouldDisableAnimations) return;
-                
-                const handleMouseMove = (e) => {
-                    if (!this.spotlight) return;
-                    
-                    const section = this.container.closest('.bento-section');
-                    const rect = section?.getBoundingClientRect();
-                    const mouseInside = rect && 
-                        e.clientX >= rect.left && 
-                        e.clientX <= rect.right && 
-                        e.clientY >= rect.top && 
-                        e.clientY <= rect.bottom;
-                    
-                    if (!mouseInside) {
-                        this.spotlight.style.opacity = '0';
-                        this.container.querySelectorAll('.card').forEach(card => {
-                            card.style.setProperty('--glow-intensity', '0');
-                        });
-                        return;
-                    }
-                    
-                    const { proximity, fadeDistance } = this.calculateSpotlightValues();
-                    let minDistance = Infinity;
-                    
-                    this.container.querySelectorAll('.card').forEach(card => {
-                        const cardRect = card.getBoundingClientRect();
-                        const centerX = cardRect.left + cardRect.width / 2;
-                        const centerY = cardRect.top + cardRect.height / 2;
-                        const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY) - 
-                            Math.max(cardRect.width, cardRect.height) / 2;
-                        const effectiveDistance = Math.max(0, distance);
-                        
-                        minDistance = Math.min(minDistance, effectiveDistance);
-                        
-                        let glowIntensity = 0;
-                        if (effectiveDistance <= proximity) {
-                            glowIntensity = 1;
-                        } else if (effectiveDistance <= fadeDistance) {
-                            glowIntensity = (fadeDistance - effectiveDistance) / (fadeDistance - proximity);
-                        }
-                        
-                        this.updateCardGlowProperties(card, e.clientX, e.clientY, glowIntensity);
-                    });
-                    
-                    this.spotlight.style.left = e.clientX + 'px';
-                    this.spotlight.style.top = e.clientY + 'px';
-                    
-                    const targetOpacity = minDistance <= proximity ? 0.8 : 
-                        minDistance <= fadeDistance ? 
-                            ((fadeDistance - minDistance) / (fadeDistance - proximity)) * 0.8 : 0;
-                    
-                    this.spotlight.style.opacity = targetOpacity;
-                };
-                
-                const handleMouseLeave = () => {
-                    this.container.querySelectorAll('.card').forEach(card => {
-                        card.style.setProperty('--glow-intensity', '0');
-                    });
-                    if (this.spotlight) {
-                        this.spotlight.style.opacity = '0';
-                    }
-                };
-                
-                document.addEventListener('mousemove', handleMouseMove);
-                document.addEventListener('mouseleave', handleMouseLeave);
-                
-                this.cleanup = () => {
-                    document.removeEventListener('mousemove', handleMouseMove);
-                    document.removeEventListener('mouseleave', handleMouseLeave);
-                    if (this.spotlight && this.spotlight.parentNode) {
-                        this.spotlight.parentNode.removeChild(this.spotlight);
-                    }
-                };
-            }
-            
-            calculateSpotlightValues() {
-                const radius = this.options.spotlightRadius;
-                return {
-                    proximity: radius * 0.5,
-                    fadeDistance: radius * 0.75
-                };
-            }
-            
-            updateCardGlowProperties(card, mouseX, mouseY, glow) {
-                const rect = card.getBoundingClientRect();
-                const relativeX = ((mouseX - rect.left) / rect.width) * 100;
-                const relativeY = ((mouseY - rect.top) / rect.height) * 100;
-                
-                card.style.setProperty('--glow-x', `${relativeX}%`);
-                card.style.setProperty('--glow-y', `${relativeY}%`);
-                card.style.setProperty('--glow-intensity', glow.toString());
-                card.style.setProperty('--glow-radius', `${this.options.spotlightRadius}px`);
-            }
-            
-            destroy() {
-                if (this.cleanup) {
-                    this.cleanup();
-                }
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            const API_URL = 'http://127.0.0.1:5001';
-
             // --- THEME TOGGLE LOGIC ---
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             const sunIcon = document.getElementById('theme-icon-sun');
@@ -1881,90 +718,8 @@
                 localStorage.setItem('theme', newTheme);
             });
 
-            // --- MAGNET EFFECT INITIALIZATION ---
-            const magnetWrapper = document.getElementById('magnet-wrapper');
-            if (magnetWrapper) {
-                new MagnetEffect(magnetWrapper, {
-                    padding: 100,
-                    magnetStrength: 2,
-                    activeTransition: 'transform 0.3s ease-out',
-                    inactiveTransition: 'transform 0.5s ease-in-out'
-                });
-            }
-
-            // --- CAREER LOGOS INITIALIZATION ---
-            const careerLogos = [
-                { node: '💻', title: 'Software Development' },
-                { node: '📊', title: 'Data Science' },
-                { node: '🎨', title: 'UX/UI Design' },
-                { node: '📱', title: 'Mobile Development' },
-                { node: '🔒', title: 'Cybersecurity' },
-                { node: '☁️', title: 'Cloud Computing' },
-                { node: '🤖', title: 'AI/ML Engineering' },
-                { node: '📈', title: 'Digital Marketing' },
-                { node: '💼', title: 'Product Management' },
-                { node: '🏥', title: 'Healthcare Tech' },
-                { node: '🎮', title: 'Game Development' },
-                { node: '🌐', title: 'Web Development' },
-                { node: '📱', title: 'DevOps' },
-                { node: '💡', title: 'Startup Founder' },
-                { node: '🎯', title: 'Business Analyst' },
-                { node: '🔬', title: 'Research Scientist' }
-            ];
-
-            const careerLogosElement = document.getElementById('career-logos');
-            if (careerLogosElement) {
-                new LogoLoop(careerLogosElement, {
-                    logos: careerLogos,
-                    speed: 80,
-                    direction: 'left',
-                    logoHeight: 40,
-                    gap: 48,
-                    pauseOnHover: true,
-                    fadeOut: true,
-                    scaleOnHover: true,
-                    ariaLabel: 'Career path options'
-                });
-            }
-
-            // --- MAGIC BENTO INITIALIZATION ---
-            const magicBentoContainer = document.getElementById('magic-bento-container');
-            if (magicBentoContainer) {
-                const bentoCardData = [
-                    {
-                        color: '#060010',
-                        title: 'Job Seeker',
-                        description: 'Find job/internship opportunities and get interview preparation help.',
-                        label: 'Career',
-                        type: 'job_seeker'
-                    },
-                    {
-                        color: '#060010',
-                        title: 'Student',
-                        description: 'Explore career paths and get a step-by-step learning roadmap.',
-                        label: 'Learning',
-                        type: 'student'
-                    }
-                ];
-
-                new MagicBento(magicBentoContainer, {
-                    cards: bentoCardData,
-                    textAutoHide: true,
-                    enableStars: true,
-                    enableSpotlight: true,
-                    enableBorderGlow: true,
-                    disableAnimations: false,
-                    spotlightRadius: 300,
-                    particleCount: 12,
-                    enableTilt: false,
-                    glowColor: '132, 0, 255',
-                    clickEffect: true,
-                    enableMagnetism: false
-                });
-            }
-
-            // --- APP LOGIC ---
-            const pages = { landing: document.getElementById('landing-page'), auth: document.getElementById('auth-page'), input: document.getElementById('input-page'), assessment: document.getElementById('assessment-page'), careers: document.getElementById('careers-page'), roadmap: document.getElementById('roadmap-page'), comparison: document.getElementById('comparison-page'), case_studies: document.getElementById('case-studies-page'), skill_gap: document.getElementById('skill-gap-page') };
+            // --- APP LOGIC (SIMULATED) ---
+            const pages = { landing: document.getElementById('landing-page'), auth: document.getElementById('auth-page'), input: document.getElementById('input-page'), assessment: document.getElementById('assessment-page'), careers: document.getElementById('careers-page'), roadmap: document.getElementById('roadmap-page'), comparison: document.getElementById('comparison-page'), skill_gap: document.getElementById('skill-gap-page'), interview: document.getElementById('interview-page'), project_pitch: document.getElementById('project-pitch-page') };
             const appHeader = document.getElementById('app-header');
             const userEmailDisplay = document.getElementById('user-email');
             const getStartedBtn = document.getElementById('get-started-btn');
@@ -1979,18 +734,7 @@
             const sendOtpBtn = document.getElementById('send-otp-btn');
             const otpPhoneDisplay = document.getElementById('otp-phone-display');
             const authError = document.getElementById('auth-error');
-            
-            // --- MODIFIED & NEW ELEMENTS FOR USER TYPE ---
-            const userTypeSelection = document.getElementById('user-type-selection');
-            const studentFormContainer = document.getElementById('student-form-container');
-            const jobSeekerFormContainer = document.getElementById('job-seeker-form-container');
-            const studentForm = document.getElementById('student-form');
-            const jobSeekerForm = document.getElementById('job-seeker-form');
-            const changeGoalBtn1 = document.getElementById('change-goal-btn-1');
-            const changeGoalBtn2 = document.getElementById('change-goal-btn-2');
-            const careersTitle = document.getElementById('careers-title');
-            // --- END MODIFIED & NEW ELEMENTS ---
-
+            const inputForm = document.getElementById('input-form');
             const careersLoader = document.getElementById('careers-loader');
             const careersList = document.getElementById('careers-list');
             const careersSubtitle = document.getElementById('careers-subtitle');
@@ -2004,12 +748,7 @@
             const startAssessmentBtn = document.getElementById('start-assessment-btn');
             const assessmentForm = document.getElementById('assessment-form');
             const cancelAssessmentBtn = document.getElementById('cancel-assessment-btn');
-            const caseStudyBtnRoadmap = document.getElementById('case-study-btn-roadmap');
-            const caseStudiesLoader = document.getElementById('case-studies-loader');
-            const caseStudiesGrid = document.getElementById('case-studies-grid');
-            const caseStudiesTitle = document.getElementById('case-studies-title');
-            const backToRoadmapBtn = document.getElementById('back-to-roadmap-btn');
-            const analyzeSkillsBtnRoadmap = document.getElementById('analyze-skills-btn-roadmap');
+            const startInterviewBtnRoadmap = document.getElementById('start-interview-btn-roadmap');
             const skillGapPage = document.getElementById('skill-gap-page');
             const skillGapTitle = document.getElementById('skill-gap-title');
             const skillGapForm = document.getElementById('skill-gap-form');
@@ -2020,21 +759,32 @@
             const skillsHaveList = document.getElementById('skills-have-list');
             const skillsToLearnList = document.getElementById('skills-to-learn-list');
             const backToRoadmapFromGapBtn = document.getElementById('back-to-roadmap-from-gap-btn');
+            const interviewTitle = document.getElementById('interview-title');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const backToRoadmapFromInterviewBtn = document.getElementById('back-to-roadmap-from-interview-btn');
+            const analyzeSkillsBtnRoadmap = document.getElementById('analyze-skills-btn-roadmap');
+            const projectPitchPage = document.getElementById('project-pitch-page');
+            const projectPitchTitle = document.getElementById('project-pitch-title');
+            const projectPitchLoader = document.getElementById('project-pitch-loader');
+            const projectPitchContent = document.getElementById('project-pitch-content');
+            const backToRoadmapFromPitchBtn = document.getElementById('back-to-roadmap-from-pitch-btn');
 
             let currentUserEmail = null;
             let careersToCompare = new Set();
             let isCompareModeActive = false;
-            let currentCareer = '';
+            let currentCareerForAnalysis = '';
             let currentRoadmapForAnalysis = null;
             let lastPage = 'landing';
-            let currentUserType = null; // 'student' or 'job_seeker'
+            let interviewConversation = [];
 
             function navigateTo(pageName) {
                 const currentPage = Object.keys(pages).find(key => pages[key].classList.contains('active'));
                 if (currentPage) lastPage = currentPage;
 
-                if (pageName === 'landing') { body.style.background = 'var(--bg-landing)'; document.getElementById('theme-toggle-container').classList.remove('hidden'); appHeader.classList.add('hidden'); } 
-                else { body.style.background = 'var(--bg-main-app)'; document.getElementById('theme-toggle-container').classList.add('hidden'); appHeader.classList.remove('hidden');}
+                if (pageName === 'landing') { body.classList.remove('bg-main-app'); body.classList.add('bg-landing'); document.getElementById('theme-toggle-container').classList.remove('hidden'); appHeader.classList.add('hidden'); } 
+                else { body.classList.remove('bg-landing'); body.classList.add('bg-main-app'); document.getElementById('theme-toggle-container').classList.add('hidden'); appHeader.classList.remove('hidden');}
                 Object.values(pages).forEach(page => page.classList.remove('active'));
                 if (pages[pageName]) { pages[pageName].classList.add('active'); }
             }
@@ -2054,316 +804,55 @@
                 appHeader.classList.remove('hidden');
                 navigateTo('input');
             }
-            
-            async function handleApiResponse(response) {
-                const result = await response.json();
-                if (!response.ok) {
-                    throw new Error(result.error || 'An unknown error occurred.');
-                }
-                return result;
+
+            async function handleApiSimulation(action, data) {
+                return new Promise(resolve => setTimeout(() => {
+                    if (action === 'getCareers') {
+                        resolve([ { title: "AI Ethics Consultant", description: "Guide companies in the responsible development and deployment of artificial intelligence systems." }, { title: "Frontend Developer", description: "Build beautiful, responsive, and user-friendly websites and web applications." }, { title: "UX/UI Designer", description: "Craft intuitive and visually appealing digital experiences for users." }, { title: "Data Scientist", description: "Analyze complex data to uncover trends and insights that drive business decisions." } ]);
+                    } else if (action === 'getRoadmap') {
+                         resolve([ { title: "Foundational Knowledge", skills: [ { name: "HTML5 & CSS3", resource: { name: "freeCodeCamp", link: "https://www.freecodecamp.org/learn/2022/responsive-web-design/" } }, { name: "JavaScript (ES6+)", resource: { name: "MDN Docs", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" } } ] }, { title: "Framework Mastery", skills: [ { name: "React or Vue.js", resource: { name: "Official React Docs", link: "https://react.dev/" } }, { name: "State Management", resource: { name: "Redux Tutorial - YouTube", link: "https://www.youtube.com/watch?v=9boMnm5X9ak" } } ] }, { title: "Advanced Skills & Portfolio", skills: [ { name: "TypeScript", resource: { name: "Udemy: Understanding TypeScript", link: "https://www.udemy.com/course/understanding-typescript/" } }, { name: "Build 3 Projects", resource: { name: "Project Ideas - GitHub", link: "https://github.com/florinpop17/app-ideas" } } ] } ]);
+                    } else if (action === 'getInterests') {
+                         resolve({ interests: "AI & Technology, Creative Design, Problem Solving" });
+                    } else if (action === 'startInterview') {
+                        resolve({ greeting: `Hello! I'll be your interviewer today for the ${data.careerTitle} position. Let's start with a simple question: Why are you interested in this career?` });
+                    } else if (action === 'continueInterview') {
+                        const responses = [ "That's an interesting perspective. Could you elaborate on the technical skills you have that make you a good fit?", "Thank you for sharing. Can you tell me about a time you faced a difficult challenge in a project and how you overcame it?", "I see. Where do you see yourself in five years within this career path?", "Good point. What are you most passionate about learning next?", "Okay, that's helpful. Let's move on. What's your experience with collaborative tools like Git and Jira?" ];
+                        resolve({ text: responses[Math.floor(Math.random() * responses.length)] });
+                    } else if (action === 'getProjectPitch') {
+                        resolve({ pitch: `Based on your interest in ${data.interests} and the skills for this milestone (${data.skills.join(', ')}), a great project would be to build an interactive portfolio website using React. This site could dynamically showcase your projects, filtering them based on the technologies used, and include a blog section where you write about your learning journey.`});
+                    }
+                }, 1000));
             }
 
-            getStartedBtn.addEventListener('click', () => {
-                // Skip authentication and go directly to input page
-                currentUserEmail = 'demo@user.com';
-                userEmailDisplay.textContent = currentUserEmail;
-                appHeader.classList.remove('hidden');
-                navigateTo('input');
-            });
+            getStartedBtn.addEventListener('click', () => navigateTo('auth'));
             signinTab.addEventListener('click', () => setActiveTab(signinTab));
             signupTab.addEventListener('click', () => setActiveTab(signupTab));
             otpTab.addEventListener('click', () => setActiveTab(otpTab));
 
-            signupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('signup-email').value;
-                const password = document.getElementById('signup-password').value;
-                try {
-                    const response = await fetch(`${API_URL}/signup`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password }),
-                    });
-                    const result = await handleApiResponse(response);
-                    alert(result.message);
-                    signinTab.click();
-                } catch (error) {
-                    authError.textContent = error.message;
-                }
-            });
+            signupForm.addEventListener('submit', (e) => { e.preventDefault(); alert('Sign up successful! Please sign in.'); signinTab.click(); });
+            signinForm.addEventListener('submit', (e) => { e.preventDefault(); const email = document.getElementById('signin-email').value; loginUser(email || "demo@user.com"); });
+            sendOtpBtn.addEventListener('click', () => { const phone = document.getElementById('phone-number').value; if (!phone) { authError.textContent = "Please enter a phone number."; return; } authError.textContent = `OTP sent to ${phone}`; authError.classList.remove('text-pink-300'); authError.classList.add('text-green-300'); setTimeout(() => { authError.textContent = ''; authError.classList.remove('text-green-300'); authError.classList.add('text-pink-300'); }, 3000); otpPhoneDisplay.textContent = phone; otpPhoneStep.classList.add('hidden'); otpVerifyStep.classList.remove('hidden'); });
+            otpForm.addEventListener('submit', (e) => { e.preventDefault(); const phone = otpPhoneDisplay.textContent; loginUser(phone); });
+            document.getElementById('signout-btn').addEventListener('click', () => { currentUserEmail = null; appHeader.classList.add('hidden'); navigateTo('landing'); });
 
-            signinForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('signin-email').value;
-                const password = document.getElementById('signin-password').value;
-                try {
-                    const response = await fetch(`${API_URL}/signin`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password }),
-                    });
-                    const result = await handleApiResponse(response);
-                    loginUser(result.identifier);
-                } catch (error) {
-                    authError.textContent = error.message;
-                }
-            });
-
-            sendOtpBtn.addEventListener('click', async () => {
-                const phone = document.getElementById('phone-number').value;
-                if (!phone) { authError.textContent = "Please enter a phone number."; return; }
-                try {
-                    const response = await fetch(`${API_URL}/send-otp`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone }),
-                    });
-                    const result = await handleApiResponse(response);
-                    authError.textContent = result.message;
-                    authError.classList.remove('text-pink-300'); authError.classList.add('text-green-300');
-                    setTimeout(() => { authError.textContent = ''; authError.classList.remove('text-green-300'); authError.classList.add('text-pink-300'); }, 3000);
-                    otpPhoneDisplay.textContent = phone;
-                    otpPhoneStep.classList.add('hidden');
-                    otpVerifyStep.classList.remove('hidden');
-                } catch (error) {
-                    authError.textContent = error.message;
-                }
-            });
-
-            otpForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const code = document.getElementById('otp-code').value;
-                const phone = otpPhoneDisplay.textContent;
-                try {
-                    const response = await fetch(`${API_URL}/verify-otp`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone, code }),
-                    });
-                    const result = await handleApiResponse(response);
-                    loginUser(result.identifier);
-                } catch (error) {
-                    authError.textContent = error.message;
-                }
-            });
-
-            document.getElementById('signout-btn').addEventListener('click', () => {
-                currentUserEmail = null;
-                appHeader.classList.add('hidden');
-                navigateTo('landing');
-            });
-
-            // --- START: NEW LOGIC FOR USER TYPE SELECTION ---
-            function resetInputPage() {
-                userTypeSelection.classList.remove('hidden');
-                studentFormContainer.classList.add('hidden');
-                jobSeekerFormContainer.classList.add('hidden');
-                currentUserType = null;
-            }
-
-            // Updated event listeners for MagicBento cards
-            document.addEventListener('click', (e) => {
-                const card = e.target.closest('.card');
-                if (!card || !card.dataset.cardType) return;
-                
-                const cardType = card.dataset.cardType;
-                currentUserType = cardType;
-                
-                userTypeSelection.classList.add('hidden');
-                
-                if (cardType === 'student') {
-                    studentFormContainer.classList.remove('hidden');
-                } else if (cardType === 'job_seeker') {
-                jobSeekerFormContainer.classList.remove('hidden');
-                }
-            });
-
-            changeGoalBtn1.addEventListener('click', resetInputPage);
-            changeGoalBtn2.addEventListener('click', resetInputPage);
-            // --- END: NEW LOGIC FOR USER TYPE SELECTION ---
-
-            // --- STUDENT FORM SUBMISSION ---
-            studentForm.addEventListener('submit', async (e) => {
+            inputForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 navigateTo('careers');
                 careersList.innerHTML = '';
                 careersLoader.classList.remove('hidden');
-                toggleCompareModeBtn.classList.remove('hidden'); // Show compare for students
-
-                const formData = {
-                    name: document.getElementById('student-name').value,
-                    interests: document.getElementById('student-interests').value,
-                    skills: document.getElementById('student-skills').value,
-                    pace: document.getElementById('student-pace').value,
-                    lifeGoals: Array.from(document.querySelectorAll('input[name="life-goal"]:checked')).map(el => el.value)
-                };
-
-                try {
-                    const response = await fetch('http://localhost:5001/generate-careers', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
-                    const careers = await response.json();
-                    displayCareerOptions(careers);
-                } catch (error) {
-                    console.error('Error:', error);
-                    // Fallback to mock data if backend is not available
-                    const mockCareers = [
-                        {
-                            title: "Software Developer",
-                            description: "Build applications and software solutions using programming languages and frameworks."
-                        },
-                        {
-                            title: "Data Scientist",
-                            description: "Analyze complex data to help organizations make informed decisions."
-                        },
-                        {
-                            title: "UX/UI Designer",
-                            description: "Create user-friendly interfaces and experiences for digital products."
-                        },
-                        {
-                            title: "Digital Marketer",
-                            description: "Promote products and services through digital channels and platforms."
-                        }
-                    ];
-                    
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    displayCareerOptions(mockCareers);
-                } finally {
-                    careersLoader.classList.add('hidden');
-                }
+                const result = await handleApiSimulation('getCareers');
+                careersLoader.classList.add('hidden');
+                displayCareerOptions(result);
             });
 
-            // --- JOB EXAM SECTION TOGGLE ---
-            const recruitmentTypeSelect = document.getElementById('recruitment-type');
-            const jobExamSection = document.getElementById('job-exam-section');
-            
-            if (recruitmentTypeSelect && jobExamSection) {
-                recruitmentTypeSelect.addEventListener('change', (e) => {
-                    if (e.target.value === 'Govt. job exams (Bank PO, SSC, etc.)') {
-                        jobExamSection.classList.remove('hidden');
-                    } else {
-                        jobExamSection.classList.add('hidden');
-                    }
-                });
-            }
-
-            // --- JOB SEEKER FORM SUBMISSION ---
-            jobSeekerForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                navigateTo('careers');
-                careersList.innerHTML = '';
-                careersLoader.classList.remove('hidden');
-                toggleCompareModeBtn.classList.add('hidden'); // Hide compare for job seekers
-
-                // Collect all form data
-                const checkedSkills = Array.from(document.querySelectorAll('input[name="skills-learned"]:checked')).map(el => el.value);
-                const customSkills = document.getElementById('custom-skills-learned').value.split(',').map(s => s.trim()).filter(s => s);
-                const checkedWeakAreas = Array.from(document.querySelectorAll('input[name="weak-areas"]:checked')).map(el => el.value);
-                const customWeakAreas = document.getElementById('custom-weak-areas').value.split(',').map(s => s.trim()).filter(s => s);
-                
-                const formData = {
-                    currentStatus: document.getElementById('current-status').value,
-                    target: document.getElementById('target').value,
-                    collegeType: document.getElementById('college-type').value,
-                    branchStream: document.getElementById('branch-stream').value,
-                    targetRole: document.getElementById('target-role').value,
-                    industryPreference: document.getElementById('industry-preference').value,
-                    recruitmentType: document.getElementById('recruitment-type').value,
-                    skillsLearned: [...checkedSkills, ...customSkills],
-                    weakAreas: [...checkedWeakAreas, ...customWeakAreas],
-                    jobLocation: document.getElementById('job-location').value,
-                    jobExamPreference: document.getElementById('job-exam-preference').value
-                };
-
-                try {
-                    // Try to connect to backend first
-                    const response = await fetch('http://localhost:5001/generate-careers', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    if (response.ok) {
-                        const careers = await response.json();
-                        displayCareerOptions(careers);
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Backend connection failed, using mock data:', error);
-                }
-                
-                // Fallback to mock data if backend is not available
-                try {
-                    const mockJobs = [
-                        {
-                            title: "Frontend Developer",
-                            company: "TechCorp Inc.",
-                            description: "Join our team to build amazing user interfaces using React and modern web technologies.",
-                            type: "Full-time",
-                            location: "Remote",
-                            apply_link: "https://example.com/apply"
-                        },
-                        {
-                            title: "Data Analyst Intern",
-                            company: "DataFlow Solutions",
-                            description: "Gain hands-on experience analyzing business data and creating insights for our clients.",
-                            type: "Internship",
-                            location: "New York, NY",
-                            apply_link: "https://example.com/apply"
-                        },
-                        {
-                            title: "UX Designer",
-                            company: "DesignStudio",
-                            description: "Create intuitive and beautiful user experiences for our digital products.",
-                            type: "Full-time",
-                            location: "San Francisco, CA",
-                            apply_link: "https://example.com/apply"
-                        }
-                    ];
-                    
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    displayJobOpportunities(mockJobs);
-                } catch (error) {
-                    console.error('Error displaying job opportunities:', error);
-                    careersList.innerHTML = '<p class="text-pink-300 text-center">Error loading opportunities. Please try again.</p>';
-                } finally {
-                    careersLoader.classList.add('hidden');
-                }
-
-                
-            });
-
-            // --- MODIFIED: To handle both career paths and job opportunities ---
             function displayCareerOptions(careers) {
-                careersTitle.textContent = "Here Are Your Custom Paths";
-                careersSubtitle.textContent = "Click a card to discover your roadmap.";
                 careersList.innerHTML = '';
                 careers.forEach(career => {
                     const card = document.createElement('div');
                     card.className = 'career-card';
                     card.dataset.title = career.title;
-                    card.innerHTML = `
-                        <h3 class="text-xl font-bold mb-2">${career.title}</h3>
-                        <p class="opacity-80 mb-3">${career.description}</p>
-                        <div class="flex gap-2">
-                            <button class="mock-interview-btn text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full transition-colors" data-career="${career.title}">
-                                🎤 Mock Interview
-                            </button>
-                        </div>
-                    `;
-                    card.addEventListener('click', (e) => {
-                        // Don't trigger if clicking on the mock interview button
-                        if (e.target.classList.contains('mock-interview-btn')) return;
-                        
+                    card.innerHTML = `<h3 class="text-xl font-bold mb-2">${career.title}</h3><p class="opacity-80">${career.description}</p>`;
+                    card.addEventListener('click', () => {
                         if (isCompareModeActive) {
                             if (careersToCompare.has(career.title)) { careersToCompare.delete(career.title); card.classList.remove('selected'); } 
                             else { careersToCompare.add(career.title); card.classList.add('selected'); }
@@ -2372,684 +861,287 @@
                             fetchAndDisplayRoadmap(career.title);
                         }
                     });
-                    
-                    // Add mock interview button event listener
-                    const mockInterviewBtn = card.querySelector('.mock-interview-btn');
-                    mockInterviewBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        startMockInterview(career.title);
-                    });
-                    
                     careersList.appendChild(card);
                 });
-            }
-
-            // --- NEW: Display function for job opportunities with enhanced sections ---
-            function displayJobOpportunities(jobs) {
-                careersTitle.textContent = "Job Seeker Dashboard";
-                careersSubtitle.textContent = "Your personalized career development hub.";
-                careersList.innerHTML = '';
-                
-                // Create main sections container
-                const sectionsContainer = document.createElement('div');
-                sectionsContainer.className = 'flex flex-wrap justify-center items-start';
-                sectionsContainer.style.gap = '2rem';
-                sectionsContainer.style.padding = '2rem';
-                sectionsContainer.style.maxWidth = '1200px';
-                sectionsContainer.style.margin = '0 auto';
-                
-                // 1. Find Experts Section
-                const expertsSection = document.createElement('div');
-                expertsSection.className = 'dashboard-card text-center';
-                expertsSection.innerHTML = `
-                    <div>
-                        <div class="card-icon">👥</div>
-                        <h3 class="card-title">Find Experts</h3>
-                        <p class="card-description">Connect with industry professionals and mentors in your field.</p>
-                    </div>
-                    <button class="submit-btn !text-sm !py-2 card-button" onclick="showExperts()">Browse Experts</button>
-                `;
-                
-                // 2. Personalized Roadmap Section
-                const roadmapSection = document.createElement('div');
-                roadmapSection.className = 'dashboard-card text-center';
-                roadmapSection.innerHTML = `
-                    <div>
-                        <div class="card-icon">🗺️</div>
-                        <h3 class="card-title">Personalized Roadmap</h3>
-                        <p class="card-description">Get a customized learning path based on your current skills and goals.</p>
-                    </div>
-                    <button class="submit-btn !text-sm !py-2 card-button" onclick="showPersonalizedRoadmap()">View Roadmap</button>
-                `;
-                
-                // 3. Future Scope in India Section
-                const futureScopeSection = document.createElement('div');
-                futureScopeSection.className = 'dashboard-card text-center';
-                futureScopeSection.innerHTML = `
-                    <div>
-                        <div class="card-icon">🇮🇳</div>
-                        <h3 class="card-title">Future Scope in India</h3>
-                        <p class="card-description">Explore career opportunities and market trends in India.</p>
-                    </div>
-                    <button class="submit-btn !text-sm !py-2 card-button" onclick="showFutureScope()">Explore Scope</button>
-                `;
-                
-                // 4. Projects Section
-                const projectsSection = document.createElement('div');
-                projectsSection.className = 'dashboard-card text-center';
-                projectsSection.innerHTML = `
-                    <div>
-                        <div class="card-icon">💼</div>
-                        <h3 class="card-title">Projects</h3>
-                        <p class="card-description">Hands-on projects to build your portfolio and enhance your skills.</p>
-                    </div>
-                    <button class="submit-btn !text-sm !py-2 card-button" onclick="showProjects()">View Projects</button>
-                `;
-                
-                // 5. Chatbot for Interview Section
-                const interviewSection = document.createElement('div');
-                interviewSection.className = 'dashboard-card text-center';
-                interviewSection.innerHTML = `
-                    <div>
-                        <div class="card-icon">🤖</div>
-                        <h3 class="card-title">Interview Practice</h3>
-                        <p class="card-description">Practice with our AI chatbot for mock interviews.</p>
-                    </div>
-                    <button class="submit-btn !text-sm !py-2 card-button" onclick="startMockInterview('Job Seeker')">Start Practice</button>
-                `;
-                
-                // Add all sections to container (only the 5 requested sections)
-                sectionsContainer.appendChild(expertsSection);
-                sectionsContainer.appendChild(roadmapSection);
-                sectionsContainer.appendChild(futureScopeSection);
-                sectionsContainer.appendChild(projectsSection);
-                sectionsContainer.appendChild(interviewSection);
-                
-                careersList.appendChild(sectionsContainer);
             }
             
             function updateCompareButtonVisibility() { viewComparisonBtn.classList.toggle('hidden', careersToCompare.size < 2); }
 
-            // --- NEW: Mock Interview Function ---
-            function startMockInterview(careerTitle) {
-                // Open mock interview in a new window/tab
-                const mockInterviewUrl = `mock-interview.html?career=${encodeURIComponent(careerTitle)}`;
-                window.open(mockInterviewUrl, '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
-            }
+           const getMilestoneIcon = (title) => {
+    // Use the theme's accent color for a consistent look
+    const accentColor = 'var(--text-accent)'; 
+    const lowerTitle = title.toLowerCase();
 
-            // --- NEW: Job Seeker Section Functions ---
-            function showExperts() {
-                careersTitle.textContent = "Find Industry Experts";
-                careersSubtitle.textContent = "Connect with professionals and mentors in your field.";
-                careersList.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="career-card text-center">
-                            <div class="text-4xl mb-4">👨‍💻</div>
-                            <h3 class="text-xl font-bold mb-2">Tech Mentors</h3>
-                            <p class="opacity-80 mb-4">Senior developers, architects, and tech leads</p>
-                            <button class="submit-btn !text-sm !py-2">Connect</button>
-                        </div>
-                        <div class="career-card text-center">
-                            <div class="text-4xl mb-4">👩‍💼</div>
-                            <h3 class="text-xl font-bold mb-2">Career Coaches</h3>
-                            <p class="opacity-80 mb-4">HR professionals and career advisors</p>
-                            <button class="submit-btn !text-sm !py-2">Connect</button>
-                        </div>
-                        <div class="career-card text-center">
-                            <div class="text-4xl mb-4">🎯</div>
-                            <h3 class="text-xl font-bold mb-2">Industry Leaders</h3>
-                            <p class="opacity-80 mb-4">CEOs, founders, and industry veterans</p>
-                            <button class="submit-btn !text-sm !py-2">Connect</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function showPersonalizedRoadmap() {
-                careersTitle.textContent = "Your Personalized Roadmap";
-                careersSubtitle.textContent = "Customized learning path based on your profile.";
-                careersList.innerHTML = `
-                    <div class="career-card">
-                        <h3 class="text-xl font-bold mb-4">Learning Path</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center mr-3">1</div>
-                                <div>
-                                    <h4 class="font-semibold">Foundation Skills (2-3 months)</h4>
-                                    <p class="text-sm opacity-80">Build core technical skills</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                                <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mr-3">2</div>
-                                <div>
-                                    <h4 class="font-semibold">Intermediate Projects (3-4 months)</h4>
-                                    <p class="text-sm opacity-80">Apply skills in real projects</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                                <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center mr-3">3</div>
-                                <div>
-                                    <h4 class="font-semibold">Advanced Specialization (4-6 months)</h4>
-                                    <p class="text-sm opacity-80">Master specific technologies</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function showFutureScope() {
-                careersTitle.textContent = "Future Scope in India";
-                careersSubtitle.textContent = "Career opportunities and market trends in India.";
-                careersList.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="career-card">
-                            <h3 class="text-xl font-bold mb-4">Market Growth</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between">
-                                    <span>IT Services</span>
-                                    <span class="text-green-500">+15% YoY</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Startups</span>
-                                    <span class="text-green-500">+25% YoY</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Fintech</span>
-                                    <span class="text-green-500">+30% YoY</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="career-card">
-                            <h3 class="text-xl font-bold mb-4">Top Cities</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between">
-                                    <span>Bangalore</span>
-                                    <span class="text-blue-500">Tech Hub</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Mumbai</span>
-                                    <span class="text-blue-500">Finance</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Delhi NCR</span>
-                                    <span class="text-blue-500">Startups</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function showProjects() {
-                careersTitle.textContent = "Projects Between Roadmaps";
-                careersSubtitle.textContent = "Hands-on projects to build your portfolio.";
-                careersList.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="career-card">
-                            <h3 class="text-xl font-bold mb-2">E-commerce Website</h3>
-                            <p class="opacity-80 mb-4">Build a full-stack e-commerce platform</p>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="case-study-skill-tag">React</span>
-                                <span class="case-study-skill-tag">Node.js</span>
-                                <span class="case-study-skill-tag">MongoDB</span>
-                            </div>
-                            <button class="submit-btn !text-sm !py-2 w-full">Start Project</button>
-                        </div>
-                        <div class="career-card">
-                            <h3 class="text-xl font-bold mb-2">Mobile App</h3>
-                            <p class="opacity-80 mb-4">Create a cross-platform mobile application</p>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="case-study-skill-tag">React Native</span>
-                                <span class="case-study-skill-tag">Firebase</span>
-                                <span class="case-study-skill-tag">API</span>
-                            </div>
-                            <button class="submit-btn !text-sm !py-2 w-full">Start Project</button>
-                        </div>
-                        <div class="career-card">
-                            <h3 class="text-xl font-bold mb-2">Data Analysis</h3>
-                            <p class="opacity-80 mb-4">Analyze real-world datasets and create insights</p>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="case-study-skill-tag">Python</span>
-                                <span class="case-study-skill-tag">Pandas</span>
-                                <span class="case-study-skill-tag">Visualization</span>
-                            </div>
-                            <button class="submit-btn !text-sm !py-2 w-full">Start Project</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function showJobOpportunities() {
-                careersTitle.textContent = "Current Job Opportunities";
-                careersSubtitle.textContent = "Browse available positions and internships.";
-                careersList.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="career-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-xl font-bold">Frontend Developer</h3>
-                                    <p class="font-semibold text-sm" style="color: var(--text-accent);">TechCorp India</p>
-                                    <p class="opacity-80 mt-2">Join our team to build amazing user interfaces using React and modern web technologies.</p>
-                                    <div class="flex flex-wrap gap-2 mt-3">
-                                        <span class="case-study-skill-tag">Full-time</span>
-                                        <span class="case-study-skill-tag">Bangalore</span>
-                                        <span class="case-study-skill-tag">3-5 years</span>
-                                    </div>
-                                </div>
-                                <button class="submit-btn !text-sm !py-2">Apply Now</button>
-                            </div>
-                        </div>
-                        <div class="career-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-xl font-bold">Data Analyst Intern</h3>
-                                    <p class="font-semibold text-sm" style="color: var(--text-accent);">DataFlow Solutions</p>
-                                    <p class="opacity-80 mt-2">Gain hands-on experience analyzing business data and creating insights for our clients.</p>
-                                    <div class="flex flex-wrap gap-2 mt-3">
-                                        <span class="case-study-skill-tag">Internship</span>
-                                        <span class="case-study-skill-tag">Mumbai</span>
-                                        <span class="case-study-skill-tag">6 months</span>
-                                    </div>
-                                </div>
-                                <button class="submit-btn !text-sm !py-2">Apply Now</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            const getMilestoneIcon = (title) => {
-                const lowerTitle = title.toLowerCase();
-                if (lowerTitle.includes('foundation') || lowerTitle.includes('knowledge')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
-                if (lowerTitle.includes('mastery') || lowerTitle.includes('framework')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20v-6m4 6v-6m4 6v-6M4 20h16"/><path d="M4 10h16"/><path d="M10 4v6m4-6v6m-8 6h16"/></svg>`;
-                if (lowerTitle.includes('advanced') || lowerTitle.includes('specialization')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path></svg>`;
-                if (lowerTitle.includes('project') || lowerTitle.includes('portfolio')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"></path><path d="M5 12A2 2 0 0 1 7 10h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"></path></svg>`;
-                return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>`;
-            };
+    // IMPORTANT: All attributes now use single quotes (') to be safely embedded in Mermaid syntax
+    if (lowerTitle.includes('foundation') || lowerTitle.includes('knowledge')) {
+        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'></path><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'></path></svg>`;
+    }
+    if (lowerTitle.includes('mastery') || lowerTitle.includes('framework')) {
+        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 20v-6m4 6v-6m4 6v-6M4 20h16'/><path d='M4 10h16'/><path d='M10 4v6m4-6v6m-8 6h16'/></svg>`;
+    }
+    if (lowerTitle.includes('advanced') || lowerTitle.includes('specialization')) {
+        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25'></path></svg>`;
+    }
+    if (lowerTitle.includes('project') || lowerTitle.includes('portfolio')) {
+        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z'></path><path d='M5 12A2 2 0 0 1 7 10h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z'></path></svg>`;
+    }
+    // Default icon
+    return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='16'></line><line x1='8' y1='12' x2='16' y2='12'></line></svg>`;
+};
             
             async function fetchAndDisplayRoadmap(careerTitle) {
-                currentCareer = careerTitle;
-                navigateTo('roadmap');
-                roadmapTitle.textContent = `Roadmap to Becoming a ${careerTitle}`;
-                roadmapContent.innerHTML = '';
-                roadmapLoader.classList.remove('hidden');
-                try {
-                    // Try to fetch from backend first
-                    const response = await fetch(`http://localhost:5001/shared-roadmap/${encodeURIComponent(careerTitle)}`);
-                    
-                    if (response.ok) {
-                        const roadmapData = await response.json();
-                        currentRoadmapForAnalysis = roadmapData.roadmap_data;
-                        displayRoadmap(roadmapData.roadmap_data);
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Backend connection failed, using mock data:', error);
-                }
-                
-                // Fallback to mock data if backend is not available
-                try {
-                    const mockRoadmap = [
-                        {
-                            title: "Foundation Skills",
-                            skills: [
-                                { name: "Programming Basics", resource: { name: "Codecademy", link: "https://codecademy.com" } },
-                                { name: "Problem Solving", resource: { name: "LeetCode", link: "https://leetcode.com" } }
-                            ]
-                        },
-                        {
-                            title: "Core Technologies",
-                            skills: [
-                                { name: "JavaScript/TypeScript", resource: { name: "MDN Web Docs", link: "https://developer.mozilla.org" } },
-                                { name: "React Framework", resource: { name: "React Official Docs", link: "https://react.dev" } }
-                            ]
-                        },
-                        {
-                            title: "Advanced Concepts",
-                            skills: [
-                                { name: "State Management", resource: { name: "Redux Toolkit", link: "https://redux-toolkit.js.org" } },
-                                { name: "Testing", resource: { name: "Jest Documentation", link: "https://jestjs.io" } }
-                            ]
-                        },
-                        {
-                            title: "Portfolio & Projects",
-                            skills: [
-                                { name: "Build Real Projects", resource: { name: "GitHub", link: "https://github.com" } },
-                                { name: "Deploy Applications", resource: { name: "Vercel", link: "https://vercel.com" } }
-                            ]
-                        }
-                    ];
-                    
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    currentRoadmapForAnalysis = mockRoadmap;
-                    displayRoadmap(mockRoadmap);
-                } catch (error) {
-                    console.error('Error displaying roadmap:', error);
-                    roadmapContent.innerHTML = '<p class="text-pink-300 text-center">Error loading roadmap. Please try again.</p>';
-                } finally {
-                    roadmapLoader.classList.add('hidden');
-                }
-            }
+    currentCareerForAnalysis = careerTitle;
+    navigateTo('roadmap');
+    roadmapTitle.textContent = `Roadmap to Becoming a ${careerTitle}`;
+    roadmapContent.innerHTML = '';
+    roadmapLoader.classList.remove('hidden');
+    const result = await handleApiSimulation('getRoadmap', { careerTitle });
+    roadmapLoader.classList.add('hidden');
+    currentRoadmapForAnalysis = result;
+    // Wait for the page to be visible before rendering Mermaid
+    setTimeout(() => displayRoadmap(result), 0);
+}
+
+  async function displayRoadmap(roadmap) {
+    roadmapContent.innerHTML = '';
+
+    // --- Color definitions ---
+    const cardBg = '#FFFFFF0D';
+    const inputBg = '#00000033';
+    const textPrimary = '#FFFFFF';
+    const textAccent = '#22d3ee'; // The blue color for all nodes AND arrows
+    const textSecondary = '#94a3b8';
+
+    let mermaidSyntax = 'graph TD;\n\n';
+
+    // --- Node Styling Definitions ---
+    mermaidSyntax += `    classDef milestoneNode fill:${cardBg},stroke:${textAccent},stroke-width:2,color:${textPrimary},font-weight:bold,padding:15;\n`;
+    mermaidSyntax += `    classDef skillNode fill:${inputBg},stroke:${textAccent},stroke-width:2,color:${textPrimary},padding:10;\n`;
+    
+    // --- Updated Link Style ---
+    // The default link color is now the blue accent color.
+    mermaidSyntax += `    linkStyle default stroke:${textAccent},stroke-dasharray:3 3,stroke-width:1.5;\n\n`;
+
+    // --- Graph Generation ---
+    let mainLinkCounter = 0;
+
+    roadmap.forEach((milestone, index) => {
+        const milestoneId = `M${index}`;
+        const icon = getMilestoneIcon(milestone.title);
+        const nodeContent = `${icon}<br/>${milestone.title}`;
+
+        mermaidSyntax += `    ${milestoneId}("${nodeContent}");\n`;
+
+        // Apply the 'milestoneNode' class to ALL milestone nodes.
+        mermaidSyntax += `    class ${milestoneId} milestoneNode;\n`;
+
+        // Connect to the previous milestone
+        if (index > 0) {
+            mermaidSyntax += `    M${index - 1} --> ${milestoneId};\n`;
+            // This override makes the main links solid and slightly thicker
+            mermaidSyntax += `    linkStyle ${mainLinkCounter} stroke:${textAccent},stroke-width:2,stroke-dasharray:none;\n`;
+            mainLinkCounter++;
+        }
+
+        // Add and connect skill nodes
+        milestone.skills.forEach((skill, skillIndex) => {
+            const skillId = `S_${index}_${skillIndex}`; 
+            mermaidSyntax += `    ${skillId}("${skill.name}");\n`;
+            mermaidSyntax += `    class ${skillId} skillNode;\n`;
+            mermaidSyntax += `    ${milestoneId} -.-> ${skillId};\n`;
+        });
+        mermaidSyntax += '\n';
+    });
+    
+    roadmapContent.textContent = mermaidSyntax;
+    roadmapContent.removeAttribute('data-processed');
+    await window.mermaid.run({
+        nodes: [roadmapContent]
+    });
+}
             
+           // ...existing code...
 
-            function displayRoadmap(roadmap) {
-                roadmapContent.innerHTML = '<div class="roadmap-timeline-line"></div>';
-                roadmap.forEach((milestone, index) => {
-                    const milestoneElement = document.createElement('div');
-                    milestoneElement.className = 'roadmap-milestone';
-                    milestoneElement.style.animationDelay = `${index * 0.2}s`;
-                    const skillsList = milestone.skills.map(skill => `<li class="skill-item"><span>${skill.name}</span> - <a href="${skill.resource.link}" target="_blank" class="hover:underline" style="color: var(--text-accent);">${skill.resource.name}</a></li>`).join('');
-                    milestoneElement.innerHTML = `<div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div><div class="milestone-content"><p class="font-semibold" style="color: var(--text-accent);">Milestone ${index + 1}</p><h4 class="text-xl font-bold mb-3">${milestone.title}</h4><div><h5 class="font-semibold mb-2 opacity-90">Skills to Learn:</h5><ul class="list-disc list-inside space-y-1 opacity-80">${skillsList}</ul><h5 class="font-semibold mb-2 mt-4 opacity-90">My Notes:</h5><textarea class="notes-textarea" rows="3" placeholder="Add your own links or resources..."></textarea></div></div>`;
-                    milestoneElement.querySelectorAll('.skill-item').forEach(item => { item.addEventListener('click', (e) => { if (e.target.tagName !== 'A') { item.classList.toggle('completed'); } }); });
-                    roadmapContent.appendChild(milestoneElement);
-                });
-            }
-            
-            async function fetchAndDisplayComparison() {
-                navigateTo('comparison');
-                comparisonGrid.innerHTML = '';
-                comparisonLoader.classList.remove('hidden');
-                try {
-                    // Try to fetch from backend first
-                    const response = await fetch('http://localhost:5001/generate-comparison', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ careerTitles: Array.from(careersToCompare) })
-                    });
-                    
-                    if (response.ok) {
-                        const roadmaps = await response.json();
-                        displayComparison(roadmaps);
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Backend connection failed, using mock data:', error);
-                }
-                
-                // Fallback to mock data
-                try {
-                    const mockComparison = Array.from(careersToCompare).map(title => ({
-                        title: title,
-                        summary_roadmap: [
-                            { title: "Foundation", description: "Learn the basics and fundamentals" },
-                            { title: "Intermediate", description: "Build practical skills and projects" },
-                            { title: "Advanced", description: "Master specialized techniques" },
-                            { title: "Expert", description: "Lead projects and mentor others" }
-                        ]
-                    }));
-                        
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    displayComparison(mockComparison);
-                } catch (error) {
-                    comparisonGrid.innerHTML = `<p class="text-pink-300 text-center">${error.message}</p>`;
-                } finally {
-                    comparisonLoader.classList.add('hidden');
-                }
-            }
+async function fetchAndDisplayComparison() {
+    navigateTo('comparison');
+    comparisonLoader.classList.remove('hidden');
+    comparisonGrid.innerHTML = '';
 
-            function displayComparison(roadmaps) {
-                comparisonGrid.innerHTML = '';
-                const numColumns = roadmaps.length;
-                if (numColumns === 2) { comparisonGrid.classList.remove('lg:grid-cols-3'); comparisonGrid.classList.add('md:grid-cols-2'); } 
-                else { comparisonGrid.classList.remove('md:grid-cols-2'); comparisonGrid.classList.add('lg:grid-cols-3'); }
-                
-                roadmaps.forEach(data => {
-                    const column = document.createElement('div');
-                    column.className = 'comparison-column';
-                    const milestonesHtml = `<div class="roadmap-container"><div class="roadmap-timeline-line"></div>` + data.summary_roadmap.map((milestone, index) => {
-                         return `<div class="roadmap-milestone" style="animation-delay: ${index * 0.2}s"><div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div><div class="milestone-content"><p class="font-bold">${milestone.title}</p><p class="opacity-80 text-sm">${milestone.description}</p></div></div>`;
-                    }).join('') + `</div>`;
-                    
-                    const caseStudyBtnHtml = `<div class="text-center mt-4"><button data-career-title="${data.title}" class="wizard-btn primary text-sm view-case-studies-comparison-btn">View Case Studies</button></div>`;
-                    column.innerHTML = `<h3 class="text-2xl font-bold mb-6 text-center">${data.title}</h3>${milestonesHtml}${caseStudyBtnHtml}`;
-                    comparisonGrid.appendChild(column);
-                });
+    const careerTitles = Array.from(careersToCompare);
+    const allRoadmaps = await Promise.all(
+        careerTitles.map(title => handleApiSimulation('getRoadmap', { careerTitle: title }))
+    );
 
-                comparisonGrid.querySelectorAll('.view-case-studies-comparison-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => { 
-                        fetchAndDisplayCaseStudies(e.currentTarget.dataset.careerTitle); 
-                    });
-                });
-            }
+    comparisonLoader.classList.add('hidden');
+
+    comparisonGrid.innerHTML = careerTitles.map((title, idx) => {
+        const roadmap = allRoadmaps[idx];
+        const milestonesHtml = roadmap.map((milestone, mIdx) => {
+            // Generates a styled row for each skill
+            const skillsHtml = milestone.skills.map(skill => `
+                <div class="skill-item">
+                    <span class="opacity-90">${skill.name}</span>
+                    <a href="${skill.resource.link}" target="_blank" rel="noopener noreferrer" class="resource-link">
+                        <span>${skill.resource.name}</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            `).join('');
+
+            // Creates the main card for the milestone
+            return `
+                <div class="roadmap-milestone">
+                    <div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div>
+                    <div class="milestone-content">
+                        <p class="font-semibold" style="color: var(--text-accent);">Milestone ${mIdx + 1}</p>
+                        <h4 class="text-lg font-bold mb-3">${milestone.title}</h4>
+                        <div class="space-y-2">${skillsHtml}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Creates the full column for the career
+        return `
+            <div class="comparison-column">
+                <h3 class="text-2xl font-bold mb-6 text-center" style="color: var(--text-primary);">${title}</h3>
+                <div class="roadmap-container">${milestonesHtml}</div>
+            </div>
+        `;
+    }).join('');
+
+    // Reset compare mode state
+    isCompareModeActive = false;
+    careersToCompare.clear();
+    toggleCompareModeBtn.textContent = "Compare Roadmaps";
+    careersSubtitle.textContent = "Click a card to discover your roadmap.";
+    document.getElementById('back-to-input-btn').classList.remove('hidden');
+    document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected'));
+    updateCompareButtonVisibility();
+}
+
+// ...existing code...
             
             toggleCompareModeBtn.addEventListener('click', () => { isCompareModeActive = !isCompareModeActive; if (isCompareModeActive) { toggleCompareModeBtn.textContent = "Cancel Comparison"; careersSubtitle.textContent = "Select 2 or more careers to compare."; document.getElementById('back-to-input-btn').classList.add('hidden'); } else { toggleCompareModeBtn.textContent = "Compare Roadmaps"; careersSubtitle.textContent = "Click a card to discover your roadmap."; document.getElementById('back-to-input-btn').classList.remove('hidden'); careersToCompare.clear(); document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected')); updateCompareButtonVisibility(); } });
             startAssessmentBtn.addEventListener('click', () => navigateTo('assessment'));
             cancelAssessmentBtn.addEventListener('click', () => navigateTo('input'));
-        
+            
             assessmentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const answers = { q1: document.querySelector('input[name="q1"]:checked')?.value, q2: document.querySelector('input[name="q2"]:checked')?.value, q3: document.querySelector('input[name="q3"]:checked')?.value, q4: document.querySelector('input[name="q4"]:checked')?.value, q5: document.querySelector('input[name="q5"]:checked')?.value, };
                 if (Object.values(answers).some(answer => !answer)) { alert("Please answer all questions."); return; }
                 const submitBtn = assessmentForm.querySelector('button[type="submit"]');
                 submitBtn.disabled = true; submitBtn.textContent = 'Analyzing...';
-                try {
-                    // Mock response for demo purposes
-                    const mockInterests = "Technology, Problem Solving, Creative Design, Data Analysis";
-                    
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    document.getElementById('student-interests').value = mockInterests;
-                    navigateTo('input');
-                } catch (error) {
-                    alert(`Error: ${error.message}`);
-                } finally {
-                    submitBtn.disabled = false; submitBtn.textContent = 'Find My Interests';
-                }
+                
+                const result = await handleApiSimulation('getInterests');
+                document.getElementById('interests').value = result.interests;
+                navigateTo('input');
+                submitBtn.disabled = false; submitBtn.textContent = 'Find My Interests';
             });
 
             viewComparisonBtn.addEventListener('click', fetchAndDisplayComparison);
-            document.getElementById('back-to-input-btn').addEventListener('click', () => {
-                resetInputPage();
-                navigateTo('input');
-            });
+            document.getElementById('back-to-input-btn').addEventListener('click', () => navigateTo('input'));
             document.getElementById('back-to-careers-btn').addEventListener('click', () => navigateTo('careers'));
             document.getElementById('back-to-careers-from-compare-btn').addEventListener('click', () => navigateTo('careers'));
             
-            // CASE STUDY PAGE LOGIC
-            caseStudyBtnRoadmap.addEventListener('click', () => fetchAndDisplayCaseStudies(currentCareer));
-            backToRoadmapBtn.addEventListener('click', () => navigateTo(lastPage));
-
-            async function fetchAndDisplayCaseStudies(careerTitle) {
-                navigateTo('case_studies');
-                caseStudiesTitle.textContent = `Career Case Studies: ${careerTitle}`;
-                caseStudiesGrid.innerHTML = '';
-                caseStudiesLoader.classList.remove('hidden');
-                try {
-                    // Mock case studies data for demo purposes
-                    const mockCaseStudies = [
-                        {
-                            name: "Sarah Chen",
-                            title: "Senior Software Engineer at Google",
-                            photo: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-                            journey: "Started as a computer science student, built projects in her spare time, and landed an internship that led to a full-time position.",
-                            keySkills: ["JavaScript", "React", "Node.js", "System Design"],
-                            proTip: "Build projects that solve real problems, not just tutorials. Employers want to see your problem-solving approach.",
-                            resource: { type: "video", link: "https://example.com", name: "Watch Sarah's Story" }
-                        },
-                        {
-                            name: "Marcus Johnson",
-                            title: "Data Scientist at Netflix",
-                            photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-                            journey: "Transitioned from a business background by taking online courses and building a portfolio of data analysis projects.",
-                            keySkills: ["Python", "Machine Learning", "SQL", "Statistics"],
-                            proTip: "Focus on understanding the business impact of your analysis, not just the technical implementation.",
-                            resource: { type: "article", link: "https://example.com", name: "Read Marcus's Journey" }
-                        }
-                    ];
-                    
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    displayCaseStudies(mockCaseStudies);
-                } catch (error) {
-                     caseStudiesGrid.innerHTML = `<p class="text-pink-300 text-center col-span-full">${error.message}</p>`;
-                } finally {
-                    caseStudiesLoader.classList.add('hidden');
-                }
-            }
-            
-            function displayCaseStudies(studies) {
-                caseStudiesGrid.innerHTML = '';
-                studies.forEach(study => {
-                    const card = document.createElement('div');
-                    card.className = 'case-study-card';
-                    const skillsHtml = study.keySkills.map(skill => `<span class="case-study-skill-tag">${skill}</span>`).join('');
-                    const resourceButtonHtml = study.resource.link ? `<a href="${study.resource.link}" target="_blank" class="submit-btn mt-4 w-full text-center">${study.resource.type === 'video' ? 'Watch Story' : 'Read Full Story'}</a>` : '';
-                    card.innerHTML = `
-                        <div class="case-study-header">
-                            <img src="${study.photo}" alt="${study.name}" class="case-study-photo">
-                            <div>
-                                <h3 class="case-study-name">${study.name}</h3>
-                                <p class="case-study-title">${study.title}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="case-study-section-title">Career Journey</h4>
-                            <p class="case-study-text">${study.journey}</p>
-                        </div>
-                        <div>
-                            <h4 class="case-study-section-title">Key Skills in Action</h4>
-                            <div class="case-study-skills">${skillsHtml}</div>
-                        </div>
-                        <div>
-                            <h4 class="case-study-section-title">Pro Tip</h4>
-                            <p class="case-study-text case-study-protip">"${study.proTip}"</p>
-                        </div>
-                        ${resourceButtonHtml}
-                    `;
-                    caseStudiesGrid.appendChild(card);
-                });
-            }
-
-            // SKILL GAP ANALYSIS LOGIC
+            // ANALYZE SKILLS LOGIC
             analyzeSkillsBtnRoadmap.addEventListener('click', () => {
-                skillGapTitle.textContent = `Skill Gap Analysis: ${currentCareer}`;
+                skillGapTitle.textContent = `Skill Gap Analysis: ${currentCareerForAnalysis}`;
                 skillGapResults.classList.add('hidden');
                 userSkillsInput.value = '';
                 navigateTo('skill_gap');
             });
 
-            skillGapForm.addEventListener('submit', async (e) => {
+            skillGapForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const userSkills = userSkillsInput.value;
-                if (!userSkills || !currentRoadmapForAnalysis) return;
-
-                try {
-                    // Mock skill analysis for demo purposes
-                    const userSkillsList = userSkills.toLowerCase().split(',').map(s => s.trim());
-                    const allSkills = currentRoadmapForAnalysis.flatMap(milestone => 
-                        milestone.skills.map(skill => skill.name.toLowerCase())
-                    );
-                    
-                    const skillsHave = userSkillsList.filter(skill => 
-                        allSkills.some(roadmapSkill => 
-                            roadmapSkill.includes(skill) || skill.includes(roadmapSkill)
-                        )
-                    );
-                    
-                    const skillsToLearn = allSkills.filter(roadmapSkill => 
-                        !userSkillsList.some(userSkill => 
-                            roadmapSkill.includes(userSkill) || userSkill.includes(roadmapSkill)
-                        )
-                    );
-                    
-                    const percentage = Math.round((skillsHave.length / allSkills.length) * 100);
-                    
-                    // Simulate API delay
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    progressBarFill.style.width = `${percentage}%`;
-                    progressBarText.textContent = `${percentage}%`;
-                    skillsHaveList.innerHTML = skillsHave.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">No matching skills found.</li>';
-                    skillsToLearnList.innerHTML = skillsToLearn.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">You have all the skills!</li>';
-                    skillGapResults.classList.remove('hidden');
-                } catch (error) {
-                    alert(`Error: ${error.message}`);
-                }
+                const userSkillsRaw = userSkillsInput.value;
+                if (!userSkillsRaw || !currentRoadmapForAnalysis) return;
+                const userSkills = userSkillsRaw.toLowerCase().split(',').map(s => s.trim()).filter(s => s);
+                const requiredSkills = currentRoadmapForAnalysis.flatMap(m => m.skills.map(s => s.name.toLowerCase()));
+                const skillsHave = [];
+                const skillsToLearn = [];
+                requiredSkills.forEach(reqSkill => {
+                    if (userSkills.some(userSkill => reqSkill.includes(userSkill) || userSkill.includes(reqSkill))) { skillsHave.push(reqSkill); } 
+                    else { skillsToLearn.push(reqSkill); }
+                });
+                const percentage = requiredSkills.length > 0 ? Math.round((skillsHave.length / requiredSkills.length) * 100) : 0;
+                progressBarFill.style.width = `${percentage}%`;
+                progressBarText.textContent = `${percentage}%`;
+                skillsHaveList.innerHTML = skillsHave.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">No matching skills found.</li>';
+                skillsToLearnList.innerHTML = skillsToLearn.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">You have all the skills!</li>';
+                skillGapResults.classList.remove('hidden');
             });
             backToRoadmapFromGapBtn.addEventListener('click', () => navigateTo('roadmap'));
+
+            // MOCK INTERVIEW LOGIC
+            startInterviewBtnRoadmap.addEventListener('click', () => startInterview(currentCareerForAnalysis));
+            backToRoadmapFromInterviewBtn.addEventListener('click', () => navigateTo('roadmap'));
+
+            async function startInterview(careerTitle) {
+                navigateTo('interview');
+                interviewTitle.textContent = `Mock Interview: ${careerTitle}`;
+                chatMessages.innerHTML = '';
+                interviewConversation = [];
+                
+                const typingIndicator = showTypingIndicator();
+                const response = await handleApiSimulation('startInterview', { careerTitle });
+                chatMessages.removeChild(typingIndicator);
+                addMessageToChat('ai', response.greeting);
+                interviewConversation.push({role: 'model', parts: [{ text: response.greeting }] });
+            }
+
+            function addMessageToChat(sender, text) {
+                const messageElement = document.createElement('div');
+                messageElement.className = `chat-bubble ${sender}`;
+                messageElement.textContent = text;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function showTypingIndicator() {
+                const typingElement = document.createElement('div');
+                typingElement.className = 'typing-indicator';
+                typingElement.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
+                chatMessages.appendChild(typingElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return typingElement;
+            }
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userInput = chatInput.value.trim();
+                if (!userInput) return;
+                
+                addMessageToChat('user', userInput);
+                chatInput.value = '';
+                interviewConversation.push({role: 'user', parts: [{ text: userInput }] });
+                
+                const typingIndicator = showTypingIndicator();
+                const response = await handleApiSimulation('continueInterview', { conversation: interviewConversation });
+                chatMessages.removeChild(typingIndicator);
+                addMessageToChat('ai', response.text);
+                interviewConversation.push({role: 'model', parts: [{ text: response.text }] });
+            });
+
+            // PROJECT PITCH LOGIC
+            async function fetchAndDisplayProjectPitch(milestoneTitle, skills) {
+                navigateTo('project_pitch');
+                projectPitchTitle.textContent = `Project Idea for: ${milestoneTitle}`;
+                projectPitchContent.innerHTML = '';
+                projectPitchLoader.classList.remove('hidden');
+                
+                const interests = document.getElementById('interests').value || 'general topics';
+                const result = await handleApiSimulation('getProjectPitch', { interests, skills });
+                
+                projectPitchLoader.classList.add('hidden');
+                projectPitchContent.textContent = result.pitch;
+            }
+
+            backToRoadmapFromPitchBtn.addEventListener('click', () => navigateTo('roadmap'));
             
             navigateTo('landing');
-        });
-
-        // BlurText Component with CSS animations
-        const { useState, useEffect, useRef } = React;
-
-        const BlurText = ({
-            text = '',
-            delay = 200,
-            className = '',
-            animateBy = 'words',
-            direction = 'top'
-        }) => {
-            const elements = animateBy === 'words' ? text.split(' ') : text.split('');
-            const [inView, setInView] = useState(false);
-            const ref = useRef(null);
-
-            useEffect(() => {
-                if (!ref.current) return;
-                const observer = new IntersectionObserver(
-                    ([entry]) => {
-                        if (entry.isIntersecting) {
-                            setInView(true);
-                            observer.unobserve(ref.current);
-                        }
-                    },
-                    { threshold: 0.1 }
-                );
-                observer.observe(ref.current);
-                return () => observer.disconnect();
-            }, []);
-
-            return React.createElement('p', { 
-                ref: ref, 
-                className: className, 
-                style: { 
-                    display: 'flex', 
-                    flexWrap: 'wrap',
-                    justifyContent: 'center'
-                } 
-            },
-                elements.map((segment, index) => {
-                    const spanStyle = {
-                        display: 'inline-block',
-                        marginRight: animateBy === 'words' ? '0.25em' : '0.1em',
-                        filter: inView ? 'blur(0px)' : 'blur(10px)',
-                        opacity: inView ? 1 : 0,
-                        transform: inView ? 'translateY(0px)' : `translateY(${direction === 'top' ? '-30px' : '30px'})`,
-                        transition: `all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${(index * delay) / 1000}s`,
-                        willChange: 'transform, filter, opacity'
-                    };
-
-                    return React.createElement('span', {
-                        key: index,
-                        style: spanStyle
-                    }, segment === ' ' ? '\u00A0' : segment);
-                })
-            );
-        };
-
-        // Render the animated title
-        const AnimatedTitle = () => {
-            return React.createElement('div', null,
-                React.createElement(BlurText, {
-                    text: "Pick the track that matches your need",
-                    className: "form-title",
-                    delay: 150,
-                    direction: "top"
-                })
-            );
-        };
-
-        // Mount the component when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('animated-title-container');
-            if (container) {
-                ReactDOM.render(React.createElement(AnimatedTitle), container);
-            }
         });
     </script>
 </body>
 </html>
+
