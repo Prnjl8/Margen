@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARGEN AI - Career Advisor</title>
-    
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <!-- Mermaid.js for Flowcharts -->
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: false });
-        window.mermaid = mermaid; 
+        window.mermaid = mermaid; // Make it globally accessible
     </script>
     
     <style>
-        
+        /* --- STYLES WITH DARK/LIGHT MODE --- */
         :root {
-           
+            /* Light Theme Variables */
             --bg-landing: #f0f4f8;
             --bg-main-app: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
             --text-primary: #111827;
@@ -699,448 +699,537 @@ body.dark .skill-item:hover {
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- THEME TOGGLE LOGIC ---
-            const themeToggleBtn = document.getElementById('theme-toggle-btn');
-            const sunIcon = document.getElementById('theme-icon-sun');
-            const moonIcon = document.getElementById('theme-icon-moon');
-            const body = document.body;
+    // --- THEME TOGGLE LOGIC ---
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const sunIcon = document.getElementById('theme-icon-sun');
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const body = document.body;
 
-            function applyTheme(theme) {
-                if (theme === 'dark') { body.classList.add('dark'); sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden'); } 
-                else { body.classList.remove('dark'); sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden'); }
-            }
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            applyTheme(savedTheme);
-
-            themeToggleBtn.addEventListener('click', () => {
-                const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
-                applyTheme(newTheme);
-                localStorage.setItem('theme', newTheme);
-            });
-
-            // --- APP LOGIC (SIMULATED) ---
-            const pages = { landing: document.getElementById('landing-page'), auth: document.getElementById('auth-page'), input: document.getElementById('input-page'), assessment: document.getElementById('assessment-page'), careers: document.getElementById('careers-page'), roadmap: document.getElementById('roadmap-page'), comparison: document.getElementById('comparison-page'), skill_gap: document.getElementById('skill-gap-page'), interview: document.getElementById('interview-page'), project_pitch: document.getElementById('project-pitch-page') };
-            const appHeader = document.getElementById('app-header');
-            const userEmailDisplay = document.getElementById('user-email');
-            const getStartedBtn = document.getElementById('get-started-btn');
-            const signinTab = document.getElementById('signin-tab');
-            const signupTab = document.getElementById('signup-tab');
-            const otpTab = document.getElementById('otp-tab');
-            const signinForm = document.getElementById('signin-form');
-            const signupForm = document.getElementById('signup-form');
-            const otpForm = document.getElementById('otp-form');
-            const otpPhoneStep = document.getElementById('otp-phone-step');
-            const otpVerifyStep = document.getElementById('otp-verify-step');
-            const sendOtpBtn = document.getElementById('send-otp-btn');
-            const otpPhoneDisplay = document.getElementById('otp-phone-display');
-            const authError = document.getElementById('auth-error');
-            const inputForm = document.getElementById('input-form');
-            const careersLoader = document.getElementById('careers-loader');
-            const careersList = document.getElementById('careers-list');
-            const careersSubtitle = document.getElementById('careers-subtitle');
-            const roadmapLoader = document.getElementById('roadmap-loader');
-            const roadmapContent = document.getElementById('roadmap-content');
-            const roadmapTitle = document.getElementById('roadmap-title');
-            const toggleCompareModeBtn = document.getElementById('toggle-compare-mode-btn');
-            const viewComparisonBtn = document.getElementById('view-comparison-btn');
-            const comparisonLoader = document.getElementById('comparison-loader');
-            const comparisonGrid = document.getElementById('comparison-grid');
-            const startAssessmentBtn = document.getElementById('start-assessment-btn');
-            const assessmentForm = document.getElementById('assessment-form');
-            const cancelAssessmentBtn = document.getElementById('cancel-assessment-btn');
-            const startInterviewBtnRoadmap = document.getElementById('start-interview-btn-roadmap');
-            const skillGapPage = document.getElementById('skill-gap-page');
-            const skillGapTitle = document.getElementById('skill-gap-title');
-            const skillGapForm = document.getElementById('skill-gap-form');
-            const userSkillsInput = document.getElementById('user-skills-input');
-            const skillGapResults = document.getElementById('skill-gap-results');
-            const progressBarFill = document.getElementById('progress-bar-fill');
-            const progressBarText = document.getElementById('progress-bar-text');
-            const skillsHaveList = document.getElementById('skills-have-list');
-            const skillsToLearnList = document.getElementById('skills-to-learn-list');
-            const backToRoadmapFromGapBtn = document.getElementById('back-to-roadmap-from-gap-btn');
-            const interviewTitle = document.getElementById('interview-title');
-            const chatMessages = document.getElementById('chat-messages');
-            const chatForm = document.getElementById('chat-form');
-            const chatInput = document.getElementById('chat-input');
-            const backToRoadmapFromInterviewBtn = document.getElementById('back-to-roadmap-from-interview-btn');
-            const analyzeSkillsBtnRoadmap = document.getElementById('analyze-skills-btn-roadmap');
-            const projectPitchPage = document.getElementById('project-pitch-page');
-            const projectPitchTitle = document.getElementById('project-pitch-title');
-            const projectPitchLoader = document.getElementById('project-pitch-loader');
-            const projectPitchContent = document.getElementById('project-pitch-content');
-            const backToRoadmapFromPitchBtn = document.getElementById('back-to-roadmap-from-pitch-btn');
-
-            let currentUserEmail = null;
-            let careersToCompare = new Set();
-            let isCompareModeActive = false;
-            let currentCareerForAnalysis = '';
-            let currentRoadmapForAnalysis = null;
-            let lastPage = 'landing';
-            let interviewConversation = [];
-
-            function navigateTo(pageName) {
-                const currentPage = Object.keys(pages).find(key => pages[key].classList.contains('active'));
-                if (currentPage) lastPage = currentPage;
-
-                if (pageName === 'landing') { body.classList.remove('bg-main-app'); body.classList.add('bg-landing'); document.getElementById('theme-toggle-container').classList.remove('hidden'); appHeader.classList.add('hidden'); } 
-                else { body.classList.remove('bg-landing'); body.classList.add('bg-main-app'); document.getElementById('theme-toggle-container').classList.add('hidden'); appHeader.classList.remove('hidden');}
-                Object.values(pages).forEach(page => page.classList.remove('active'));
-                if (pages[pageName]) { pages[pageName].classList.add('active'); }
-            }
-
-            function setActiveTab(activeTab) {
-                [signinTab, signupTab, otpTab].forEach(tab => tab.classList.remove('active'));
-                activeTab.classList.add('active');
-                signinForm.classList.toggle('hidden', activeTab !== signinTab);
-                signupForm.classList.toggle('hidden', activeTab !== signupTab);
-                otpForm.classList.toggle('hidden', activeTab !== otpTab);
-            }
-
-            function loginUser(identifier) {
-                authError.textContent = '';
-                currentUserEmail = identifier;
-                userEmailDisplay.textContent = currentUserEmail;
-                appHeader.classList.remove('hidden');
-                navigateTo('input');
-            }
-
-            async function handleApiSimulation(action, data) {
-                return new Promise(resolve => setTimeout(() => {
-                    if (action === 'getCareers') {
-                        resolve([ { title: "AI Ethics Consultant", description: "Guide companies in the responsible development and deployment of artificial intelligence systems." }, { title: "Frontend Developer", description: "Build beautiful, responsive, and user-friendly websites and web applications." }, { title: "UX/UI Designer", description: "Craft intuitive and visually appealing digital experiences for users." }, { title: "Data Scientist", description: "Analyze complex data to uncover trends and insights that drive business decisions." } ]);
-                    } else if (action === 'getRoadmap') {
-                         resolve([ { title: "Foundational Knowledge", skills: [ { name: "HTML5 & CSS3", resource: { name: "freeCodeCamp", link: "https://www.freecodecamp.org/learn/2022/responsive-web-design/" } }, { name: "JavaScript (ES6+)", resource: { name: "MDN Docs", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" } } ] }, { title: "Framework Mastery", skills: [ { name: "React or Vue.js", resource: { name: "Official React Docs", link: "https://react.dev/" } }, { name: "State Management", resource: { name: "Redux Tutorial - YouTube", link: "https://www.youtube.com/watch?v=9boMnm5X9ak" } } ] }, { title: "Advanced Skills & Portfolio", skills: [ { name: "TypeScript", resource: { name: "Udemy: Understanding TypeScript", link: "https://www.udemy.com/course/understanding-typescript/" } }, { name: "Build 3 Projects", resource: { name: "Project Ideas - GitHub", link: "https://github.com/florinpop17/app-ideas" } } ] } ]);
-                    } else if (action === 'getInterests') {
-                         resolve({ interests: "AI & Technology, Creative Design, Problem Solving" });
-                    } else if (action === 'startInterview') {
-                        resolve({ greeting: `Hello! I'll be your interviewer today for the ${data.careerTitle} position. Let's start with a simple question: Why are you interested in this career?` });
-                    } else if (action === 'continueInterview') {
-                        const responses = [ "That's an interesting perspective. Could you elaborate on the technical skills you have that make you a good fit?", "Thank you for sharing. Can you tell me about a time you faced a difficult challenge in a project and how you overcame it?", "I see. Where do you see yourself in five years within this career path?", "Good point. What are you most passionate about learning next?", "Okay, that's helpful. Let's move on. What's your experience with collaborative tools like Git and Jira?" ];
-                        resolve({ text: responses[Math.floor(Math.random() * responses.length)] });
-                    } else if (action === 'getProjectPitch') {
-                        resolve({ pitch: `Based on your interest in ${data.interests} and the skills for this milestone (${data.skills.join(', ')}), a great project would be to build an interactive portfolio website using React. This site could dynamically showcase your projects, filtering them based on the technologies used, and include a blog section where you write about your learning journey.`});
-                    }
-                }, 1000));
-            }
-
-            getStartedBtn.addEventListener('click', () => navigateTo('auth'));
-            signinTab.addEventListener('click', () => setActiveTab(signinTab));
-            signupTab.addEventListener('click', () => setActiveTab(signupTab));
-            otpTab.addEventListener('click', () => setActiveTab(otpTab));
-
-            signupForm.addEventListener('submit', (e) => { e.preventDefault(); alert('Sign up successful! Please sign in.'); signinTab.click(); });
-            signinForm.addEventListener('submit', (e) => { e.preventDefault(); const email = document.getElementById('signin-email').value; loginUser(email || "demo@user.com"); });
-            sendOtpBtn.addEventListener('click', () => { const phone = document.getElementById('phone-number').value; if (!phone) { authError.textContent = "Please enter a phone number."; return; } authError.textContent = `OTP sent to ${phone}`; authError.classList.remove('text-pink-300'); authError.classList.add('text-green-300'); setTimeout(() => { authError.textContent = ''; authError.classList.remove('text-green-300'); authError.classList.add('text-pink-300'); }, 3000); otpPhoneDisplay.textContent = phone; otpPhoneStep.classList.add('hidden'); otpVerifyStep.classList.remove('hidden'); });
-            otpForm.addEventListener('submit', (e) => { e.preventDefault(); const phone = otpPhoneDisplay.textContent; loginUser(phone); });
-            document.getElementById('signout-btn').addEventListener('click', () => { currentUserEmail = null; appHeader.classList.add('hidden'); navigateTo('landing'); });
-
-            inputForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                navigateTo('careers');
-                careersList.innerHTML = '';
-                careersLoader.classList.remove('hidden');
-                const result = await handleApiSimulation('getCareers');
-                careersLoader.classList.add('hidden');
-                displayCareerOptions(result);
-            });
-
-            function displayCareerOptions(careers) {
-                careersList.innerHTML = '';
-                careers.forEach(career => {
-                    const card = document.createElement('div');
-                    card.className = 'career-card';
-                    card.dataset.title = career.title;
-                    card.innerHTML = `<h3 class="text-xl font-bold mb-2">${career.title}</h3><p class="opacity-80">${career.description}</p>`;
-                    card.addEventListener('click', () => {
-                        if (isCompareModeActive) {
-                            if (careersToCompare.has(career.title)) { careersToCompare.delete(career.title); card.classList.remove('selected'); } 
-                            else { careersToCompare.add(career.title); card.classList.add('selected'); }
-                            updateCompareButtonVisibility();
-                        } else {
-                            fetchAndDisplayRoadmap(career.title);
-                        }
-                    });
-                    careersList.appendChild(card);
-                });
-            }
-            
-            function updateCompareButtonVisibility() { viewComparisonBtn.classList.toggle('hidden', careersToCompare.size < 2); }
-
-           const getMilestoneIcon = (title) => {
-    // Use the theme's accent color for a consistent look
-    const accentColor = 'var(--text-accent)'; 
-    const lowerTitle = title.toLowerCase();
-
-    // IMPORTANT: All attributes now use single quotes (') to be safely embedded in Mermaid syntax
-    if (lowerTitle.includes('foundation') || lowerTitle.includes('knowledge')) {
-        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'></path><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'></path></svg>`;
+    function applyTheme(theme) {
+        if (theme === 'dark') { body.classList.add('dark'); sunIcon.classList.remove('hidden'); moonIcon.classList.add('hidden'); } 
+        else { body.classList.remove('dark'); sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden'); }
     }
-    if (lowerTitle.includes('mastery') || lowerTitle.includes('framework')) {
-        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 20v-6m4 6v-6m4 6v-6M4 20h16'/><path d='M4 10h16'/><path d='M10 4v6m4-6v6m-8 6h16'/></svg>`;
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener('click', () => {
+        const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+
+    // --- DOM ELEMENT REFERENCES ---
+    const pages = { landing: document.getElementById('landing-page'), auth: document.getElementById('auth-page'), input: document.getElementById('input-page'), assessment: document.getElementById('assessment-page'), careers: document.getElementById('careers-page'), roadmap: document.getElementById('roadmap-page'), comparison: document.getElementById('comparison-page'), skill_gap: document.getElementById('skill-gap-page'), interview: document.getElementById('interview-page'), project_pitch: document.getElementById('project-pitch-page') };
+    const loaders = {
+        careers: document.getElementById('careers-loader'),
+        roadmap: document.getElementById('roadmap-loader'),
+        comparison: document.getElementById('comparison-loader'),
+        projectPitch: document.getElementById('project-pitch-loader'),
+    };
+    const appHeader = document.getElementById('app-header');
+    const userEmailDisplay = document.getElementById('user-email');
+    const getStartedBtn = document.getElementById('get-started-btn');
+    const signinTab = document.getElementById('signin-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const otpTab = document.getElementById('otp-tab');
+    const signinForm = document.getElementById('signin-form');
+    const signupForm = document.getElementById('signup-form');
+    const otpForm = document.getElementById('otp-form');
+    const otpPhoneStep = document.getElementById('otp-phone-step');
+    const otpVerifyStep = document.getElementById('otp-verify-step');
+    const sendOtpBtn = document.getElementById('send-otp-btn');
+    const otpPhoneDisplay = document.getElementById('otp-phone-display');
+    const authError = document.getElementById('auth-error');
+    const inputForm = document.getElementById('input-form');
+    const careersList = document.getElementById('careers-list');
+    const careersSubtitle = document.getElementById('careers-subtitle');
+    const roadmapContent = document.getElementById('roadmap-content');
+    const roadmapTitle = document.getElementById('roadmap-title');
+    const toggleCompareModeBtn = document.getElementById('toggle-compare-mode-btn');
+    const viewComparisonBtn = document.getElementById('view-comparison-btn');
+    const comparisonGrid = document.getElementById('comparison-grid');
+    const startAssessmentBtn = document.getElementById('start-assessment-btn');
+    const assessmentForm = document.getElementById('assessment-form');
+    const cancelAssessmentBtn = document.getElementById('cancel-assessment-btn');
+    const startInterviewBtnRoadmap = document.getElementById('start-interview-btn-roadmap');
+    const skillGapTitle = document.getElementById('skill-gap-title');
+    const skillGapForm = document.getElementById('skill-gap-form');
+    const userSkillsInput = document.getElementById('user-skills-input');
+    const skillGapResults = document.getElementById('skill-gap-results');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const progressBarText = document.getElementById('progress-bar-text');
+    const skillsHaveList = document.getElementById('skills-have-list');
+    const skillsToLearnList = document.getElementById('skills-to-learn-list');
+    const backToRoadmapFromGapBtn = document.getElementById('back-to-roadmap-from-gap-btn');
+    const interviewTitle = document.getElementById('interview-title');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const backToRoadmapFromInterviewBtn = document.getElementById('back-to-roadmap-from-interview-btn');
+    const analyzeSkillsBtnRoadmap = document.getElementById('analyze-skills-btn-roadmap');
+    const projectPitchTitle = document.getElementById('project-pitch-title');
+    const projectPitchContent = document.getElementById('project-pitch-content');
+    const backToRoadmapFromPitchBtn = document.getElementById('back-to-roadmap-from-pitch-btn');
+
+    // --- STATE VARIABLES ---
+    let currentUserEmail = null;
+    let careersToCompare = new Set();
+    let isCompareModeActive = false;
+    let currentCareerForAnalysis = '';
+    let currentRoadmapForAnalysis = null;
+    let lastPage = 'landing';
+    let interviewConversation = [];
+
+    // --- BACKEND CONNECTION ---
+    const BASE_URL = 'http://127.0.0.1:5001';
+
+    async function handleApiRequest(endpoint, method = 'POST', body = null) {
+        const url = `${BASE_URL}${endpoint}`;
+        const options = {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: body ? JSON.stringify(body) : null,
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const responseData = await response.json();
+            if (!response.ok) {
+                throw new Error(responseData.error || `Server error: ${response.status}`);
+            }
+            return responseData;
+        } catch (error) {
+            console.error(`API request to ${endpoint} failed:`, error);
+            authError.textContent = error.message;
+            authError.classList.remove('text-green-300');
+            authError.classList.add('text-pink-300');
+            Object.values(loaders).forEach(loader => loader.classList.add('hidden'));
+            throw error;
+        }
     }
-    if (lowerTitle.includes('advanced') || lowerTitle.includes('specialization')) {
-        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25'></path></svg>`;
-    }
-    if (lowerTitle.includes('project') || lowerTitle.includes('portfolio')) {
-        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z'></path><path d='M5 12A2 2 0 0 1 7 10h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z'></path></svg>`;
-    }
-    // Default icon
-    return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='16'></line><line x1='8' y1='12' x2='16' y2='12'></line></svg>`;
-};
-            
-            async function fetchAndDisplayRoadmap(careerTitle) {
-    currentCareerForAnalysis = careerTitle;
-    navigateTo('roadmap');
-    roadmapTitle.textContent = `Roadmap to Becoming a ${careerTitle}`;
-    roadmapContent.innerHTML = '';
-    roadmapLoader.classList.remove('hidden');
-    const result = await handleApiSimulation('getRoadmap', { careerTitle });
-    roadmapLoader.classList.add('hidden');
-    currentRoadmapForAnalysis = result;
-    // Wait for the page to be visible before rendering Mermaid
-    setTimeout(() => displayRoadmap(result), 0);
-}
-
-  async function displayRoadmap(roadmap) {
-    roadmapContent.innerHTML = '';
-
-    // --- Color definitions ---
-    const cardBg = '#FFFFFF0D';
-    const inputBg = '#00000033';
-    const textPrimary = '#FFFFFF';
-    const textAccent = '#22d3ee'; // The blue color for all nodes AND arrows
-    const textSecondary = '#94a3b8';
-
-    let mermaidSyntax = 'graph TD;\n\n';
-
-    // --- Node Styling Definitions ---
-    mermaidSyntax += `    classDef milestoneNode fill:${cardBg},stroke:${textAccent},stroke-width:2,color:${textPrimary},font-weight:bold,padding:15;\n`;
-    mermaidSyntax += `    classDef skillNode fill:${inputBg},stroke:${textAccent},stroke-width:2,color:${textPrimary},padding:10;\n`;
     
-    // --- Updated Link Style ---
-    // The default link color is now the blue accent color.
-    mermaidSyntax += `    linkStyle default stroke:${textAccent},stroke-dasharray:3 3,stroke-width:1.5;\n\n`;
+    // --- NAVIGATION & UI HELPERS ---
+    function navigateTo(pageName) {
+        const currentPage = Object.keys(pages).find(key => pages[key].classList.contains('active'));
+        if (currentPage) lastPage = currentPage;
 
-    // --- Graph Generation ---
-    let mainLinkCounter = 0;
+        if (pageName === 'landing') { body.classList.remove('bg-main-app'); body.classList.add('bg-landing'); document.getElementById('theme-toggle-container').classList.remove('hidden'); appHeader.classList.add('hidden'); } 
+        else { body.classList.remove('bg-landing'); body.classList.add('bg-main-app'); document.getElementById('theme-toggle-container').classList.add('hidden'); appHeader.classList.remove('hidden');}
+        Object.values(pages).forEach(page => page.classList.remove('active'));
+        if (pages[pageName]) { pages[pageName].classList.add('active'); }
+    }
 
-    roadmap.forEach((milestone, index) => {
-        const milestoneId = `M${index}`;
-        const icon = getMilestoneIcon(milestone.title);
-        const nodeContent = `${icon}<br/>${milestone.title}`;
+    function setActiveTab(activeTab) {
+        [signinTab, signupTab, otpTab].forEach(tab => tab.classList.remove('active'));
+        activeTab.classList.add('active');
+        signinForm.classList.toggle('hidden', activeTab !== signinTab);
+        signupForm.classList.toggle('hidden', activeTab !== signupTab);
+        otpForm.classList.toggle('hidden', activeTab !== otpTab);
+    }
 
-        mermaidSyntax += `    ${milestoneId}("${nodeContent}");\n`;
+    function loginUser(identifier) {
+        authError.textContent = '';
+        currentUserEmail = identifier;
+        userEmailDisplay.textContent = currentUserEmail;
+        appHeader.classList.remove('hidden');
+        navigateTo('input');
+    }
 
-        // Apply the 'milestoneNode' class to ALL milestone nodes.
-        mermaidSyntax += `    class ${milestoneId} milestoneNode;\n`;
+    // --- EVENT LISTENERS & LOGIC ---
+    getStartedBtn.addEventListener('click', () => navigateTo('auth'));
+    signinTab.addEventListener('click', () => setActiveTab(signinTab));
+    signupTab.addEventListener('click', () => setActiveTab(signupTab));
+    otpTab.addEventListener('click', () => setActiveTab(otpTab));
 
-        // Connect to the previous milestone
-        if (index > 0) {
-            mermaidSyntax += `    M${index - 1} --> ${milestoneId};\n`;
-            // This override makes the main links solid and slightly thicker
-            mermaidSyntax += `    linkStyle ${mainLinkCounter} stroke:${textAccent},stroke-width:2,stroke-dasharray:none;\n`;
-            mainLinkCounter++;
+    signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        authError.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating...';
+        try {
+            await handleApiRequest('/signup', 'POST', { email, password });
+            authError.textContent = 'Account created! Please sign in.';
+            authError.classList.remove('text-pink-300');
+            authError.classList.add('text-green-300');
+            setActiveTab(signinTab);
+        } catch (error) {
+            // Error is displayed by handleApiRequest
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account →';
+        }
+    });
+
+    signinForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signin-email').value;
+        const password = document.getElementById('signin-password').value;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        authError.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing In...';
+        try {
+            const data = await handleApiRequest('/signin', 'POST', { email, password });
+            loginUser(data.identifier);
+        } catch (error) {
+            // Error is displayed by handleApiRequest
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign In →';
+        }
+    });
+
+    sendOtpBtn.addEventListener('click', async () => {
+        const phone = document.getElementById('phone-number').value;
+        if (!phone) {
+            authError.textContent = "Please enter a phone number.";
+            return;
+        }
+        authError.textContent = '';
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = 'Sending...';
+        try {
+            const data = await handleApiRequest('/send-otp', 'POST', { phone });
+            authError.textContent = data.message;
+            authError.classList.remove('text-pink-300');
+            authError.classList.add('text-green-300');
+            otpPhoneDisplay.textContent = phone;
+            otpPhoneStep.classList.add('hidden');
+            otpVerifyStep.classList.remove('hidden');
+        } catch (error) {
+            // Error displayed by handleApiRequest
+        } finally {
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.textContent = 'Send OTP';
+        }
+    });
+    
+    otpForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const phone = otpPhoneDisplay.textContent;
+        const code = document.getElementById('otp-code').value;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        authError.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verifying...';
+        try {
+            const data = await handleApiRequest('/verify-otp', 'POST', { phone, code });
+            loginUser(data.identifier);
+        } catch (error) {
+             // Error displayed by handleApiRequest
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Verify & Sign In';
+        }
+    });
+    
+    document.getElementById('signout-btn').addEventListener('click', () => {
+        currentUserEmail = null;
+        appHeader.classList.add('hidden');
+        navigateTo('landing');
+    });
+
+    inputForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        navigateTo('careers');
+        careersList.innerHTML = '';
+        loaders.careers.classList.remove('hidden');
+        const formData = {
+            interests: document.getElementById('interests').value,
+            skills: document.getElementById('skills').value,
+            pace: document.getElementById('pace').value,
+            lifeGoals: Array.from(document.querySelectorAll('input[name="life-goal"]:checked')).map(cb => cb.value)
+        };
+        try {
+            const result = await handleApiRequest('/generate-careers', 'POST', formData);
+            displayCareerOptions(result);
+        } catch (error) {
+            // Error is handled by API function
+        } finally {
+            loaders.careers.classList.add('hidden');
+        }
+    });
+
+    function displayCareerOptions(careers) {
+        careersList.innerHTML = '';
+        careers.forEach(career => {
+            const card = document.createElement('div');
+            card.className = 'career-card';
+            card.dataset.title = career.title;
+            card.innerHTML = `<h3 class="text-xl font-bold mb-2">${career.title}</h3><p class="opacity-80">${career.description}</p>`;
+            card.addEventListener('click', () => {
+                if (isCompareModeActive) {
+                    if (careersToCompare.has(career.title)) { careersToCompare.delete(career.title); card.classList.remove('selected'); } 
+                    else { careersToCompare.add(career.title); card.classList.add('selected'); }
+                    updateCompareButtonVisibility();
+                } else {
+                    fetchAndDisplayRoadmap(career.title);
+                }
+            });
+            careersList.appendChild(card);
+        });
+    }
+    
+    function updateCompareButtonVisibility() { viewComparisonBtn.classList.toggle('hidden', careersToCompare.size < 2); }
+    
+    async function fetchAndDisplayRoadmap(careerTitle) {
+        currentCareerForAnalysis = careerTitle;
+        navigateTo('roadmap');
+        roadmapTitle.textContent = `Roadmap to Becoming a ${careerTitle}`;
+        roadmapContent.innerHTML = '';
+        loaders.roadmap.classList.remove('hidden');
+        try {
+            const result = await handleApiRequest('/generate-roadmap', 'POST', { careerTitle });
+            currentRoadmapForAnalysis = result;
+            setTimeout(() => displayRoadmap(result), 0);
+        } catch(e) { 
+            // Error already handled
+        } finally { 
+            loaders.roadmap.classList.add('hidden');
+        }
+    }
+
+    async function displayRoadmap(roadmap) {
+        roadmapContent.innerHTML = '';
+        const cardBg = document.body.classList.contains('dark') ? '#FFFFFF0D' : '#FFFFFFB3';
+        const inputBg = document.body.classList.contains('dark') ? '#00000033' : '#E5E7EBCC';
+        const textPrimary = document.body.classList.contains('dark') ? '#FFFFFF' : '#111827';
+        const textAccent = document.body.classList.contains('dark') ? '#22d3ee' : '#4f46e5';
+        
+        let mermaidSyntax = 'graph TD;\n\n';
+        mermaidSyntax += `    classDef milestoneNode fill:${cardBg},stroke:${textAccent},stroke-width:1.5,color:${textPrimary},font-weight:bold,padding:15px,border-radius:10px;\n`;
+        mermaidSyntax += `    classDef skillNode fill:${inputBg},stroke:${textAccent},stroke-width:1,color:${textPrimary},padding:10px,border-radius:8px;\n`;
+        mermaidSyntax += `    linkStyle default stroke:${textAccent},stroke-width:1.5,stroke-dasharray:3 3;\n\n`;
+        
+        let mainLinkCounter = 0;
+
+        roadmap.forEach((milestone, index) => {
+            const milestoneId = `M${index}`;
+            const milestoneTitle = milestone.title.replace(/"/g, '#quot;');
+            mermaidSyntax += `    ${milestoneId}("${milestoneTitle}");\n`;
+            mermaidSyntax += `    class ${milestoneId} milestoneNode;\n`;
+
+            if (index > 0) {
+                mermaidSyntax += `    M${index - 1} --> ${milestoneId};\n`;
+                mermaidSyntax += `    linkStyle ${mainLinkCounter} stroke:${textAccent},stroke-width:2,stroke-dasharray:none;\n`;
+                mainLinkCounter++;
+            }
+
+            milestone.skills.forEach((skill, skillIndex) => {
+                const skillId = `S_${index}_${skillIndex}`; 
+                const skillName = skill.name.replace(/"/g, '#quot;');
+                mermaidSyntax += `    ${skillId}("<a href='${skill.resource.link}' target='_blank' style='color:${textPrimary}'>${skillName}</a>");\n`;
+                mermaidSyntax += `    class ${skillId} skillNode;\n`;
+                mermaidSyntax += `    ${milestoneId} -.-> ${skillId};\n`;
+            });
+            mermaidSyntax += '\n';
+        });
+        
+        roadmapContent.textContent = mermaidSyntax;
+        roadmapContent.removeAttribute('data-processed');
+        await window.mermaid.run({ nodes: [roadmapContent] });
+    }
+    
+    async function fetchAndDisplayComparison() {
+        navigateTo('comparison');
+        loaders.comparison.classList.remove('hidden');
+        comparisonGrid.innerHTML = '';
+
+        try {
+            const careerTitles = Array.from(careersToCompare);
+            const allRoadmaps = await Promise.all(
+                careerTitles.map(title => handleApiRequest('/generate-roadmap', 'POST', { careerTitle: title }))
+            );
+
+            comparisonGrid.innerHTML = careerTitles.map((title, idx) => {
+                const roadmap = allRoadmaps[idx];
+                const milestonesHtml = roadmap.map((milestone, mIdx) => {
+                    const skillsHtml = milestone.skills.map(skill => `
+                        <div class="skill-item">
+                            <span class="opacity-90">${skill.name}</span>
+                            <a href="${skill.resource.link}" target="_blank" rel="noopener noreferrer" class="resource-link">
+                                <span>${skill.resource.name}</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 o 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>`).join('');
+                    return `<div class="roadmap-milestone">
+                                <div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div>
+                                <div class="milestone-content">
+                                    <p class="font-semibold" style="color: var(--text-accent);">Milestone ${mIdx + 1}</p>
+                                    <h4 class="text-lg font-bold mb-3">${milestone.title}</h4>
+                                    <div class="space-y-2">${skillsHtml}</div>
+                                </div>
+                            </div>`;
+                }).join('');
+                return `<div class="comparison-column">
+                            <h3 class="text-2xl font-bold mb-6 text-center" style="color: var(--text-primary);">${title}</h3>
+                            <div class="roadmap-container">${milestonesHtml}</div>
+                        </div>`;
+            }).join('');
+        } catch(e) {
+            // error handled
+        } finally {
+            loaders.comparison.classList.add('hidden');
         }
 
-        // Add and connect skill nodes
-        milestone.skills.forEach((skill, skillIndex) => {
-            const skillId = `S_${index}_${skillIndex}`; 
-            mermaidSyntax += `    ${skillId}("${skill.name}");\n`;
-            mermaidSyntax += `    class ${skillId} skillNode;\n`;
-            mermaidSyntax += `    ${milestoneId} -.-> ${skillId};\n`;
-        });
-        mermaidSyntax += '\n';
-    });
+        isCompareModeActive = false;
+        careersToCompare.clear();
+        toggleCompareModeBtn.textContent = "Compare Roadmaps";
+        careersSubtitle.textContent = "Click a card to discover your roadmap.";
+        document.getElementById('back-to-input-btn').classList.remove('hidden');
+        document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected'));
+        updateCompareButtonVisibility();
+    }
+
+    const getMilestoneIcon = (title) => {
+        const accentColor = 'var(--text-accent)'; 
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes('foundation') || lowerTitle.includes('knowledge')) return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'></path><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'></path></svg>`;
+        if (lowerTitle.includes('mastery') || lowerTitle.includes('framework')) return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 20v-6m4 6v-6m4 6v-6M4 20h16'/><path d='M4 10h16'/><path d='M10 4v6m4-6v6m-8 6h16'/></svg>`;
+        if (lowerTitle.includes('advanced') || lowerTitle.includes('specialization')) return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25'></path></svg>`;
+        if (lowerTitle.includes('project') || lowerTitle.includes('portfolio')) return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 7h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z'></path><path d='M5 12A2 2 0 0 1 7 10h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z'></path></svg>`;
+        return `<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${accentColor}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='16'></line><line x1='8' y1='12' x2='16' y2='12'></line></svg>`;
+    };
+
+    toggleCompareModeBtn.addEventListener('click', () => { isCompareModeActive = !isCompareModeActive; if (isCompareModeActive) { toggleCompareModeBtn.textContent = "Cancel Comparison"; careersSubtitle.textContent = "Select 2 or more careers to compare."; document.getElementById('back-to-input-btn').classList.add('hidden'); } else { toggleCompareModeBtn.textContent = "Compare Roadmaps"; careersSubtitle.textContent = "Click a card to discover your roadmap."; document.getElementById('back-to-input-btn').classList.remove('hidden'); careersToCompare.clear(); document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected')); updateCompareButtonVisibility(); } });
+    startAssessmentBtn.addEventListener('click', () => navigateTo('assessment'));
+    cancelAssessmentBtn.addEventListener('click', () => navigateTo('input'));
     
-    roadmapContent.textContent = mermaidSyntax;
-    roadmapContent.removeAttribute('data-processed');
-    await window.mermaid.run({
-        nodes: [roadmapContent]
+    assessmentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const answers = { q1: document.querySelector('input[name="q1"]:checked')?.value, q2: document.querySelector('input[name="q2"]:checked')?.value, q3: document.querySelector('input[name="q3"]:checked')?.value, q4: document.querySelector('input[name="q4"]:checked')?.value, q5: document.querySelector('input[name="q5"]:checked')?.value, };
+        if (Object.values(answers).some(answer => !answer)) { alert("Please answer all questions."); return; }
+        const submitBtn = assessmentForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true; submitBtn.textContent = 'Analyzing...';
+        try {
+            const result = await handleApiRequest('/find-interests', 'POST', { answers });
+            document.getElementById('interests').value = result.interests;
+            navigateTo('input');
+        } catch(e) {
+            // error handled
+        } finally {
+            submitBtn.disabled = false; submitBtn.textContent = 'Find My Interests';
+        }
     });
-}
-            
-           // ...existing code...
 
-async function fetchAndDisplayComparison() {
-    navigateTo('comparison');
-    comparisonLoader.classList.remove('hidden');
-    comparisonGrid.innerHTML = '';
+    viewComparisonBtn.addEventListener('click', fetchAndDisplayComparison);
+    document.getElementById('back-to-input-btn').addEventListener('click', () => navigateTo('input'));
+    document.getElementById('back-to-careers-btn').addEventListener('click', () => navigateTo('careers'));
+    document.getElementById('back-to-careers-from-compare-btn').addEventListener('click', () => navigateTo('careers'));
+    
+    analyzeSkillsBtnRoadmap.addEventListener('click', () => {
+        skillGapTitle.textContent = `Skill Gap Analysis: ${currentCareerForAnalysis}`;
+        skillGapResults.classList.add('hidden');
+        userSkillsInput.value = document.getElementById('skills').value; // Pre-fill skills
+        navigateTo('skill_gap');
+    });
 
-    const careerTitles = Array.from(careersToCompare);
-    const allRoadmaps = await Promise.all(
-        careerTitles.map(title => handleApiSimulation('getRoadmap', { careerTitle: title }))
-    );
+    skillGapForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userSkillsRaw = userSkillsInput.value;
+        if (!userSkillsRaw || !currentRoadmapForAnalysis) return;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Analyzing...';
+        try {
+            const result = await handleApiRequest('/analyze-skills', 'POST', { userSkills: userSkillsRaw, roadmap: currentRoadmapForAnalysis });
+            progressBarFill.style.width = `${result.percentage}%`;
+            progressBarText.textContent = `${result.percentage}%`;
+            skillsHaveList.innerHTML = result.skillsHave.map(s => `<li class="skill-list-item">${s}</li>`).join('') || '<li class="opacity-50">No matching skills found.</li>';
+            skillsToLearnList.innerHTML = result.skillsToLearn.map(s => `<li class="skill-list-item">${s}</li>`).join('') || '<li class="opacity-50">You have all the skills!</li>';
+            skillGapResults.classList.remove('hidden');
+        } catch(e) {
+            // error handled
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Analyze My Skills';
+        }
+    });
+    backToRoadmapFromGapBtn.addEventListener('click', () => navigateTo('roadmap'));
 
-    comparisonLoader.classList.add('hidden');
+    startInterviewBtnRoadmap.addEventListener('click', () => startInterview(currentCareerForAnalysis));
+    backToRoadmapFromInterviewBtn.addEventListener('click', () => navigateTo('roadmap'));
 
-    comparisonGrid.innerHTML = careerTitles.map((title, idx) => {
-        const roadmap = allRoadmaps[idx];
-        const milestonesHtml = roadmap.map((milestone, mIdx) => {
-            // Generates a styled row for each skill
-            const skillsHtml = milestone.skills.map(skill => `
-                <div class="skill-item">
-                    <span class="opacity-90">${skill.name}</span>
-                    <a href="${skill.resource.link}" target="_blank" rel="noopener noreferrer" class="resource-link">
-                        <span>${skill.resource.name}</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                    </a>
-                </div>
-            `).join('');
+    async function startInterview(careerTitle) {
+        navigateTo('interview');
+        interviewTitle.textContent = `Mock Interview: ${careerTitle}`;
+        chatMessages.innerHTML = '';
+        interviewConversation = [];
+        const typingIndicator = showTypingIndicator();
+        try {
+            const response = await handleApiRequest('/start-interview', 'POST', { careerTitle });
+            chatMessages.removeChild(typingIndicator);
+            addMessageToChat('ai', response.greeting);
+            interviewConversation.push({role: 'model', parts: [{ text: response.greeting }] });
+        } catch (e) {
+            if (chatMessages.contains(typingIndicator)) chatMessages.removeChild(typingIndicator);
+        }
+    }
 
-            // Creates the main card for the milestone
-            return `
-                <div class="roadmap-milestone">
-                    <div class="milestone-icon">${getMilestoneIcon(milestone.title)}</div>
-                    <div class="milestone-content">
-                        <p class="font-semibold" style="color: var(--text-accent);">Milestone ${mIdx + 1}</p>
-                        <h4 class="text-lg font-bold mb-3">${milestone.title}</h4>
-                        <div class="space-y-2">${skillsHtml}</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
+    function addMessageToChat(sender, text) {
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-bubble ${sender}`;
+        messageElement.textContent = text;
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function showTypingIndicator() {
+        const typingElement = document.createElement('div');
+        typingElement.className = 'typing-indicator';
+        typingElement.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
+        chatMessages.appendChild(typingElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return typingElement;
+    }
 
-        // Creates the full column for the career
-        return `
-            <div class="comparison-column">
-                <h3 class="text-2xl font-bold mb-6 text-center" style="color: var(--text-primary);">${title}</h3>
-                <div class="roadmap-container">${milestonesHtml}</div>
-            </div>
-        `;
-    }).join('');
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userInput = chatInput.value.trim();
+        if (!userInput) return;
+        
+        addMessageToChat('user', userInput);
+        chatInput.value = '';
+        interviewConversation.push({role: 'user', parts: [{ text: userInput }] });
+        
+        const typingIndicator = showTypingIndicator();
+        try {
+            const response = await handleApiRequest('/continue-interview', 'POST', { careerTitle: currentCareerForAnalysis, conversation: interviewConversation });
+            chatMessages.removeChild(typingIndicator);
+            addMessageToChat('ai', response.text);
+            interviewConversation.push({role: 'model', parts: [{ text: response.text }] });
+        } catch (e) {
+             if (chatMessages.contains(typingIndicator)) chatMessages.removeChild(typingIndicator);
+        }
+    });
 
-    // Reset compare mode state
-    isCompareModeActive = false;
-    careersToCompare.clear();
-    toggleCompareModeBtn.textContent = "Compare Roadmaps";
-    careersSubtitle.textContent = "Click a card to discover your roadmap.";
-    document.getElementById('back-to-input-btn').classList.remove('hidden');
-    document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected'));
-    updateCompareButtonVisibility();
-}
+    async function fetchAndDisplayProjectPitch(milestoneTitle, skills) {
+        navigateTo('project_pitch');
+        projectPitchTitle.textContent = `Project Idea for: ${milestoneTitle}`;
+        projectPitchContent.innerHTML = '';
+        loaders.projectPitch.classList.remove('hidden');
+        
+        try {
+            const interests = document.getElementById('interests').value || 'general topics';
+            const result = await handleApiRequest('/generate-project-pitch', 'POST', { interests, skills, milestoneTitle });
+            projectPitchContent.textContent = result.pitch;
+        } catch (e) {
+            // error handled
+        } finally {
+            loaders.projectPitch.classList.add('hidden');
+        }
+    }
 
-// ...existing code...
-            
-            toggleCompareModeBtn.addEventListener('click', () => { isCompareModeActive = !isCompareModeActive; if (isCompareModeActive) { toggleCompareModeBtn.textContent = "Cancel Comparison"; careersSubtitle.textContent = "Select 2 or more careers to compare."; document.getElementById('back-to-input-btn').classList.add('hidden'); } else { toggleCompareModeBtn.textContent = "Compare Roadmaps"; careersSubtitle.textContent = "Click a card to discover your roadmap."; document.getElementById('back-to-input-btn').classList.remove('hidden'); careersToCompare.clear(); document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected')); updateCompareButtonVisibility(); } });
-            startAssessmentBtn.addEventListener('click', () => navigateTo('assessment'));
-            cancelAssessmentBtn.addEventListener('click', () => navigateTo('input'));
-            
-            assessmentForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const answers = { q1: document.querySelector('input[name="q1"]:checked')?.value, q2: document.querySelector('input[name="q2"]:checked')?.value, q3: document.querySelector('input[name="q3"]:checked')?.value, q4: document.querySelector('input[name="q4"]:checked')?.value, q5: document.querySelector('input[name="q5"]:checked')?.value, };
-                if (Object.values(answers).some(answer => !answer)) { alert("Please answer all questions."); return; }
-                const submitBtn = assessmentForm.querySelector('button[type="submit"]');
-                submitBtn.disabled = true; submitBtn.textContent = 'Analyzing...';
-                
-                const result = await handleApiSimulation('getInterests');
-                document.getElementById('interests').value = result.interests;
-                navigateTo('input');
-                submitBtn.disabled = false; submitBtn.textContent = 'Find My Interests';
-            });
+    backToRoadmapFromPitchBtn.addEventListener('click', () => navigateTo('roadmap'));
+    
+    navigateTo('landing');
+});
 
-            viewComparisonBtn.addEventListener('click', fetchAndDisplayComparison);
-            document.getElementById('back-to-input-btn').addEventListener('click', () => navigateTo('input'));
-            document.getElementById('back-to-careers-btn').addEventListener('click', () => navigateTo('careers'));
-            document.getElementById('back-to-careers-from-compare-btn').addEventListener('click', () => navigateTo('careers'));
-            
-            // ANALYZE SKILLS LOGIC
-            analyzeSkillsBtnRoadmap.addEventListener('click', () => {
-                skillGapTitle.textContent = `Skill Gap Analysis: ${currentCareerForAnalysis}`;
-                skillGapResults.classList.add('hidden');
-                userSkillsInput.value = '';
-                navigateTo('skill_gap');
-            });
 
-            skillGapForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const userSkillsRaw = userSkillsInput.value;
-                if (!userSkillsRaw || !currentRoadmapForAnalysis) return;
-                const userSkills = userSkillsRaw.toLowerCase().split(',').map(s => s.trim()).filter(s => s);
-                const requiredSkills = currentRoadmapForAnalysis.flatMap(m => m.skills.map(s => s.name.toLowerCase()));
-                const skillsHave = [];
-                const skillsToLearn = [];
-                requiredSkills.forEach(reqSkill => {
-                    if (userSkills.some(userSkill => reqSkill.includes(userSkill) || userSkill.includes(reqSkill))) { skillsHave.push(reqSkill); } 
-                    else { skillsToLearn.push(reqSkill); }
-                });
-                const percentage = requiredSkills.length > 0 ? Math.round((skillsHave.length / requiredSkills.length) * 100) : 0;
-                progressBarFill.style.width = `${percentage}%`;
-                progressBarText.textContent = `${percentage}%`;
-                skillsHaveList.innerHTML = skillsHave.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">No matching skills found.</li>';
-                skillsToLearnList.innerHTML = skillsToLearn.map(s => `<li class="skill-list-item">${s.charAt(0).toUpperCase() + s.slice(1)}</li>`).join('') || '<li class="opacity-50">You have all the skills!</li>';
-                skillGapResults.classList.remove('hidden');
-            });
-            backToRoadmapFromGapBtn.addEventListener('click', () => navigateTo('roadmap'));
 
-            // MOCK INTERVIEW LOGIC
-            startInterviewBtnRoadmap.addEventListener('click', () => startInterview(currentCareerForAnalysis));
-            backToRoadmapFromInterviewBtn.addEventListener('click', () => navigateTo('roadmap'));
-
-            async function startInterview(careerTitle) {
-                navigateTo('interview');
-                interviewTitle.textContent = `Mock Interview: ${careerTitle}`;
-                chatMessages.innerHTML = '';
-                interviewConversation = [];
-                
-                const typingIndicator = showTypingIndicator();
-                const response = await handleApiSimulation('startInterview', { careerTitle });
-                chatMessages.removeChild(typingIndicator);
-                addMessageToChat('ai', response.greeting);
-                interviewConversation.push({role: 'model', parts: [{ text: response.greeting }] });
-            }
-
-            function addMessageToChat(sender, text) {
-                const messageElement = document.createElement('div');
-                messageElement.className = `chat-bubble ${sender}`;
-                messageElement.textContent = text;
-                chatMessages.appendChild(messageElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            
-            function showTypingIndicator() {
-                const typingElement = document.createElement('div');
-                typingElement.className = 'typing-indicator';
-                typingElement.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
-                chatMessages.appendChild(typingElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                return typingElement;
-            }
-
-            chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const userInput = chatInput.value.trim();
-                if (!userInput) return;
-                
-                addMessageToChat('user', userInput);
-                chatInput.value = '';
-                interviewConversation.push({role: 'user', parts: [{ text: userInput }] });
-                
-                const typingIndicator = showTypingIndicator();
-                const response = await handleApiSimulation('continueInterview', { conversation: interviewConversation });
-                chatMessages.removeChild(typingIndicator);
-                addMessageToChat('ai', response.text);
-                interviewConversation.push({role: 'model', parts: [{ text: response.text }] });
-            });
-
-            // PROJECT PITCH LOGIC
-            async function fetchAndDisplayProjectPitch(milestoneTitle, skills) {
-                navigateTo('project_pitch');
-                projectPitchTitle.textContent = `Project Idea for: ${milestoneTitle}`;
-                projectPitchContent.innerHTML = '';
-                projectPitchLoader.classList.remove('hidden');
-                
-                const interests = document.getElementById('interests').value || 'general topics';
-                const result = await handleApiSimulation('getProjectPitch', { interests, skills });
-                
-                projectPitchLoader.classList.add('hidden');
-                projectPitchContent.textContent = result.pitch;
-            }
-
-            backToRoadmapFromPitchBtn.addEventListener('click', () => navigateTo('roadmap'));
-            
-            navigateTo('landing');
-        });
     </script>
 </body>
 </html>
