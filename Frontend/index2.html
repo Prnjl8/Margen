@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MARGEN AI - Career Advisor</title>
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Mermaid.js for Flowcharts -->
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: false });
@@ -35,6 +32,7 @@
             --tab-active-bg: white;
             --chat-bubble-ai-bg: #e5e7eb;
             --chat-bubble-user-bg: #4f46e5;
+            --sidebar-bg: rgba(255, 255, 255, 0.6);
         }
 
         body.dark {
@@ -53,6 +51,7 @@
             --tab-active-bg: rgba(255, 255, 255, 0.1);
             --chat-bubble-ai-bg: #374151;
             --chat-bubble-user-bg: #14b8a6;
+            --sidebar-bg: rgba(15, 23, 42, 0.7);
         }
 
         body { 
@@ -81,7 +80,7 @@
         .theme-toggle-btn svg { width: 1.25rem; height: 1.25rem; color: var(--text-secondary); }
         
         /* Header styling adjustments */
-        #app-header { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 88rem; padding: 1rem; padding-right: 2rem; }
+        #app-header { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 100%; padding: 1rem 2rem; }
         #app-header.hidden { display: none; }
         #app-header-left { display: flex; align-items: center; }
         #app-header-right { display: flex; align-items: center; gap: 1rem; }
@@ -115,7 +114,26 @@
         body.dark .input-field:focus { box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.5); border-color: var(--text-accent); }
         .submit-btn { width: 100%; padding: 1rem; margin-top: 1.5rem; border: none; border-radius: 10px; background: var(--btn-primary-bg); color: var(--btn-primary-text); font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
         .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 20px rgba(20, 184, 166, 0.3); }
+
+        /* --- [NEW] CHOICE PAGE --- */
+        .choice-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 2.5rem; text-align: center; color: var(--text-primary); transition: all 0.3s ease; cursor: pointer; width: 350px; }
+        .choice-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border-color: var(--text-accent); }
+        .choice-card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .choice-card h3 { font-size: 1.75rem; font-weight: 700; }
+        .choice-card p { color: var(--text-secondary); margin-top: 0.5rem; }
         
+        /* --- [NEW] JOB PREPARATION SECTION --- */
+        #job-prep-container { display: none; width: 100%; height: 100vh; flex-direction: row; }
+        #job-prep-sidebar { width: 260px; background: var(--sidebar-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 2rem 1rem; flex-shrink: 0; display: flex; flex-direction: column; border-right: 1px solid var(--card-border); }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; color: var(--text-secondary); font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+        .sidebar-link:hover { background: var(--input-bg); color: var(--text-primary); }
+        .sidebar-link.active { background: var(--text-accent); color: white; }
+        #job-prep-content { flex-grow: 1; overflow-y: auto; padding: 2rem; }
+        .job-prep-page { display: none; }
+        .job-prep-page.active { display: block; animation: fadeIn 0.5s; }
+        .course-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; color: white}
+
+
         /* --- INPUT & ASSESSMENT PAGE --- */
         .input-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 600px; color: var(--text-primary); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
         .form-label { display: flex; align-items: center; font-weight: 600; margin-bottom: 0.5rem; }
@@ -281,7 +299,6 @@
 </head>
 <body class="gradient-background">
     <div id="app-container">
-        <!-- THEME TOGGLE BUTTON -->
         <div id="theme-toggle-container" class="fixed top-6 right-6 z-50">
              <button id="theme-toggle-btn" class="theme-toggle-btn !static">
                 <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
@@ -289,10 +306,13 @@
             </button>
         </div>
 
-        <!-- Header (Visible when logged in) -->
         <header id="app-header" class="hidden">
             <div id="app-header-left">
                 <h1 class="text-2xl font-bold tracking-wider" style="color: var(--text-primary);">MARGEN AI</h1>
+                 <button id="back-to-choice-btn" class="ml-6 font-semibold hover:opacity-80 transition hidden items-center" style="color: var(--text-accent);">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Change Mode
+                </button>
             </div>
             <div id="app-header-right">
                 <div class="flex items-center" style="color: var(--text-primary);">
@@ -302,7 +322,6 @@
             </div>
         </header>
 
-        <!-- PAGE 0: LANDING PAGE -->
         <main id="landing-page" class="page active">
             <div class="landing-content">
                 <p>Welcome to</p>
@@ -326,9 +345,7 @@
             </div>
         </main>
 
-       <!-- ... ALL OTHER HTML PAGES ARE IDENTICAL ... -->
-       <!-- I'm omitting them for brevity, but they are in the full file -->
-        <main id="auth-page" class="page">
+       <main id="auth-page" class="page">
              <div class="auth-container">
                 <div class="auth-promo-panel">
                     <h2 id="auth-promo-title">Unlock Your Future.</h2>
@@ -372,6 +389,93 @@
                 </div>
             </div>
         </main>
+
+        <main id="choice-page" class="page">
+            <div class="text-center">
+                <h2 class="form-title">How can I help you today?</h2>
+                <p class="form-subtitle">Choose your path to get started.</p>
+                <div class="flex flex-col md:flex-row gap-8 mt-8">
+                    <div id="choice-career-advice" class="choice-card">
+                        <div class="choice-card-icon">🧭</div>
+                        <h3>Career Advice</h3>
+                        <p>Get personalized career roadmaps and discover new professional paths.</p>
+                    </div>
+                    <div id="choice-job-prep" class="choice-card">
+                        <div class="choice-card-icon">🎯</div>
+                        <h3>Job Preparation</h3>
+                        <p>Practice coding problems, take mock tests, and track your progress.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="job-prep-container">
+            <aside id="job-prep-sidebar">
+                <div class="flex flex-col space-y-2">
+                    <a href="#" class="sidebar-link active" data-target="dashboard">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="practice">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        <span>Practice</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="quizzes">
+                         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        <span>Quizzes</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="resources">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        <span>Resources</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="discuss">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Discuss</span>
+                    </a>
+                </div>
+            </aside>
+            <main id="job-prep-content">
+                <div id="job-prep-dashboard-page" class="job-prep-page active">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Dashboard</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="course-card">
+                            <h3 class="font-bold text-lg mb-2">Problems Solved</h3>
+                            <p class="text-4xl font-extrabold" style="color: var(--text-accent);">0</p>
+                        </div>
+                         <div class="course-card">
+                            <h3 class="font-bold text-lg mb-2">Quizzes Attempted</h3>
+                            <p class="text-4xl font-extrabold" style="color: var(--text-accent);">0</p>
+                        </div>
+                         <div class="course-card">
+                            <h3 class="font-bold text-lg mb-2">Overall Progress</h3>
+                            <div class="progress-bar-container mt-4">
+                               <div class="progress-bar-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mt-10 mb-4" style="color: var(--text-primary);">Your Bookmarks</h3>
+                    <p style="color: var(--text-secondary);">You haven't bookmarked any questions yet.</p>
+                </div>
+                <div id="job-prep-practice-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Practice Problems</h2>
+                    <p style="color: var(--text-secondary);">A list of practice problems with filters for company, topic, and difficulty will be shown here.</p>
+                </div>
+                <div id="job-prep-quizzes-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Quizzes and Mock Tests</h2>
+                    <p style="color: var(--text-secondary);">A list of available quizzes will be shown here.</p>
+                </div>
+                <div id="job-prep-resources-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Resources</h2>
+                    <p style="color: var(--text-secondary);">Curated notes, PDFs, and helpful links will be available here.</p>
+                </div>
+                 <div id="job-prep-discuss-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Discussion Forum</h2>
+                    <p style="color: var(--text-secondary);">A community Q&A section will be available here.</p>
+                </div>
+            </main>
+        </div>
+
+
         <main id="input-page" class="page">
             <div class="input-card">
                 <h2 class="form-title">Tell Us About You</h2>
@@ -599,8 +703,23 @@
                 localStorage.setItem('theme', newTheme);
             });
 
+
             // --- DOM ELEMENT REFERENCES ---
-            const pages = { landing: document.getElementById('landing-page'), auth: document.getElementById('auth-page'), input: document.getElementById('input-page'), assessment: document.getElementById('assessment-page'), careers: document.getElementById('careers-page'), roadmap: document.getElementById('roadmap-page'), comparison: document.getElementById('comparison-page'), skill_gap: document.getElementById('skill-gap-page'), interview: document.getElementById('interview-page'), project_pitch: document.getElementById('project-pitch-page') };
+            const pages = { 
+                landing: document.getElementById('landing-page'), 
+                auth: document.getElementById('auth-page'), 
+                choice: document.getElementById('choice-page'), // NEW
+                input: document.getElementById('input-page'), 
+                assessment: document.getElementById('assessment-page'), 
+                careers: document.getElementById('careers-page'), 
+                roadmap: document.getElementById('roadmap-page'), 
+                comparison: document.getElementById('comparison-page'), 
+                skill_gap: document.getElementById('skill-gap-page'), 
+                interview: document.getElementById('interview-page'), 
+                project_pitch: document.getElementById('project-pitch-page') 
+            };
+            const jobPrepContainer = document.getElementById('job-prep-container');
+            const backToChoiceBtn = document.getElementById('back-to-choice-btn');
             const loaders = {
                 careers: document.getElementById('careers-loader'),
                 roadmap: document.getElementById('roadmap-loader'),
@@ -613,7 +732,7 @@
             const signinTab = document.getElementById('signin-tab');
             const signupTab = document.getElementById('signup-tab');
             const otpTab = document.getElementById('otp-tab');
-            const signinForm = document.getElementById('signin-form'); // BUG FIX: Added this missing constant
+            const signinForm = document.getElementById('signin-form');
             const signupForm = document.getElementById('signup-form');
             const otpForm = document.getElementById('otp-form');
             const otpPhoneStep = document.getElementById('otp-phone-step');
@@ -652,18 +771,18 @@
             const projectPitchContent = document.getElementById('project-pitch-content');
             const backToRoadmapFromPitchBtn = document.getElementById('back-to-roadmap-from-pitch-btn');
 
+
             // --- STATE VARIABLES ---
             let currentUserEmail = null;
             let careersToCompare = new Set();
             let isCompareModeActive = false;
             let currentCareerForAnalysis = '';
             let currentRoadmapForAnalysis = null;
-            let lastPage = 'landing';
             let interviewConversation = [];
+
 
             // --- BACKEND CONNECTION ---
             const BASE_URL = 'http://127.0.0.1:5001';
-
             async function handleApiRequest(endpoint, method = 'POST', body = null) {
                 const url = `${BASE_URL}${endpoint}`;
                 const options = {
@@ -689,15 +808,54 @@
                 }
             }
             
-            // --- NAVIGATION & UI HELPERS ---
+            // --- [MODIFIED] NAVIGATION & UI HELPERS ---
             function navigateTo(pageName) {
-                const currentPage = Object.keys(pages).find(key => pages[key].classList.contains('active'));
-                if (currentPage) lastPage = currentPage;
+                // Hide job prep container if we are navigating to a standard page
+                jobPrepContainer.style.display = 'none';
+                backToChoiceBtn.classList.add('hidden');
 
-                if (pageName === 'landing') { body.classList.remove('bg-main-app'); body.classList.add('bg-landing'); document.getElementById('theme-toggle-container').classList.remove('hidden'); appHeader.classList.add('hidden'); } 
-                else { body.classList.remove('bg-landing'); body.classList.add('bg-main-app'); document.getElementById('theme-toggle-container').classList.add('hidden'); appHeader.classList.remove('hidden');}
+                if (pageName === 'landing') { 
+                    document.body.style.background = 'var(--bg-landing)';
+                    document.getElementById('theme-toggle-container').classList.remove('hidden'); 
+                    appHeader.classList.add('hidden'); 
+                } else { 
+                    document.body.style.background = 'var(--bg-main-app)';
+                    document.getElementById('theme-toggle-container').classList.add('hidden'); 
+                    appHeader.classList.remove('hidden');
+                }
+                
                 Object.values(pages).forEach(page => page.classList.remove('active'));
-                if (pages[pageName]) { pages[pageName].classList.add('active'); }
+                if (pages[pageName]) { 
+                    pages[pageName].classList.add('active'); 
+                }
+            }
+
+            // [NEW] Function to show the Job Prep dashboard
+            function showJobPrepDashboard() {
+                // Hide all standard pages
+                Object.values(pages).forEach(page => page.classList.remove('active'));
+                
+                // Show the main container and header
+                jobPrepContainer.style.display = 'flex';
+                appHeader.classList.remove('hidden');
+                backToChoiceBtn.classList.remove('hidden');
+                document.body.style.background = 'var(--bg-main-app)';
+                
+                // Set the default view to the dashboard
+                showJobPrepPage('dashboard');
+            }
+
+            // [NEW] Function to switch between job prep pages
+            function showJobPrepPage(targetPage) {
+                document.querySelectorAll('.job-prep-page').forEach(p => p.classList.remove('active'));
+                document.getElementById(`job-prep-${targetPage}-page`).classList.add('active');
+
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.target === targetPage) {
+                        link.classList.add('active');
+                    }
+                });
             }
 
             function setActiveTab(activeTab) {
@@ -713,11 +871,32 @@
                 currentUserEmail = identifier;
                 userEmailDisplay.textContent = currentUserEmail;
                 appHeader.classList.remove('hidden');
-                navigateTo('input');
+                // [MODIFIED] Navigate to the new choice page instead of the input page
+                navigateTo('choice');
             }
 
             // --- EVENT LISTENERS & LOGIC ---
             getStartedBtn.addEventListener('click', () => navigateTo('auth'));
+
+            // [NEW] Event listeners for the choice page
+            document.getElementById('choice-career-advice').addEventListener('click', () => {
+                navigateTo('input');
+            });
+            document.getElementById('choice-job-prep').addEventListener('click', () => {
+                showJobPrepDashboard();
+            });
+            
+            // [NEW] Event listener to go back to choice page
+            backToChoiceBtn.addEventListener('click', () => navigateTo('choice'));
+
+            // [NEW] Event listeners for the sidebar
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showJobPrepPage(link.dataset.target);
+                });
+            });
+
             signinTab.addEventListener('click', () => setActiveTab(signinTab));
             signupTab.addEventListener('click', () => setActiveTab(signupTab));
             otpTab.addEventListener('click', () => setActiveTab(otpTab));
@@ -810,6 +989,8 @@
             document.getElementById('signout-btn').addEventListener('click', () => {
                 currentUserEmail = null;
                 appHeader.classList.add('hidden');
+                jobPrepContainer.style.display = 'none'; // Also hide job prep container on signout
+                backToChoiceBtn.classList.add('hidden');
                 navigateTo('landing');
             });
 
@@ -933,7 +1114,7 @@
                                     <span class="opacity-90">${skill.name}</span>
                                     <a href="${skill.resource.link}" target="_blank" rel="noopener noreferrer" class="resource-link">
                                         <span>${skill.resource.name}</span>
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 o 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                     </a>
                                 </div>`).join('');
                             return `<div class="roadmap-milestone">
@@ -1112,4 +1293,3 @@
     </script>
 </body>
 </html>
-
