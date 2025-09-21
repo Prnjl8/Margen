@@ -62,9 +62,19 @@
         }
 
         /* Gradient Animation for Dark Mode */
-        body.dark {
+        body.dark, .landing-theme-bg {
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
+        }
+        
+        /* NEW: Class to apply landing page theme to other pages */
+        .landing-theme-bg {
+            background: var(--bg-landing) !important;
+        }
+        .landing-theme-bg .input-card {
+            background: rgba(15, 23, 42, 0.7) !important; /* Darker, more transparent card */
+            backdrop-filter: blur(15px) !important;
+            -webkit-backdrop-filter: blur(15px) !important;
         }
 
         @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -135,7 +145,7 @@
 
 
         /* --- INPUT & ASSESSMENT PAGE --- */
-        .input-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 600px; color: var(--text-primary); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .input-card { background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--card-border); border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 750px; color: var(--text-primary); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
         .form-label { display: flex; align-items: center; font-weight: 600; margin-bottom: 0.5rem; }
         .input-field-light { width: 100%; padding: 0.75rem 1rem; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-primary); transition: all 0.3s ease; }
         .input-field-light::placeholder { color: var(--text-secondary); }
@@ -146,7 +156,7 @@
         body.dark .goal-checkbox:has(input:checked) { background: rgba(20, 184, 166, 0.3); }
         .goal-checkbox input { display: none; }
         .goal-checkbox span { flex-grow: 1; }
-        .wizard-btn { padding: 0.75rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .wizard-btn { padding: 0.75rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
         .wizard-btn.primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
         .wizard-btn.primary:hover { transform: translateY(-2px); }
         .wizard-btn.secondary { background: var(--input-bg); color: var(--text-primary); }
@@ -174,6 +184,7 @@
         #comparison-page.page.active, 
         #skill-gap-page.page.active, 
         #interview-page.page.active, 
+        #future-scope-page.page.active,
         #project-pitch-page.page.active {
             display: flex; 
             flex-direction: column;
@@ -295,14 +306,35 @@
         .loader { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ffffff; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 2rem auto; }
         body.light .loader { border-color: #e5e7eb; border-top-color: #4f46e5; }
         .hidden { display: none; }
+
+        /* NEW: Print Styles for PDF Export */
+        @media print {
+            body {
+                background: white !important;
+            }
+            #app-header, .roadmap-actions, #back-to-careers-btn {
+                display: none !important;
+            }
+            #roadmap-page.page.active {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+                justify-content: flex-start;
+            }
+            #roadmap-title {
+                color: black !important;
+            }
+            .mermaid svg {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body class="gradient-background">
     <div id="app-container">
         <div id="theme-toggle-container" class="fixed top-6 right-6 z-50">
              <button id="theme-toggle-btn" class="theme-toggle-btn !static">
-                <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                <svg id="theme-icon-moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                 <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                 <svg id="theme-icon-moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             </button>
         </div>
 
@@ -310,8 +342,8 @@
             <div id="app-header-left">
                 <h1 class="text-2xl font-bold tracking-wider" style="color: var(--text-primary);">MARGEN AI</h1>
                  <button id="back-to-choice-btn" class="ml-6 font-semibold hover:opacity-80 transition hidden items-center" style="color: var(--text-accent);">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Change Mode
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                     Change Mode
                 </button>
             </div>
             <div id="app-header-right">
@@ -392,20 +424,54 @@
 
         <main id="choice-page" class="page">
             <div class="text-center">
-                <h2 class="form-title">How can I help you today?</h2>
-                <p class="form-subtitle">Choose your path to get started.</p>
+                <h2 class="form-title">Define Your Objective</h2>
+                <p class="form-subtitle">Let's start by choosing your primary goal for today.</p>
                 <div class="flex flex-col md:flex-row gap-8 mt-8">
                     <div id="choice-career-advice" class="choice-card">
                         <div class="choice-card-icon">🧭</div>
-                        <h3>Career Advice</h3>
-                        <p>Get personalized career roadmaps and discover new professional paths.</p>
+                        <h3>Career Exploration</h3>
+                        <p>Discover personalized career roadmaps and find your ideal professional path.</p>
                     </div>
                     <div id="choice-job-prep" class="choice-card">
                         <div class="choice-card-icon">🎯</div>
-                        <h3>Job Preparation</h3>
-                        <p>Practice coding problems, take mock tests, and track your progress.</p>
+                        <h3>Targeted Job Prep</h3>
+                        <p>Focus your preparation for a specific role with practice, quizzes, and resources.</p>
                     </div>
                 </div>
+            </div>
+        </main>
+        
+        <main id="job-target-page" class="page">
+            <div class="input-card">
+                <h2 class="form-title">Focus Your Preparation</h2>
+                <p class="form-subtitle">Tell us about the job you're targeting. This helps us tailor your experience.</p>
+                <form id="job-target-form" class="mt-8 space-y-6">
+                    <div>
+                        <label for="target-role" class="form-label">Target Role / Job Title</label>
+                        <input id="target-role" type="text" placeholder="e.g., Senior Frontend Developer" class="input-field-light" required>
+                    </div>
+                    <div>
+                        <label for="target-companies" class="form-label">Dream Companies (Optional)</label>
+                        <input id="target-companies" type="text" placeholder="e.g., Google, Amazon, Microsoft" class="input-field-light">
+                    </div>
+                     <div>
+                        <label for="experience-level" class="form-label">Your Experience Level</label>
+                        <select id="experience-level" class="input-field-light">
+                            <option value="Internship">Internship</option>
+                            <option value="Entry-level" selected>Entry-level / New Grad (0-2 years)</option>
+                            <option value="Mid-level">Mid-level (2-5 years)</option>
+                            <option value="Senior">Senior (5+ years)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="skills-to-practice" class="form-label">Key Skills to Practice</label>
+                        <textarea id="skills-to-practice" rows="3" placeholder="e.g., Data Structures, System Design, Behavioral Questions" class="input-field-light"></textarea>
+                    </div>
+                    <div class="flex justify-between items-center pt-2">
+                         <button type="button" id="back-to-choice-from-target-btn" class="wizard-btn secondary">Go Back</button>
+                         <button type="submit" class="wizard-btn primary">Start Preparation &rarr;</button>
+                    </div>
+                </form>
             </div>
         </main>
 
@@ -449,7 +515,7 @@
                          <div class="course-card">
                             <h3 class="font-bold text-lg mb-2">Overall Progress</h3>
                             <div class="progress-bar-container mt-4">
-                               <div class="progress-bar-fill" style="width: 0%;"></div>
+                                <div class="progress-bar-fill" style="width: 0%;"></div>
                             </div>
                         </div>
                     </div>
@@ -589,12 +655,19 @@
         </main>
         <main id="roadmap-page" class="page w-full p-4 md:p-8">
              <div class="w-full">
-                <div class="flex justify-between items-center w-full max-w-4xl mx-auto mb-6">
-                    <button id="back-to-careers-btn" class="font-semibold transition flex items-center" style="color: var(--text-accent);">
+                <div class="flex justify-between items-center w-full max-w-7xl mx-auto mb-6"> <button id="back-to-careers-btn" class="font-semibold transition flex items-center" style="color: var(--text-accent);">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Careers
                     </button>
-                     <div class="flex gap-4">
+                    <div class="flex flex-wrap gap-4 roadmap-actions">
+                        <button id="future-scope-btn" class="wizard-btn secondary">
+                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                             Future Scope in India
+                        </button>
+                        <button id="export-pdf-btn" class="wizard-btn secondary">
+                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                            Export as PDF
+                        </button>
                         <button id="analyze-skills-btn-roadmap" class="wizard-btn secondary">Analyze My Skills</button>
                         <button id="start-interview-btn-roadmap" class="wizard-btn primary">Start Mock Interview</button>
                     </div>
@@ -619,7 +692,7 @@
             <div class="chat-container">
                 <div class="chat-header">
                      <button id="back-to-roadmap-from-interview-btn" class="font-semibold transition flex items-center mb-2" style="color: var(--text-accent);">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Roadmap
                     </button>
                     <h2 id="interview-title" class="text-xl font-bold text-center" style="color: var(--text-primary);"></h2>
@@ -653,7 +726,7 @@
                     <h3 class="text-2xl font-bold mb-4">Your Progress</h3>
                     <div class="progress-bar-container">
                         <div id="progress-bar-fill" class="progress-bar-fill flex items-center justify-end pr-2 text-white text-sm" style="width: 0%;">
-                           <span id="progress-bar-text">0%</span>
+                             <span id="progress-bar-text">0%</span>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
@@ -667,6 +740,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </main>
+        <main id="future-scope-page" class="page landing-theme-bg w-full max-w-4xl mx-auto p-4 md:p-8">
+            <div class="input-card w-full">
+                <button id="back-to-roadmap-from-scope-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Roadmap
+                </button>
+                <h2 id="future-scope-title" class="form-title text-center mb-4"></h2>
+                <div id="future-scope-loader" class="loader hidden"></div>
+                <div id="future-scope-content" class="prose prose-invert max-w-none text-left" style="color: var(--text-secondary); line-height: 1.75;"></div>
             </div>
         </main>
         <main id="project-pitch-page" class="page w-full max-w-4xl mx-auto p-4 md:p-8">
@@ -708,14 +792,16 @@
             const pages = { 
                 landing: document.getElementById('landing-page'), 
                 auth: document.getElementById('auth-page'), 
-                choice: document.getElementById('choice-page'), // NEW
+                choice: document.getElementById('choice-page'), 
+                job_target: document.getElementById('job-target-page'), 
                 input: document.getElementById('input-page'), 
                 assessment: document.getElementById('assessment-page'), 
                 careers: document.getElementById('careers-page'), 
                 roadmap: document.getElementById('roadmap-page'), 
                 comparison: document.getElementById('comparison-page'), 
                 skill_gap: document.getElementById('skill-gap-page'), 
-                interview: document.getElementById('interview-page'), 
+                interview: document.getElementById('interview-page'),
+                future_scope: document.getElementById('future-scope-page'),
                 project_pitch: document.getElementById('project-pitch-page') 
             };
             const jobPrepContainer = document.getElementById('job-prep-container');
@@ -724,6 +810,7 @@
                 careers: document.getElementById('careers-loader'),
                 roadmap: document.getElementById('roadmap-loader'),
                 comparison: document.getElementById('comparison-loader'),
+                futureScope: document.getElementById('future-scope-loader'),
                 projectPitch: document.getElementById('project-pitch-loader'),
             };
             const appHeader = document.getElementById('app-header');
@@ -770,6 +857,15 @@
             const projectPitchTitle = document.getElementById('project-pitch-title');
             const projectPitchContent = document.getElementById('project-pitch-content');
             const backToRoadmapFromPitchBtn = document.getElementById('back-to-roadmap-from-pitch-btn');
+            
+            const jobTargetForm = document.getElementById('job-target-form');
+            const backToChoiceFromTargetBtn = document.getElementById('back-to-choice-from-target-btn');
+
+            const exportPdfBtn = document.getElementById('export-pdf-btn');
+            const futureScopeBtn = document.getElementById('future-scope-btn');
+            const futureScopeTitle = document.getElementById('future-scope-title');
+            const futureScopeContent = document.getElementById('future-scope-content');
+            const backToRoadmapFromScopeBtn = document.getElementById('back-to-roadmap-from-scope-btn');
 
 
             // --- STATE VARIABLES ---
@@ -779,6 +875,7 @@
             let currentCareerForAnalysis = '';
             let currentRoadmapForAnalysis = null;
             let interviewConversation = [];
+            let jobPrepTarget = {};
 
 
             // --- BACKEND CONNECTION ---
@@ -808,9 +905,8 @@
                 }
             }
             
-            // --- [MODIFIED] NAVIGATION & UI HELPERS ---
+            // --- NAVIGATION & UI HELPERS ---
             function navigateTo(pageName) {
-                // Hide job prep container if we are navigating to a standard page
                 jobPrepContainer.style.display = 'none';
                 backToChoiceBtn.classList.add('hidden');
 
@@ -830,22 +926,15 @@
                 }
             }
 
-            // [NEW] Function to show the Job Prep dashboard
             function showJobPrepDashboard() {
-                // Hide all standard pages
                 Object.values(pages).forEach(page => page.classList.remove('active'));
-                
-                // Show the main container and header
                 jobPrepContainer.style.display = 'flex';
                 appHeader.classList.remove('hidden');
                 backToChoiceBtn.classList.remove('hidden');
                 document.body.style.background = 'var(--bg-main-app)';
-                
-                // Set the default view to the dashboard
                 showJobPrepPage('dashboard');
             }
 
-            // [NEW] Function to switch between job prep pages
             function showJobPrepPage(targetPage) {
                 document.querySelectorAll('.job-prep-page').forEach(p => p.classList.remove('active'));
                 document.getElementById(`job-prep-${targetPage}-page`).classList.add('active');
@@ -871,25 +960,56 @@
                 currentUserEmail = identifier;
                 userEmailDisplay.textContent = currentUserEmail;
                 appHeader.classList.remove('hidden');
-                // [MODIFIED] Navigate to the new choice page instead of the input page
                 navigateTo('choice');
+            }
+
+            // --- NEW: Simple Markdown to HTML converter ---
+            function markdownToHtml(md) {
+                // Headings
+                md = md.replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold mb-3" style="color: var(--text-primary);">$1</h2>');
+                // Bold
+                md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                // Bullets
+                md = md.replace(/^\- (.*$)/gim, '<li class="ml-4">$1</li>');
+                md = md.replace(/<\/li>\s?<li>/g, '</li><li>'); // clean up spacing
+                md = `<ul>${md}</ul>`.replace(/<\/ul>([\s\S]*)<ul>/g, '$1'); // wrap lists
+                // Tables
+                md = md.replace(/\|(.+)\|/g, '</td><td>$1</td>').replace(/<\/td><td>/,'<th>').replace(/<\/td>\s*$/,'').replace(/^/,'<tr>').replace(/$/,'</tr>');
+                md = md.replace(/<\/th><td>/g, '</th><th>').replace(/<\/tr>(\s*)<tr>/g, '</tr>$1<tr>');
+                md = md.replace(/\|---/g, '</td></tr><tr class="hidden"><td>').replace(/---/g, ''); // ignore header separator
+                md = `<table class="w-full text-left border-collapse">${md}</table>`;
+                md = md.replace(/<tr>\s*<th>/g, '<thead><tr class="border-b border-gray-600"><th>').replace(/<\/th>\s*<\/tr>/, '</th></tr></thead><tbody>').replace(/<\/tr>\s*<\/table>/, '</tr></tbody></table>');
+
+                return md.replace(/<p>|<\/p>/g, ""); // Clean up stray paragraph tags if any
             }
 
             // --- EVENT LISTENERS & LOGIC ---
             getStartedBtn.addEventListener('click', () => navigateTo('auth'));
 
-            // [NEW] Event listeners for the choice page
             document.getElementById('choice-career-advice').addEventListener('click', () => {
                 navigateTo('input');
             });
+            
             document.getElementById('choice-job-prep').addEventListener('click', () => {
+                navigateTo('job_target');
+            });
+            
+            jobTargetForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                jobPrepTarget = {
+                    role: document.getElementById('target-role').value,
+                    companies: document.getElementById('target-companies').value,
+                    experience: document.getElementById('experience-level').value,
+                    skills: document.getElementById('skills-to-practice').value,
+                };
+                console.log("Job Preparation Target Set:", jobPrepTarget);
                 showJobPrepDashboard();
             });
             
-            // [NEW] Event listener to go back to choice page
+            backToChoiceFromTargetBtn.addEventListener('click', () => navigateTo('choice'));
+            
             backToChoiceBtn.addEventListener('click', () => navigateTo('choice'));
 
-            // [NEW] Event listeners for the sidebar
             document.querySelectorAll('.sidebar-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -916,7 +1036,6 @@
                     authError.classList.add('text-green-300');
                     setActiveTab(signinTab);
                 } catch (error) {
-                    // Error is displayed by handleApiRequest
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Create Account →';
@@ -935,7 +1054,6 @@
                     const data = await handleApiRequest('/signin', 'POST', { email, password });
                     loginUser(data.identifier);
                 } catch (error) {
-                    // Error is displayed by handleApiRequest
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Sign In →';
@@ -960,7 +1078,6 @@
                     otpPhoneStep.classList.add('hidden');
                     otpVerifyStep.classList.remove('hidden');
                 } catch (error) {
-                    // Error displayed by handleApiRequest
                 } finally {
                     sendOtpBtn.disabled = false;
                     sendOtpBtn.textContent = 'Send OTP';
@@ -979,7 +1096,6 @@
                     const data = await handleApiRequest('/verify-otp', 'POST', { phone, code });
                     loginUser(data.identifier);
                 } catch (error) {
-                     // Error displayed by handleApiRequest
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Verify & Sign In';
@@ -989,7 +1105,7 @@
             document.getElementById('signout-btn').addEventListener('click', () => {
                 currentUserEmail = null;
                 appHeader.classList.add('hidden');
-                jobPrepContainer.style.display = 'none'; // Also hide job prep container on signout
+                jobPrepContainer.style.display = 'none';
                 backToChoiceBtn.classList.add('hidden');
                 navigateTo('landing');
             });
@@ -1009,7 +1125,6 @@
                     const result = await handleApiRequest('/generate-careers', 'POST', formData);
                     displayCareerOptions(result);
                 } catch (error) {
-                    // Error is handled by API function
                 } finally {
                     loaders.careers.classList.add('hidden');
                 }
@@ -1048,7 +1163,6 @@
                     currentRoadmapForAnalysis = result;
                     setTimeout(() => displayRoadmap(result), 0);
                 } catch(e) { 
-                    // Error already handled
                 } finally { 
                     loaders.roadmap.classList.add('hidden');
                 }
@@ -1132,7 +1246,6 @@
                                 </div>`;
                     }).join('');
                 } catch(e) {
-                    // error handled
                 } finally {
                     loaders.comparison.classList.add('hidden');
                 }
@@ -1171,7 +1284,6 @@
                     document.getElementById('interests').value = result.interests;
                     navigateTo('input');
                 } catch(e) {
-                    // error handled
                 } finally {
                     submitBtn.disabled = false; submitBtn.textContent = 'Find My Interests';
                 }
@@ -1185,7 +1297,7 @@
             analyzeSkillsBtnRoadmap.addEventListener('click', () => {
                 skillGapTitle.textContent = `Skill Gap Analysis: ${currentCareerForAnalysis}`;
                 skillGapResults.classList.add('hidden');
-                userSkillsInput.value = document.getElementById('skills').value; // Pre-fill skills
+                userSkillsInput.value = document.getElementById('skills').value;
                 navigateTo('skill_gap');
             });
 
@@ -1204,7 +1316,6 @@
                     skillsToLearnList.innerHTML = result.skillsToLearn.map(s => `<li class="skill-list-item">${s}</li>`).join('') || '<li class="opacity-50">You have all the skills!</li>';
                     skillGapResults.classList.remove('hidden');
                 } catch(e) {
-                    // error handled
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Analyze My Skills';
@@ -1214,6 +1325,29 @@
 
             startInterviewBtnRoadmap.addEventListener('click', () => startInterview(currentCareerForAnalysis));
             backToRoadmapFromInterviewBtn.addEventListener('click', () => navigateTo('roadmap'));
+            
+            exportPdfBtn.addEventListener('click', () => {
+                window.print();
+            });
+
+            futureScopeBtn.addEventListener('click', async () => {
+                navigateTo('future_scope'); // Navigate immediately
+                futureScopeTitle.textContent = `Future Scope of ${currentCareerForAnalysis} in India`;
+                futureScopeContent.innerHTML = '';
+                loaders.futureScope.classList.remove('hidden');
+
+                try {
+                    const result = await handleApiRequest('/generate-future-scope', 'POST', { careerTitle: currentCareerForAnalysis });
+                    futureScopeContent.innerHTML = markdownToHtml(result.scope);
+                } catch (e) {
+                    futureScopeContent.textContent = "Sorry, we couldn't fetch the future scope analysis at this time. Please try again later.";
+                } finally {
+                    loaders.futureScope.classList.add('hidden');
+                }
+            });
+
+            backToRoadmapFromScopeBtn.addEventListener('click', () => navigateTo('roadmap'));
+
 
             async function startInterview(careerTitle) {
                 navigateTo('interview');
@@ -1279,7 +1413,6 @@
                     const result = await handleApiRequest('/generate-project-pitch', 'POST', { interests, skills, milestoneTitle });
                     projectPitchContent.textContent = result.pitch;
                 } catch (e) {
-                    // error handled
                 } finally {
                     loaders.projectPitch.classList.add('hidden');
                 }
