@@ -214,6 +214,62 @@ def generate_careers():
         print(f"Gemini Error in /generate-careers: {e}")
         return jsonify({"error": f"AI returned an invalid response for careers. Please try again."}), 500
 
+@app.route('/generate-future-scope', methods=['POST'])
+def generate_future_scope():
+    try:
+        data = request.get_json()
+        career_title = data.get('careerTitle')
+
+        if not career_title:
+            return jsonify({'error': 'Career title is required'}), 400
+
+        # This is the high-quality prompt from our previous discussion
+        prompt = f"""
+        You are an expert career analyst and technology futurist specializing in the Indian job market. The current year is 2025. Your task is to generate a comprehensive and encouraging "Future Scope in India" analysis for the career path of a: "{career_title}".
+
+        The analysis must be structured, detailed, and exclusively focused on the Indian context. Format the entire output as clean Markdown.
+
+        Use the following structure with the specified headings and emojis:
+
+        ## 🇮🇳 Market Outlook & Demand
+        Provide a 2-3 paragraph summary of the current demand for this role in India. Is it a growing field? What are the key drivers for its growth (e.g., Digital India, startup ecosystem, global capability centers)?
+
+        ## 🏙️ Key Hiring Hubs
+        List the top 5-6 cities in India that are hotspots for this career, briefly explaining why (e.g., Bengaluru for its startup culture, Hyderabad for its pharma and tech parks).
+
+        ## 💰 Salary Projections (INR)
+        Provide estimated annual salary ranges in Indian Rupees (₹) for different experience levels. Use a Markdown table:
+        | Experience Level      | Salary Range (Per Annum) | Notes                               |
+        | --------------------- | ------------------------ | ----------------------------------- |
+        | Entry-Level (0-2 Yrs) | *Your Estimate* | Fresh graduates from top-tier colleges |
+        | Mid-Level (3-7 Yrs)   | *Your Estimate* | Strong portfolio, proven skills       |
+        | Senior-Level (8+ Yrs) | *Your Estimate* | Team leadership, architectural skills |
+
+        ## 🚀 Career Progression Path
+        Outline a typical career ladder for a professional in this field in India. For example: `Associate -> Senior {{career_title}} -> Lead {{career_title}} -> Principal/Architect -> Managerial roles`.
+
+        ## 🛠️ Essential & Future-Proofing Skills
+        Create two lists:
+        - **Core Skills for Today:** List the top 5-7 non-negotiable skills required right now.
+        - **Skills for Tomorrow (2027-2030):** List 3-5 emerging skills or technologies that professionals in this role should start learning to stay ahead in the Indian market.
+
+        ## 🏢 Top Companies Hiring in India
+        List a mix of 8-10 prominent companies hiring for this role in India. Include both major MNCs and leading Indian startups.
+
+        Conclude with a final, motivational paragraph summarizing why India is an exciting place for a "{career_title}" right now.
+        """
+
+        response = model.generate_content(prompt)
+        
+        if not response.text:
+             return jsonify({'error': 'Failed to generate content from AI model'}), 500
+
+        return jsonify({'scope': response.text})
+
+    except Exception as e:
+        print(f"Error in /generate-future-scope: {e}")
+        return jsonify({'error': 'An internal error occurred'}), 500
+
 @app.route('/generate-roadmap', methods=['POST'])
 def generate_roadmap():
     if not model: return jsonify({"error": "AI model not configured"}), 500
@@ -356,4 +412,3 @@ def continue_interview():
 # --- 5. RUN THE APP ---
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
-
