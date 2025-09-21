@@ -13,7 +13,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # --- 1. INITIALIZATION & CONFIGURATION ---
 load_dotenv()
 # A more robust way to define the template folder
-app = Flask(__name__, template_folder='templates') 
+# New, corrected line
+app = Flask(__name__, template_folder='../Frontend')
 CORS(app) 
 
 # Database Configuration
